@@ -1,0 +1,130 @@
+﻿@page "/TiposTecnicos/index"
+@inject TipoTecnicoService tipoTecnicoService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<div class="card-header text-center py-2 rounded">
+    <h3 style="font-weight: bold;" class="mb-0">Consulta Tipos Técnicos</h3>
+</div>
+
+<div class="row mb-3 align-items-end">
+    <div class="col-md-3">
+        <label for="Filtro" class="form-label">Filtrar por:</label>
+        <select @bind="filtro" class="form-select">
+            <option value="id">ID</option>
+            <option value="nombre">Descripción</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+        <div class="input-group">
+            <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+            <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                <span class="bi bi-search"></span> Buscar
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-9"></div>
+        <div class="col-md-3 text-end">
+            <a href="/TipoTecnicos/Create" class="btn btn-success" type="button">
+                <span class="bi bi-pencil-square" aria-hidden="true"></span> Crear
+            </a>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered text-center">
+    <thead>
+        <tr>
+            <th>TipoId</th>
+            <th>Descripción</th>
+            <th>Incentivo</th>
+            <th>Detalles</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var T in ListaTipoTecnico)
+        {
+            <tr>
+                <td>@T.TipoId</td>
+                <td>@T.Descripcion</td>
+                <td>@T.Incentivo</td>
+                <td>
+                    <a href="/TiposTecnicos/Details/@T.TipoId" style="border: none; background-color: transparent;" class="btn-detalle">
+                        <span class="bi bi-info-circle-fill" style="font-size: 2rem;"></span>
+                    </a>
+                </td>
+                <td>
+                    <a href="/TiposTecnicos/Editar/@T.TipoId" style="border: none; background-color: transparent;" class="btn-editar">
+                        <span class="bi bi-pencil-square" style="font-size: 2rem;"></span>
+                    </a>
+                </td>
+                <td>
+                    <a href="/TiposTecnicos/Delete/@T.TipoId" style="border: none; background-color: transparent;" class="btn-eliminar">
+                        <span class="bi bi-trash" style="font-size: 2rem;"></span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="card-footer text-end">
+    <T>Total de Tipos Técnicos: @ListaTipoTecnico.Count</T>
+</div>
+
+@code {
+    public List<TiposTecnicos> ListaTipoTecnico { get; set; } = new List<TiposTecnicos>();
+    private string filtro = "id";
+    private string valorFiltro = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ListaTipoTecnico = await tipoTecnicoService.Listar(c => true);
+        }
+        catch (Exception ex)
+        {
+            // Manejo del error inicial
+            Console.WriteLine($"Error initializing: {ex.Message}");
+        }
+    }
+
+    private async Task Buscar()
+    {
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(valorFiltro))
+            {
+                if (filtro == "id" && int.TryParse(valorFiltro, out int TecnicoId))
+                {
+                    ListaTipoTecnico = await tipoTecnicoService.Listar(t => t.TipoId == TecnicoId);
+                }
+                else if (filtro == "nombre")
+                {
+                    ListaTipoTecnico = await tipoTecnicoService.Listar(t => t.Descripcion == valorFiltro);
+                }
+            }
+            else
+            {
+                ListaTipoTecnico = await tipoTecnicoService.Listar(p => true);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en Buscar(): {ex.Message}");
+            ListaTipoTecnico = new List<TiposTecnicos>();
+        }
+    }
+    private void IrEliminar(int tipoId)
+    {
+        navigationManager.NavigateTo("/TiposTecnicos/Delete/");
+    }
+}

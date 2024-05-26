@@ -1,0 +1,32 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="Tecnico">
+        <a class="navbar-brand" href="/">Registro Técnicos</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/Tecnicos/index">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Técnicos
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/TiposTecnicos/index">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Tipos Tecnico
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/IncentivosTecnicos/index">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> IncentivosTecnicos
+            </NavLink>
+        </div>
+    </nav>
+</div>

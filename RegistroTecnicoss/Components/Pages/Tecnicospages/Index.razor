@@ -1,0 +1,138 @@
+﻿@page "/Tecnicos/index"
+@inject TecnicoService tecnicoService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<EditForm Model="ListaTecnicos" class="border shadow-lg p-3 rounded">
+    <div class="card-header text-center py-2 rounded">
+        <h3 style="font-weight: bold;" class="mb-0">Consulta Técnicos</h3>
+    </div>
+
+    <div class="row mb-3 align-items-end">
+        <div class="col-md-3">
+            <label for="Filtro" class="form-label">Filtrar por:</label>
+            <select @bind="filtro" class="form-select">
+                <option value="id">ID</option>
+                <option value="nombres">Nombres</option>
+                <option value="Tipo técnico">Tipo técnico</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+            <div class="input-group">
+                <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                    <span class="bi bi-search"></span> Buscar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="col-md-3 text-end">
+                <a href="/Tecnicos/Create" class="btn btn-success" type="button">
+                    <span class="bi bi-pencil-square" aria-hidden="Create"></span> Crear
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered text-center">
+            <thead class="bi-primary text-white">
+                <tr>
+                    <th>TecnicoId</th>
+                    <th>Nombres</th>
+                    <th>Tipo técnico</th>
+                    <th>Sueldohora</th>
+                    <th>Detalles</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var T in ListaTecnicos)
+                {
+                    <tr>
+                        <td>@T.TecnicoId</td>
+                        <td>@T.Nombres</td>
+                        <td>@T.TiposTecnicos!.Descripcion</td>
+                        <td>@T.Sueldohora</td>
+                        <td>
+                            <a href="/Tecnicos/Details/@T.TecnicoId" style="border: none; background-color: transparent;" class="btn-detalle">
+                                <span class="bi bi-info-circle-fill" style="font-size: 2rem;"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/Tecnicos/Editar/@T.TecnicoId" style="border: none; background-color: transparent;" class="btn-editar">
+                                <span class="bi bi-pencil-square" style="font-size: 2rem;"></span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="/Tecnicos/Delete/@T.TecnicoId" style="border: none; background-color: transparent;" class="btn-eliminar">
+                                <i class="bi bi-trash" style="font-size: 2rem;"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer text-end">
+        <p>Total de Técnicos: @ListaTecnicos.Count</p>
+    </div>
+</EditForm>
+
+@code {
+    public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
+    private string filtro = "id";
+    private string valorFiltro = "";
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ListaTecnicos = await tecnicoService.Listar(c => c.TecnicoId > 0);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error initializing: {ex.Message}");
+        }
+    }
+
+    private async Task Buscar()
+    {
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(valorFiltro))
+            {
+                if (filtro == "id" && int.TryParse(valorFiltro, out int TecnicoId))
+                {
+                    ListaTecnicos = await tecnicoService.Listar(t => t.TecnicoId == TecnicoId);
+                }
+                else if (filtro == "nombres")
+                {
+                    ListaTecnicos = await tecnicoService.Listar(t => t.Nombres == valorFiltro);
+                }
+                else if (filtro == "tipoId" && int.TryParse(valorFiltro, out int TipoId))
+                {
+                    ListaTecnicos = await tecnicoService.Listar(t => t.TipoId == TipoId);
+                }
+            }
+            else
+            {
+                ListaTecnicos = await tecnicoService.Listar(p => true);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en Buscar(): {ex.Message}");
+            ListaTecnicos = new List<Tecnicos>();
+        }
+    }
+}

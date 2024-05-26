@@ -1,0 +1,144 @@
+﻿@page "/IncentivosTecnicos/index"
+@inject IncentivosService incentivosService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<EditForm Model="ListaIncentivosTecnicos" class="border shadow-lg p-3 rounded">
+    <div class="card-header text-center py-2 rounded">
+        <h3 style="font-weight: bold;" class="mb-0">Consulta IncentivosTecnicos</h3>
+    </div>
+
+    <div class="row mb-3 align-items-end">
+        <div class="col-md-3">
+            <label for="Filtro" class="form-label">Filtrar por:</label>
+            <select @bind="filtro" class="form-select">
+                <option value="id">ID</option>
+                <option value="Descripcion">Descripcion</option>
+                <option value="TecnicoId">TecnicoId</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label for="ValorFiltro" class="form-label">Búsqueda:</label>
+            <div class="input-group">
+                <input @bind="valorFiltro" class="form-control" placeholder="Buscar" />
+                <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                    <span class="bi bi-search"></span> Buscar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="col-md-3 text-end">
+                <a href="/IncentivosTecnicos/Create" class="btn btn-success" type="button">
+                    <span class="bi bi-pencil-square" aria-hidden="Create"></span> Crear
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered text-center">
+            <thead class="bi-primary text-white">
+                <tr>
+                    <th>IncentivoId</th>
+                    <th>Fecha</th>
+                    <th>TecnicoId</th>
+                    <th>Descripcion</th>
+                    <th>CantidadServicios</th>
+                    <th>Monto</th>
+                    <th>Detalles</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var T in ListaIncentivosTecnicos)
+                {
+                    <tr>
+                        <td>@T.IncentivoId</td>
+                        <td>@T.Fecha</td>
+                        <td>@T.TecnicoId</td>
+                        <td>@T.Descripcion</td>
+                        <td>@T.CantidadServicios</td>
+                        <td>@T.Monto</td>
+                        <td>
+                            <a href="/IncentivosTecnicos/Details/@T.IncentivoId" style="border: none; background-color: transparent;" class="btn-detalle">
+                                <span class="bi bi-info-circle-fill" style="font-size: 2rem;"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/IncentivosTecnicos/Editar/@T.IncentivoId" style="border: none; background-color: transparent;" class="btn-editar">
+                                <span class="bi bi-pencil-square" style="font-size: 2rem;"></span>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="/IncentivosTecnicos/Delete/@T.IncentivoId" style="border: none; background-color: transparent;" class="btn-eliminar">
+                                <i class="bi bi-trash" style="font-size: 2rem;"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer text-end">
+        <T>Total de IncentivosTecnicos: @ListaIncentivosTecnicos.Count</T>
+    </div>
+</EditForm>
+
+@code {
+    public List<IncentivosTecnicos> ListaIncentivosTecnicos { get; set; } = new List<IncentivosTecnicos>();
+    private string filtro = "id";
+    private string valorFiltro = "";
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ListaIncentivosTecnicos = await incentivosService.Listar(c => c.IncentivoId > 0);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error initializing: {ex.Message}");
+        }
+    }
+
+    private async Task Buscar()
+    {
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(valorFiltro))
+            {
+                if (filtro == "id" && int.TryParse(valorFiltro, out int IncentivoId))
+                {
+                    ListaIncentivosTecnicos = await incentivosService.Listar(T => T.IncentivoId == IncentivoId);
+                }
+                else if (filtro == "Descripcion")
+                {
+                    ListaIncentivosTecnicos = await incentivosService.Listar(T => T.Descripcion == valorFiltro);
+                }
+                else if (filtro == "TecnicoId" && int.TryParse(valorFiltro, out int TecnicoId))
+                {
+                    ListaIncentivosTecnicos = await incentivosService.Listar(T => T.TecnicoId == TecnicoId);
+                }
+            }
+            else
+            {
+                ListaIncentivosTecnicos = await incentivosService.Listar(p => true);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en Buscar(): {ex.Message}");
+            ListaIncentivosTecnicos = new List<IncentivosTecnicos>();
+        }
+    }
+}
+
+

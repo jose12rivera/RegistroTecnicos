@@ -1,0 +1,105 @@
+﻿@page "/IncentivosTecnicos/Delete/"
+@page "/IncentivosTecnicos/Delete/{IncentivoId:int}"
+@inject IncentivosService incentivosService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Eliminar IncentivosTecnicos</PageTitle>
+
+<div class="container">
+    <div class="card shadow-header">
+        <div class="card-header text-center py-2 rounded">
+            <h3><strong>Eliminar IncentivosTecnicos</strong></h3>
+        </div>
+        <div class="card-header">
+            <h3 class="text-danger">¿Estás seguro de que quieres eliminar este IncentivosTecnicos?</h3>
+        </div>
+
+        @if (IncentivosTecnico != null)
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg">
+                            <div class="card-header">
+                                <h3 class="text-center"><strong>Datos del IncentivosTecnicos</strong></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="border-primary border-2 borde">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <ul class="list-unstyled">
+                                                    <li><strong>IncentivoId:</strong> @IncentivosTecnico.IncentivoId</li>
+                                                    <li><strong>Fecha:</strong> @IncentivosTecnico.Fecha</li>
+                                                    <li><strong>TecnicoId:</strong> @IncentivosTecnico.TecnicoId</li>
+                                                    <li><strong>Descripcion:</strong> @IncentivosTecnico.Descripcion</li>
+                                                    <li><strong>CantidadServicios:</strong> @IncentivosTecnico.CantidadServicios</li>
+                                                    <li><strong>Monto:</strong> @IncentivosTecnico.Monto</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="card-footer">
+            <button type="button" class="btn btn-outline-danger" @onclick="EliminarIncentivosTecnico"><i class="bi bi-trash-fill"></i> Eliminar</button>
+            <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+        </div>
+    </div>
+</div>
+
+@if (IncentivosTecnico == null)
+{
+    <T>Técnico no encontrado.</T>
+}
+
+@code {
+    [Parameter]
+    public int IncentivoId { get; set; }
+    public IncentivosTecnicos? IncentivosTecnico { get; set; } // Cambiado a permitir nulos
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IncentivoId != 0)
+        {
+            IncentivosTecnico = await incentivosService.Buscar(IncentivoId);
+        }
+        else
+        {
+            Console.WriteLine("El TecnicoId es igual a 0");
+        }
+    }
+
+    public async Task EliminarIncentivosTecnico()
+    {
+        if (IncentivoId == 0 || IncentivosTecnico == null)
+        {
+            Console.Write("El IncentivosTecnicos es igual a 0");
+            return; // Salir del método si el TecnicoId es inválido
+        }
+
+        Console.WriteLine("Eliminando técnico...");
+
+        if (await incentivosService.Eliminar(IncentivoId))
+        {
+            Console.WriteLine("Técnico eliminado correctamente");
+            Volver(); // Redirigir al componente Index
+        }
+        else
+        {
+            Console.WriteLine("Error al eliminar técnico");
+        }
+    }
+
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/IncentivosTecnicos/index");
+    }
+}
+

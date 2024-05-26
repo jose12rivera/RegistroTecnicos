@@ -1,0 +1,101 @@
+﻿@page "/TiposTecnicos/Delete/"
+@page "/TiposTecnicos/Delete/{TipoId:int}"
+@inject TipoTecnicoService tipotecnicoService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Eliminar tipos Tecnicos</PageTitle>
+
+<div class="container">
+    <div class="card shadow-header">
+        <div class="card-header text-center py-2 rounded">
+            <h3><strong>Eliminar tipoTecnico</strong></h3>
+        </div>
+        <div class="card-header">
+            <h3 class="text-danger">¿Estás seguro de que quieres eliminar este técnico?</h3>
+        </div>
+
+        @if (tipoTecnico != null)
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg">
+                            <div class="card-header">
+                                <h3 class="text-center"><strong>Datos del técnico</strong></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="border-primary border-2 borde">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <ul class="list-unstyled">
+                                                    <li><strong>TipoId:</strong> @tipoTecnico.TipoId</li>
+                                                    <li><strong>Descripcion:</strong> @tipoTecnico.Descripcion</li>
+                                                    <li><strong>Incentivo:</strong> @tipoTecnico.Incentivo</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="card-footer">
+            <button type="button" class="btn btn-outline-danger" @onclick="EliminarTipoTecnico"><i class="bi bi-trash-fill"></i> Eliminar</button>
+            <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+        </div>
+    </div>
+</div>
+
+@if (tipoTecnico == null)
+{
+    <T>Tipo técnico no encontrado.</T>
+}
+
+@code {
+    [Parameter]
+    public int TipoId { get; set; }
+    public TiposTecnicos? tipoTecnico { get; set; } // Cambiado a permitir nulos
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (TipoId != 0)
+        {
+            tipoTecnico = await tipotecnicoService.Buscar(TipoId);
+        }
+        else
+        {
+            Console.WriteLine("El TipoId es igual a 0");
+        }
+    }
+
+    public async Task EliminarTipoTecnico()
+    {
+        if (TipoId == 0 || tipoTecnico == null)
+        {
+            Console.Write("El TipoId es igual a 0");
+            return; // Salir del método si el TecnicoId es inválido
+        }
+
+        Console.WriteLine("Eliminando tipo técnico...");
+
+        if (await tipotecnicoService.Eliminar(TipoId))
+        {
+            Console.WriteLine("Tipo técnico eliminado correctamente");
+            Volver(); // Redirigir al componente Index
+        }
+        else
+        {
+            Console.WriteLine("Error al eliminar  tipo técnico");
+        }
+    }
+
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/TiposTecnicos/index");
+    }
+}

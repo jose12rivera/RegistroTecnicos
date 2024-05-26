@@ -1,0 +1,101 @@
+﻿@page "/Tecnicos/Delete/"
+@page "/Tecnicos/Delete/{TecnicoId:int}"
+@inject TecnicoService tecnicoService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Eliminar Técnico</PageTitle>
+
+<div class="container">
+    <div class="card shadow-header">
+        <div class="card-header text-center py-2 rounded">
+            <h3><strong>Eliminar Técnico</strong></h3>
+        </div>
+        <div class="card-header">
+            <h3 class="text-danger">¿Estás seguro de que quieres eliminar este técnico?</h3>
+        </div>
+
+        @if (tecnicos != null)
+        {
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card shadow-lg">
+                            <div class="card-header">
+                                <h3 class="text-center"><strong>Datos del técnico</strong></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="border-primary border-2 borde">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <ul class="list-unstyled">
+                                                    <li><strong>TecnicoId:</strong> @tecnicos.TecnicoId</li>
+                                                    <li><strong>Nombres:</strong> @tecnicos.Nombres</li>
+                                                    <li><strong>Sueldohora:</strong> @tecnicos.Sueldohora</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="card-footer">
+            <button type="button" class="btn btn-outline-danger" @onclick="EliminarTecnico"><i class="bi bi-trash-fill"></i> Eliminar</button>
+            <button type="button" class="btn btn-outline-primary" @onclick="Volver"><i class="bi bi-box-arrow-left"></i> Volver</button>
+        </div>
+    </div>
+</div>
+
+@if (tecnicos == null)
+{
+    <T>Técnico no encontrado.</T>
+}
+
+@code {
+    [Parameter]
+    public int TecnicoId { get; set; }
+    public Tecnicos? tecnicos { get; set; } // Cambiado a permitir nulos
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (TecnicoId != 0)
+        {
+            tecnicos = await tecnicoService.Buscar(TecnicoId);
+        }
+        else
+        {
+            Console.WriteLine("El TecnicoId es igual a 0");
+        }
+    }
+
+    public async Task EliminarTecnico()
+    {
+        if (TecnicoId == 0 || tecnicos == null)
+        {
+            Console.Write("El TecnicoId es igual a 0");
+            return; // Salir del método si el TecnicoId es inválido
+        }
+
+        Console.WriteLine("Eliminando técnico...");
+
+        if (await tecnicoService.Eliminar(TecnicoId))
+        {
+            Console.WriteLine("Técnico eliminado correctamente");
+            Volver(); // Redirigir al componente Index
+        }
+        else
+        {
+            Console.WriteLine("Error al eliminar técnico");
+        }
+    }
+
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/Tecnicos/index");
+    }
+}
