@@ -6,6 +6,7 @@
 
 <EditForm Model="IncentivosTecnico" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
+    <Toasts class="p-3" Messages="MensajeToast" Placement="ToastsPlacement.TopRight" />
 
     @* <div style="text-align:right"> *@
     <div style="width: 100%; text-align: right;">
@@ -87,6 +88,7 @@
     [Parameter]
     public int IncentivoId { get; set; }
     public IncentivosTecnicos IncentivosTecnico { get; set; } = new IncentivosTecnicos();
+    List<ToastMessage> MensajeToast = new List<ToastMessage>();
     private bool Existe = false;
 
     protected override async Task OnInitializedAsync()
@@ -127,6 +129,7 @@
         var guardo = await incentivosService.Guardar(IncentivosTecnico);
         if (guardo)
         {
+            Mensaje(ToastType.Success, "Guardado correctamente el incentivos tecnico.");
             Nuevo();
         }
     }
@@ -135,6 +138,7 @@
     {
         var eliminado = await incentivosService.Eliminar(IncentivosTecnico.IncentivoId);
         Nuevo();
+        Mensaje(ToastType.Success, "Eliminar correctamente el incentivos tecnico.");
     }
 
     private async Task Retroceder()
@@ -147,5 +151,19 @@
         var listaIncentivosTecnicos = await incentivosService.Listar(T => T.Descripcion.ToLower() == IncentivosTecnico.Descripcion.ToLower() && T.IncentivoId != IncentivosTecnico.IncentivoId);
         Existe = listaIncentivosTecnicos.Any();
         return Existe;
+    }
+    private ToastMessage CreateToastMessage(ToastType toastType, string mensaje)
+    => new ToastMessage
+    {
+        Type = toastType,
+        Title = "Notificación",
+        HelpText = $"{DateTime.Now}",
+        Message = mensaje,
+    };
+
+    private void Mensaje(ToastType toastType, string mensaje)
+    {
+        MensajeToast.Add(CreateToastMessage(toastType, mensaje));
+    
     }
 }

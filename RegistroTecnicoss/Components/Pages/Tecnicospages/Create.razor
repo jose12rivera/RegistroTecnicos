@@ -116,7 +116,7 @@
         var guardo = await tecnicoService.Guardar(tecnico);
         if (guardo)
         {
-            Mensaje(ToastType.Success, "Guardado correctamente.");
+            Mensaje(ToastType.Success, "Guardado correctamente el tecnico.");
             Nuevo();
            
            
@@ -128,7 +128,7 @@
         var eliminado = await tecnicoService.Eliminar(tecnico.TecnicoId);
         Nuevo();
 
-        Mensaje(ToastType.Success, "Eliminar correctamente.");
+        Mensaje(ToastType.Success, "Eliminado correctamente el tecnico.");
     }
 
     private void Retroceder()

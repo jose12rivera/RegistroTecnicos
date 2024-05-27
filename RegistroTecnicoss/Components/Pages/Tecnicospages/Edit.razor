@@ -6,11 +6,11 @@
 
 <EditForm Model="tecnicos" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
- 
+    <Toasts class="p-3" Messages="MensajeToast" Placement="ToastsPlacement.TopRight" />
     @* <div style="text-align:right"> *@
     <div style="width: 100%; text-align: right;">
         <button style="display: inline-block;" class="bi bi-box-arrow-left" @onclick="Retroceder">Volver</button>
-        
+
     </div>
 
     <div class="card">
@@ -54,7 +54,7 @@
             <div class="btn-group">
                 <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span> Guardar </button>
                 <button type="button" class="btn btn-outline-danger" @onclick="Eliminar"><span class="bi bi-trash-fill"></span> Eliminar </button>
-                
+
             </div>
         </div>
     </div>
@@ -64,6 +64,7 @@
     [Parameter]
     public int TecnicoId { get; set; }
     public Tecnicos tecnicos { get; set; } = new Tecnicos();
+    List<ToastMessage> MensajeToast = new List<ToastMessage>();
     private bool Existe = false;
 
     protected override async Task OnInitializedAsync()
@@ -104,6 +105,7 @@
         var guardo = await tecnicoService.Guardar(tecnicos);
         if (guardo)
         {
+            Mensaje(ToastType.Success, "Guardado correctamente el tecnico.");
             Nuevo();
         }
     }
@@ -112,6 +114,7 @@
     {
         var eliminado = await tecnicoService.Eliminar(tecnicos.TecnicoId);
         Nuevo();
+        Mensaje(ToastType.Success, "Eliminado correctamente el tecnico.");
     }
 
     private async Task Retroceder()
@@ -124,5 +127,18 @@
         var listaTecnicos = await tecnicoService.Listar(T => T.Nombres.ToLower() == tecnicos.Nombres.ToLower() && T.TecnicoId != tecnicos.TecnicoId);
         Existe = listaTecnicos.Any();
         return Existe;
+    }
+    private ToastMessage CreateToastMessage(ToastType toastType, string mensaje)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = "Notificación",
+            HelpText = $"{DateTime.Now}",
+            Message = mensaje,
+        };
+
+    private void Mensaje(ToastType toastType, string mensaje)
+    {
+        MensajeToast.Add(CreateToastMessage(toastType, mensaje));
     }
 }

@@ -126,7 +126,7 @@
         var guardo = await incentivosService.Guardar(IncentivosTecnico);
         if (guardo)
         {
-            Mensaje(ToastType.Success, "Guardado correctamente.");
+            Mensaje(ToastType.Success, "Guardado correctamente el incentivos tecnico.");
             Nuevo();
         }
     }
@@ -135,7 +135,7 @@
     {
         var eliminado = await incentivosService.Eliminar(IncentivosTecnico.IncentivoId);
         Nuevo();
-        Mensaje(ToastType.Success, "Eliminado correctamente.");
+        Mensaje(ToastType.Success, "Eliminado correctamente el incentivos tecnico.");
 
     }
 

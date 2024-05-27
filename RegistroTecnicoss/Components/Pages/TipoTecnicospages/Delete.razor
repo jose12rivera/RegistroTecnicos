@@ -16,6 +16,7 @@
             <h3 class="text-danger">¿Estás seguro de que quieres eliminar este tipos técnico?</h3>
         </div>
 
+      @*   Esta condicion *@
         @if (tipoTecnico != null)
         {
             <div class="container">
@@ -60,7 +61,7 @@
 @code {
     [Parameter]
     public int TipoId { get; set; }
-    public TiposTecnicos? tipoTecnico { get; set; } // Cambiado a permitir nulos
+    public TiposTecnicos? tipoTecnico { get; set; } /*  Cambiado a permitir nulos */
     List<ToastMessage> MensajeToast = new List<ToastMessage>();
 
     protected override async Task OnInitializedAsync()
@@ -88,12 +89,12 @@
         if (await tipotecnicoService.Eliminar(TipoId))
         {
 
-            Mensaje(ToastType.Success, "Tipo técnico eliminado correctamente.");
+            Mensaje(ToastType.Success, " eliminado correctamente tipos técnicos.");
         }
         else
         {
 
-            Mensaje(ToastType.Danger, "Error al eliminar  tipo técnico.");
+            Mensaje(ToastType.Danger, "Error al eliminar  tipos técnicos.");
         }
     }
 
