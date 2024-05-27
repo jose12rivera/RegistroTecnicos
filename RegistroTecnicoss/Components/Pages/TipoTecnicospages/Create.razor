@@ -7,6 +7,8 @@
 <EditForm Model="tipoTecnico" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
 
+    <Toasts class="p-3" Messages="MensajeToast" Placement="ToastsPlacement.TopRight" />
+
     @* <div style="text-align:right"> *@
     <div style="width: 100%; text-align: right;">
         <button style="display: inline-block;" class="bi bi-box-arrow-left" @onclick="Retroceder">Volver</button>
@@ -69,6 +71,7 @@
     public int TipoId { get; set; }
 
     public TiposTecnicos tipoTecnico { get; set; } = new TiposTecnicos();
+    List<ToastMessage> MensajeToast = new List<ToastMessage>();
     private bool Existe = false;
 
     public async Task Nuevo()
@@ -102,8 +105,9 @@
         var guardo = await tipotecnicoService.Guardar(tipoTecnico);
         if (guardo)
         {
+            Mensaje(ToastType.Success, "Guardado correctamente.");
             Nuevo();
-            navigationManager.NavigateTo("/TiposTecnicos/index");
+            
         }
     }
 
@@ -111,6 +115,7 @@
     {
         var eliminado = await tipotecnicoService.Eliminar(tipoTecnico.TipoId);
         Nuevo();
+        Mensaje(ToastType.Success, "Eliminado correctamente el tipos tecnicos.");
     }
 
     private async Task Retroceder()
@@ -123,5 +128,19 @@
         var listaTipoTecnicos = await tipotecnicoService.Listar(T => T.Descripcion.ToLower() == tipoTecnico.Descripcion.ToLower() && T.TipoId != tipoTecnico.TipoId);
        Existe = listaTipoTecnicos.Any();
         return Existe;
+    }
+
+    private ToastMessage CreateToastMessage(ToastType toastType, string mensaje)
+    => new ToastMessage
+    {
+        Type = toastType,
+        Title = "Notificación",
+        HelpText = $"{DateTime.Now}",
+        Message = mensaje,
+    };
+
+    private void Mensaje(ToastType toastType, string mensaje)
+    {
+        MensajeToast.Add(CreateToastMessage(toastType, mensaje));
     }
 }

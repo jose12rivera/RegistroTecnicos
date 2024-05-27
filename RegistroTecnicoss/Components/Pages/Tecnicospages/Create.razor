@@ -7,7 +7,7 @@
 <PageTitle>Registro de Técnicos</PageTitle>
 <EditForm Model="tecnico" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    
+    <Toasts class="p-3" Messages="MensajeToast" Placement="ToastsPlacement.TopRight" />
 
     @* <div style="text-align:right"> *@
     <div style="width: 100%; text-align: right;">
@@ -75,6 +75,7 @@
 
     public Tecnicos tecnico { get; set; } = new Tecnicos();
     public List<TiposTecnicos> tipos = new List<TiposTecnicos>();
+    List<ToastMessage> MensajeToast = new List<ToastMessage>(); 
     private bool Existe = false;
 
     protected override async Task OnInitializedAsync()
@@ -115,9 +116,10 @@
         var guardo = await tecnicoService.Guardar(tecnico);
         if (guardo)
         {
-
+            Mensaje(ToastType.Success, "Guardado correctamente.");
             Nuevo();
-            navigationManager.NavigateTo("/Tecnicos/index");
+           
+           
         }
     }
 
@@ -126,6 +128,7 @@
         var eliminado = await tecnicoService.Eliminar(tecnico.TecnicoId);
         Nuevo();
 
+        Mensaje(ToastType.Success, "Eliminar correctamente.");
     }
 
     private void Retroceder()
@@ -139,4 +142,19 @@
         Existe = listaTecnicos.Any();
         return Existe;
     }
+
+    private ToastMessage CreateToastMessage(ToastType toastType, string mensaje)
+    => new ToastMessage
+    {
+        Type = toastType,
+        Title = "Notificación",
+        HelpText = $"{DateTime.Now}",
+        Message = mensaje,
+    };
+
+    private void Mensaje(ToastType toastType, string mensaje)
+    {
+        MensajeToast.Add(CreateToastMessage(toastType, mensaje));
+    }
+
 }

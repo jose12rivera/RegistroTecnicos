@@ -11,6 +11,7 @@
         <div class="card-header text-center py-2 rounded">
             <h3><strong>Eliminar Técnico</strong></h3>
         </div>
+        <Toasts class="p-3" Messages="MensajeToast" Placement="ToastsPlacement.TopRight" />
         <div class="card-header">
             <h3 class="text-danger">¿Estás seguro de que quieres eliminar este técnico?</h3>
         </div>
@@ -60,6 +61,7 @@
     [Parameter]
     public int TecnicoId { get; set; }
     public Tecnicos? tecnicos { get; set; } // Cambiado a permitir nulos
+    List<ToastMessage> MensajeToast = new List<ToastMessage>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -85,17 +87,31 @@
 
         if (await tecnicoService.Eliminar(TecnicoId))
         {
-            Console.WriteLine("Técnico eliminado correctamente");
-            Volver(); // Redirigir al componente Index
+            Mensaje(ToastType.Success, "Técnico eliminado correctamente.");
+
         }
         else
         {
-            Console.WriteLine("Error al eliminar técnico");
+            Mensaje(ToastType.Danger, "Error al eliminar técnico.");
+
         }
     }
 
     public async Task Volver()
     {
         navigationManager.NavigateTo("/Tecnicos/index");
+    }
+    private ToastMessage CreateToastMessage(ToastType toastType, string mensaje)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = "Notificación",
+            HelpText = $"{DateTime.Now}",
+            Message = mensaje,
+        };
+
+    private void Mensaje(ToastType toastType, string mensaje)
+    {
+        MensajeToast.Add(CreateToastMessage(toastType, mensaje));
     }
 }

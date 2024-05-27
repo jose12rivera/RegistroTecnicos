@@ -11,6 +11,7 @@
         <div class="card-header text-center py-2 rounded">
             <h3><strong>Eliminar IncentivosTecnicos</strong></h3>
         </div>
+        <Toasts class="p-3" Messages="MensajeToast" Placement="ToastsPlacement.TopRight" />
         <div class="card-header">
             <h3 class="text-danger">¿Estás seguro de que quieres eliminar este IncentivosTecnicos?</h3>
         </div>
@@ -63,6 +64,7 @@
     [Parameter]
     public int IncentivoId { get; set; }
     public IncentivosTecnicos? IncentivosTecnico { get; set; } // Cambiado a permitir nulos
+    List<ToastMessage> MensajeToast = new List<ToastMessage>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,7 +74,7 @@
         }
         else
         {
-            Console.WriteLine("El TecnicoId es igual a 0");
+            Console.WriteLine("IncentivoId es igual a 0");
         }
     }
 
@@ -84,22 +86,36 @@
             return; // Salir del método si el TecnicoId es inválido
         }
 
-        Console.WriteLine("Eliminando técnico...");
+        Console.WriteLine("Eliminando el incentivos...");
 
         if (await incentivosService.Eliminar(IncentivoId))
         {
-            Console.WriteLine("Técnico eliminado correctamente");
-            Volver(); // Redirigir al componente Index
+            Mensaje(ToastType.Success, "Eliminado correctamente.");
         }
         else
         {
-            Console.WriteLine("Error al eliminar técnico");
+            Mensaje(ToastType.Danger, "Error al eliminar  el incentivos.");
+            
         }
     }
 
     public async Task Volver()
     {
         navigationManager.NavigateTo("/IncentivosTecnicos/index");
+    }
+
+    private ToastMessage CreateToastMessage(ToastType toastType, string mensaje)
+    => new ToastMessage
+        {
+            Type = toastType,
+            Title = "Notificación",
+            HelpText = $"{DateTime.Now}",
+            Message = mensaje,
+        };
+
+    private void Mensaje(ToastType toastType, string mensaje)
+    {
+        MensajeToast.Add(CreateToastMessage(toastType, mensaje));
     }
 }
 
