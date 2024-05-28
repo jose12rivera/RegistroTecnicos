@@ -70,5 +70,41 @@ public class TipoTecnicoService
             .Where(criterio)
             .ToListAsync();
     }
+
+    public async Task<List<Tecnicos>> ObtenerTecnicosPorTipo(int tipoTecnicoId)
+    {
+        return await _contexto.Tecnicos
+            .Where(t => t.TipoId == tipoTecnicoId)
+            .Include(t => t.IncentivoId) 
+            .ToListAsync();
+    }
+
+    public async Task<List<int>> ObtenerTecnicosIdsPorTipo(int tipoTecnicoId)
+    {
+        var tecnicosIds = await _contexto.Tecnicos
+            .Where(t => t.TipoId == tipoTecnicoId)
+            .Select(t => t.TecnicoId)
+            .ToListAsync();
+
+        return tecnicosIds;
+    }
+
+    public async Task ActualizarTotalIncentivos(int tipoTecnicoId)
+    {
+        var tecnicosIds = await ObtenerTecnicosIdsPorTipo(tipoTecnicoId);
+
+        var incentivos = await _contexto.IncentivosTecnicos
+            .Where(i => tecnicosIds.Contains(i.TecnicoId))
+            .ToListAsync();
+
+        var totalIncentivos = incentivos.Sum(i => i.Monto ?? 0);
+
+        var tipoTecnico = await _contexto.TipoTecnico.FindAsync(tipoTecnicoId);
+        if (tipoTecnico != null)
+        {
+            tipoTecnico.Incentivo = totalIncentivos;
+            await _contexto.SaveChangesAsync();
+        }
+    }
 }
 

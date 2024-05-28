@@ -1,5 +1,6 @@
 ﻿@page "/IncentivosTecnicos/Create"
 @inject IncentivosService incentivosService
+@inject TecnicoService tecnicoService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -30,16 +31,20 @@
                     </div>
                 </div>
             </div>
+
             <!-- TecnicoId -->
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="TecnicoId" class="form-label">TecnicoId:</label>
-                    <div class="input-group">
-                        <InputNumber @bind-Value="IncentivosTecnico.TecnicoId" class="form-control" style="font-size: 0.8em;" aria-describedby="BotonBuscar" />
-                        <ValidationMessage For="@(() => IncentivosTecnico.TecnicoId)" />
-                    </div>
-                </div>
+            <div class="form-group">
+                <label for="TecnicoId">TecnicoId</label>
+                <InputSelect @bind-Value="IncentivosTecnico.TecnicoId" class="form-select">
+                    <option value="0">Elija un técnicoId</option>
+                    @foreach (var t in tecnicos)
+                    {
+                        <option value="@t.TecnicoId">@t.TecnicoId</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => IncentivosTecnico.TecnicoId)" />
             </div>
+
             <!-- Fecha -->
             <div class="mb-3">
                 <label for="Fecha" class="form-label">Fecha:</label>
@@ -83,20 +88,24 @@
     [Parameter]
     public int IncentivoId { get; set; }
 
-    public IncentivosTecnicos IncentivosTecnico { get; set; } = new IncentivosTecnicos();
+    private IncentivosTecnicos IncentivosTecnico { get; set; } = new IncentivosTecnicos();
     List<ToastMessage> MensajeToast = new List<ToastMessage>();
-    // public List<TiposTecnicos> tipos = new List<TiposTecnicos>();
+    public List<Tecnicos> tecnicos = new List<Tecnicos>();
+    public string mensaje;
     private bool Existe = false;
+    
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     tipos = await incentivosService.Listar(t => true);
-    // }
+    protected override async Task OnInitializedAsync()
+    {
+        tecnicos = await tecnicoService.GetAllTecnicos(); 
+    }
+
 
     public async Task Nuevo()
     {
         IncentivosTecnico = new IncentivosTecnicos();
         Existe = false;
+        
     }
 
     public async Task Buscar()

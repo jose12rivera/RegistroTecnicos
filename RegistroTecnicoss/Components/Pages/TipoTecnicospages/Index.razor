@@ -90,6 +90,15 @@
     protected override async Task OnInitializedAsync()
     {
 
+        ListaTipoTecnico = await tipoTecnicoService.Listar(c => true);
+
+        // Calcula la suma total de incentivos y actualiza el campo TotalIncentivos
+        foreach (var tipoTecnico in ListaTipoTecnico)
+        {
+            await tipoTecnicoService.ActualizarTotalIncentivos(tipoTecnico.TipoId);
+        }
+
+        //Todo bien de aqui pa ya
         try
         {
             ListaTipoTecnico = await tipoTecnicoService.Listar(c => true);

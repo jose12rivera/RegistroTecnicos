@@ -123,5 +123,13 @@ namespace RegistrodeTecnicos.Services
                 return new List<Tecnicos>();
             }
         }
+
+        public async Task<List<Tecnicos>> GetAllTecnicos()
+        {
+            return await _contexto.Tecnicos
+                .Include(t => t.TiposTecnicos)
+                .AsNoTracking()
+                .ToListAsync();
+        }
     }
 }
