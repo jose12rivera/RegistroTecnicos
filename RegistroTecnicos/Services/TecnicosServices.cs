@@ -71,12 +71,5 @@ namespace RegistroTecnicos.Services
                 .Where(Criterio)
                 .ToListAsync();
         }
-            
-            
-
-
-
-
-
     }
 }
