@@ -1,0 +1,16 @@
+﻿@page "/Tecnicos/Index"
+@inject TecnicosServices tecnicosServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+@code {
+    public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaTecnicos = await tecnicosServices.Listar(t => true);
+    }
+    private async Task IrEliminar(int tecnicoId)
+    {
+        navigationManager.NavigateTo($"/Tecnicos/Delete/={tecnicoId}");
+    }
+}
