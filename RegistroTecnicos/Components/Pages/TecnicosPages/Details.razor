@@ -1,0 +1,58 @@
+﻿@page "/Tecnicos/Details"
+@page "/Tecnicos/Details/{TecnicoId:int}"
+@inject TecnicosServices tecnicosServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Detalles Tecnicos</PageTitle>
+@if(tecnico != null)
+{
+    <div class="container">
+        <div class="card shadow-header">
+            <div class="card-header bg-primary text-white text-center p-2 rounded">
+                <h3 class="text-center"><strong>Detalles Tecnicos</strong></h3>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>TecnicoId:</strong>@tecnico.TecnicoId</li>
+                                <li><strong>Nombres:</strong>@tecnico.Nombres</li>
+                                <li><strong>SueldoHora:</strong>@tecnico.SueldoHora</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button style="button" href="/Tecnicos/Index" class="btn btn-outline-primary ml-2" @onclick="Volver"><i class="bi bi-box-arrow-left"></i>Volver</button>
+        </div>
+    </div>
+}
+else
+{
+    <p>Total de Tecnicos.</p>
+}
+@code {
+    [Parameter]
+    public int TecnicoId { get; set; }
+    public Tecnicos? tecnico { get; set; } = new Tecnicos();
+    private bool Existe = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (TecnicoId != 0)
+        {
+            tecnico = await tecnicosServices.Buscar(TecnicoId);
+        }
+    }
+
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/Tecnicos/Index");
+    }
+}
