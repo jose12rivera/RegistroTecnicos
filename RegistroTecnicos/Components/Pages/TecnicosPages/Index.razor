@@ -43,17 +43,18 @@
                         <td>@T.SueldoHora</td>
 
                         <td>
-                            <a href="/Tecnicos/Details/@T.TecnicoId" style="bolder: none; background-color: transparent;" class="btn-detalles">
-                                 <span class="bi bi-eye" style="font-size: 2rem;"></span>
+                            <a href="/Tecnicos/Details/@T.TecnicoId" style="button" class="btn btn-outline-primary ml-2">
+                                <i class="bi bi-info-circle-fill"></i>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="/Tecnicos/Edit/@T.TecnicoId"  style="button" class="btn btn-outline-success ml-2">
+                                <i class="bi bi-pencil-square"></i> 
                             </a>
                         </td>
                         <td>
-                            <a href="/Tecnicos/Edit/@T.TecnicoId" style="bolder: none; background-color: transparent;" class="btn-editar">
-                                <span class="bi bi-pencil-square" style="font-size: 2rem;"></span>
-                            </a>
-                        </td>
-                        <td>
-                            <button style="button" class="btn btn-outline-primary ml-2"@onclick="()=>IrEliminar(T.TecnicoId)">
+                            <button style="button" class="btn btn-outline-danger ml-2"@onclick="()=>IrEliminar(T.TecnicoId)">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </td>
