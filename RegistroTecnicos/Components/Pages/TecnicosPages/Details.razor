@@ -4,13 +4,13 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Detalles Tecnicos</PageTitle>
+<PageTitle>Detalles  del T&eacute;cnicos</PageTitle>
 @if(tecnico != null)
 {
     <div class="container">
         <div class="card shadow-header">
             <div class="card-header bg-primary text-white text-center p-2 rounded">
-                <h3 class="text-center"><strong>Detalles Tecnicos</strong></h3>
+                <h3 class="text-center"><strong>Detalles del T&eacute;cnicos</strong></h3>
             </div>
 
             <div class="container">
@@ -18,7 +18,7 @@
                     <div class="col-md-9">
                         <div class="card-body">
                             <ul class="list-unstyled">
-                                <li><strong>TecnicoId:</strong>@tecnico.TecnicoId</li>
+                                <li><strong>T&eacute;cnicoId:</strong>@tecnico.TecnicoId</li>
                                 <li><strong>Nombres:</strong>@tecnico.Nombres</li>
                                 <li><strong>SueldoHora:</strong>@tecnico.SueldoHora</li>
                             </ul>
@@ -35,7 +35,7 @@
 }
 else
 {
-    <p>Total de Tecnicos.</p>
+    <p>Total de T&eacute;cnico.</p>
 }
 @code {
     [Parameter]

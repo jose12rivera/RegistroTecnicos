@@ -7,15 +7,15 @@
 <EditForm Model="tecnico" FormName="Guardar">
     <DataAnnotationsValidator />
     <div class="card shadow border-0 rounded" style="background-color: white;">
-        <div class="card-header bg-primary text-white" style="text-align:center;">
-            <i class="fas fa-clipboard-list"><h3>Registros Tecnicos</h3></i>
+        <div class="card-header bg-primary text-white text-center p-2 rounded">
+            <h3 style="font-weight: bold;" class="md-4 font-weight: bold; ">Registro T&eacute;cnicos</h3>
         </div>
 
         <div class="card-body">
             @* TecnicoId *@
             <div class="row">
                 <div class="col-md-8 mb-5">
-                    <label for="TecnicoId" class="form-label">TecnicoId:</label>
+                    <label for="TecnicoId" class="form-label">T&eacute;cnicos:</label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1mm;">
                             <InputNumber @bind-Value="tecnico.TecnicoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="bottonbuscar" />
@@ -37,7 +37,7 @@
                 <ValidationMessage For="(()=>tecnico.SueldoHora)" />
             </div>
         </div>
-        <div class="card-footer align; d-flex: justify-content-center">
+        <div class="card-footer bg-light d-flex: justify-content-center mt-3">
             <div class="btn-group">
                 <button style="button" class="btn btn-outline-primary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
                 <button style="submit" class="btn btn-outline-success ml-2" @onclick="Guardar"><span class="bi bi-check-circle-fill"></span>Guardar</button>

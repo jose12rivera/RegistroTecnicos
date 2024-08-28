@@ -15,10 +15,10 @@ namespace RegistroTecnicos.Services
             _contexto = contexto;
         }
         //Metodo del Existe
-        public async Task<bool> Existe(int tecnicoId)
+        public async Task<bool> Existe(int tecnicoId ,string nombres)
         {
             return await _contexto.tecnicos
-                .AnyAsync(T => T.TecnicoId == tecnicoId);
+                .AnyAsync(T => T.TecnicoId != tecnicoId && T.Nombres.Equals(nombres));
         }
         //Metodo del Insertar
         private async Task<bool> Insertar(Tecnicos tecnico)
@@ -38,9 +38,9 @@ namespace RegistroTecnicos.Services
             return modificado;
         }
         //Metodo del Guardar
-        public async Task<bool> Guardar(Tecnicos tecnico)
+        public async Task<bool> Guardar(Tecnicos tecnico )
         {
-            if (!await Existe(tecnico.TecnicoId))
+            if (!await Existe(tecnico.TecnicoId ,tecnico.Nombres))
             {
                 return await Insertar(tecnico);
             }
