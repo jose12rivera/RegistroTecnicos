@@ -7,18 +7,21 @@
     <div class="container">
         <div class="card shadow-header">
             <div class="card-header bg-primary text-white text-center p-2 rounded">
-                <h3><strong>Eliminar el T&eacute;cnico</strong></h3>
+                <h3><strong>Eliminar El T&eacute;cnico</strong></h3>
             </div>
+
             <div class="card-footer text-center">
-            <h3 class="text-danger">¿Est&aacute; seguro que quiere eliminar el t&eacute;cnico?</h3>
+                   <h3>¿Est&aacute; Seguro Que Quiere Eliminar El T&eacute;cnico?</h3>
             </div>
 
             <div class="container">
-            <div class="row justify-content-center">
+                <div class="row justify-content-center">
                     <div class="col-md-9">
                         <div class="card shadow-lg">
                             <div class="card-header">
-                                 <h3 class="text-center"><strong>Datos del T&eacute;cnico!</strong></h3>
+                                <div class="card-header bg-primary text-white text-center p-2 rounded">
+                                     <h3 class="text-center"><strong>Datos Del T&eacute;cnico!</strong></h3>
+                                </div>
                             </div>
 
                             <div class="card-body">
@@ -43,21 +46,22 @@
         </div>
 
        <div class="card-footer text-center">
-          <button style="button" class="btn btn-outline-danger ml-2"@onclick="EliminarTecnico"><i class="bi bi-trash-circle-fill"></i>Eliminar</button>
-          <button style="button" href="/Tecnicos/Index" class="btn btn-outline-primary ml-2"@onclick="Volver"><i class="bi bi-box-arrow-left"></i>Volver</button>
+          <button type="button" class="btn btn-outline-danger ml-2"@onclick="EliminarTecnico"><i class="bi bi-trash"></i>Eliminar</button>
+          <button type="button"  class="btn btn-outline-primary ml-2"@onclick="Volver"><i class="bi bi-box-arrow-left"></i>Volver</button>
        </div>
     </div>
 
 @if(tecnico ==null)
 {
-    <p>Total de T&eacute;cnico.count</p>
+    <p>Total no entrado T&eacute;cnico.count</p>
 }
+
 @code {
     [Parameter]
     public int TecnicoId { get; set; }
     public Tecnicos? tecnico { get; set; } = new Tecnicos();
     private bool Existe = false;
-
+    //El Metodo OnInitialized
     protected override async Task OnInitializedAsync()
     {
         if (TecnicoId != 0)
@@ -65,19 +69,20 @@
             tecnico = await tecnicosServices.Buscar(TecnicoId);
         }
     }
-
+    //El Metodo EliminarTecnico
     private async Task EliminarTecnico()
     {
         if(TecnicoId == 0 || tecnico == null)
         {
             return;
         }
+
         if(await tecnicosServices.Eliminar(TecnicoId))
         {
             Volver();
         }
     }
-
+    //El Metodo Volver
     public async Task Volver()
     {
         navigationManager.NavigateTo("/Tecnicos/Index");
