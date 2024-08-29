@@ -4,18 +4,18 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-<EditForm Model="tecnico" FormName="Guardar">
+<EditForm Model="tecnico" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-    <div class="card shadow border-0 rounded" style="background-color: white;">
+    <div class="card shadow-lg border-0 rounded" style="background-color: white;">
         <div class="card-header bg-primary text-white text-center p-2 rounded">
-            <h3 style="font-weight: bold;" class="md-4 font-weight: bold; ">Registro T&eacute;cnicos</h3>
+            <h3 style="font-weight: bold;" class="md-4 font-weight: bold; ">Registro Del  T&eacute;cnico</h3>
         </div>
 
         <div class="card-body">
             @* TecnicoId *@
             <div class="row">
-                <div class="col-md-8 mb-5">
-                    <label for="TecnicoId" class="form-label">T&eacute;cnicos:</label>
+                <div class="col-md-10 mb-5">
+                    <label for="TecnicoId" class="form-label"><strong>T&eacute;cnicoId:</strong></label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1mm;">
                             <InputNumber @bind-Value="tecnico.TecnicoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="bottonbuscar" />
@@ -26,32 +26,36 @@
 
             @*   Nombres *@
             <div class="mb-5">
-                <label for="Nombres" class="form-label">Nombres:</label>
+                <label for="Nombres" class="form-label"><strong>Nombres:</strong></label>
                 <InputText @bind-Value="tecnico.Nombres" class="form-control" />
-                <ValidationMessage For="(()=>tecnico.Nombres)" />
+                <ValidationMessage For="@(()=>tecnico.Nombres)" />
             </div>
+
             @*   SueldoHora *@
             <div class="mb-5">
-                <label for="SueldoHora" class="form-label">SueldoHora:</label>
+                <label for="SueldoHora" class="form-label"><strong>SueldoHora:</strong></label>
                 <InputNumber @bind-Value="tecnico.SueldoHora" class="form-control" />
-                <ValidationMessage For="(()=>tecnico.SueldoHora)" />
+                <ValidationMessage For="@(()=>tecnico.SueldoHora)" />
             </div>
         </div>
+
         <div class="card-footer bg-light d-flex: justify-content-center mt-3">
             <div class="btn-group">
-                <button style="button" class="btn btn-outline-secondary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
-                <button style="submit" class="btn btn-outline-success ml-2" @onclick="Guardar"><span class="bi bi-check-circle-fill"></span>Guardar</button>
-                <i style="button" href="/Tecnicos/Index" class="btn btn-outline-primary ml-2" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</i>
+                <button type="button" class="btn btn-outline-secondary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
+                <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span>Guardar</button>
+                <button type="button"  class="btn btn-outline-primary ml-2" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
             </div>
         </div>
     </div>
+
 </EditForm>
+
 @code {
     [Parameter]
     public int TecnicoId { get; set; }
     public Tecnicos? tecnico { get; set; } = new Tecnicos();
     private bool Existe = false;
-
+    //El Metodo OnInitialilized
     protected override async Task OnInitializedAsync()
     {
         if(TecnicoId != 0)
@@ -59,18 +63,19 @@
             tecnico = await tecnicosServices.Buscar(TecnicoId) ?? new Tecnicos();
         }
     }
+    //El Metodo Nuevo
     public async Task Nuevo()
     {
         tecnico = new Tecnicos();
         Existe = false;
     }
-
+    //El Metodo Validar
     public async Task<bool> Validar()
     {
         var TecnicoEliminado = await tecnicosServices.Listar(T => T.Nombres.ToLower() == tecnico.Nombres.ToLower() && T.TecnicoId != tecnico.TecnicoId);
         return TecnicoEliminado.Count == 0;
     }
-
+    //El Metodo Guardar
     public async Task Guardar()
     {
         if (!await Validar())
@@ -83,13 +88,13 @@
             Nuevo();
         }
     }
-
+    //El Metodo Eliminar
     public async Task Eliminar()
     {
         var eliminado = await tecnicosServices.Eliminar(tecnico.TecnicoId);
         Nuevo();
     }
-
+    //El Metodo Volver
     public async Task Volver()
     {
         navigationManager.NavigateTo("/Tecnicos/Index");

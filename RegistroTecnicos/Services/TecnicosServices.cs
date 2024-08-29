@@ -41,19 +41,17 @@ namespace RegistroTecnicos.Services
         public async Task<bool> Guardar(Tecnicos tecnico )
         {
             if (!await Existe(tecnico.TecnicoId ,tecnico.Nombres))
-            {
+            
                 return await Insertar(tecnico);
-            }
             else
-            {
                 return await Modificar(tecnico);
-            }
+            
         }
         //Metodo del Eliminar
         public async Task<bool> Eliminar(int id)
         {
             var eliminado = await _contexto.tecnicos
-                .Where(T => T.TecnicoId == id)
+                .Where(t => t.TecnicoId == id)
                 .ExecuteDeleteAsync();
             return eliminado > 0;
         }

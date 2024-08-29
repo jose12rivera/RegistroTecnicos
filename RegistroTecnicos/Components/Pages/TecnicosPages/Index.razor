@@ -6,15 +6,14 @@
 <PageTitle>T&eacute;cnicos</PageTitle>
 <EditForm Model="ListaTecnicos" class="card shadow-lg bolder p-3 rounded">
     <div class="card-header bg-primary text-white text-center p-2 rounded">
-        <h3 style="font-weight: bold;" class="md-4 font-weight: bold; ">Consulta del T&eacute;cnicos</h3>
+        <h3 style="font-weight: bold;" class="md-4 font-weight: bold; ">Consulta De T&eacute;cnicos</h3>
     </div>
 
-    
         <div class="card-body">
             <div class="row">
                 <div class="col-md-15">
                   <div class=" col-md-15 text-end">
-                    <a href="/Tecnicos/Create" class="btn btn-success" style="button">
+                    <a href="/Tecnicos/Create" class="btn btn-success" type="button">
                             <i class=" bi bi-pencil-square"></i>
                             Crear
                         </a>
@@ -22,6 +21,7 @@
                 </div>
             </div>
         </div>
+
     <div class="table table-responsive">
         <table class="table table-bordered text-center">
             <thead class="bg-primary text-white"> 
@@ -34,6 +34,7 @@
                     <th>Eliminar</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach(var T in ListaTecnicos)
                 {
@@ -43,18 +44,19 @@
                         <td>@T.SueldoHora</td>
 
                         <td>
-                            <a href="/Tecnicos/Details/@T.TecnicoId" style="button" class="btn btn-outline-primary ml-2">
+                            <a href="/Tecnicos/Details/@T.TecnicoId" type="button" class="btn btn-outline-primary ml-2">
                                 <i class="bi bi-info-circle-fill"></i>
                             </a>
                         </td>
 
                         <td>
-                            <a href="/Tecnicos/Edit/@T.TecnicoId"  style="button" class="btn btn-outline-success ml-2">
+                            <a href="/Tecnicos/Edit/@T.TecnicoId"  type="button" class="btn btn-outline-success ml-2">
                                 <i class="bi bi-pencil-square"></i> 
                             </a>
                         </td>
+
                         <td>
-                            <button style="button" class="btn btn-outline-danger ml-2"@onclick="()=>IrEliminar(T.TecnicoId)">
+                            <button type="button" class="btn btn-outline-danger ml-2"@onclick="()=>IrEliminar(T.TecnicoId)">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </td>
@@ -69,13 +71,16 @@
     </div>
 
 </EditForm>
-@code {
-    public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
 
+@code {
+    public Tecnicos? T = new Tecnicos();
+    public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
+    //El Metodo OnInitialized
     protected override async Task OnInitializedAsync()
     {
         ListaTecnicos = await tecnicosServices.Listar(t => true);
     }
+    //El Metodo IrEliminar
     private async Task IrEliminar(int TecnicoId)
     {
         navigationManager.NavigateTo($"/Tecnicos/Delete/TecnicoId={TecnicoId}");
