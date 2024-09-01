@@ -10,61 +10,84 @@
         <h3 style="font-weight: bold;" class="md-4 font-weight: bold; ">Consulta De T&eacute;cnicos</h3>
     </div>
 
+    <div class="row md-3 align-content-center">
+        <div class="col-md-3">
+            <label for="filtro" class="form-label">Filtrar Por:</label>
+            <select @bind="filtro"  class="form-select">  
+                <option value="Id">TecnicoId</option>
+                <option value="Nombres">Nombres</option>
+                <option value="SueldoHora">SueldoHora</option>
+            </select>
+        </div>
+
+        <div class="col-md-5">
+            <label for="valorfiltro" class="form-label">Busqueda:</label>
+            <div class="input-group">
+                <input @bind="valorfiltro" class="form-control"/>
+                <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                    <i class="bi bi-search-circle"></i>
+                    Buscar
+                </button>
+            </div>
+            
+        </div>
+
         <div class="card-body">
             <div class="row">
                 <div class="col-md-15">
-                  <div class=" col-md-15 text-end">
-                    <a href="/Tecnicos/Create" class="btn btn-outline-success" type="button">
+                    <div class=" col-md-15 text-end">
+                        <a href="/Tecnicos/Create" class="btn btn-outline-success" type="button">
                             <i class=" bi bi-pencil-square"></i>
                             Crear
                         </a>
-                  </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-    <div class="table table-responsive">
-        <table class="table table-bordered text-center">
-            <thead class="bg-primary text-white"> 
-                <tr>
-                    <th>T&eacute;cnicos</th>
-                    <th>Nombres</th>
-                    <th>SueldoHora</th>
-                    <th>Ver</th>
-                    <th>Editar</th>
-                    <th>Eliminar</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach(var T in ListaTecnicos)
-                {
+        <div class="table table-responsive">
+            <table class="table table-bordered text-center">
+                <thead class="bg-primary text-white">
                     <tr>
-                        <td>@T.TecnicoId</td>
-                        <td>@T.Nombres</td>
-                        <td>@T.SueldoHora</td>
-
-                        <td>
-                            <a href="/Tecnicos/Details/@T.TecnicoId" type="button" class="btn btn-outline-primary ml-2">
-                                <i class="bi bi-info-circle-fill"></i>
-                            </a>
-                        </td>
-
-                        <td>
-                            <a href="/Tecnicos/Edit/@T.TecnicoId"  type="button" class="btn btn-outline-success ml-2">
-                                <i class="bi bi-pencil-square"></i> 
-                            </a>
-                        </td>
-
-                        <td>
-                            <button type="button" class="btn btn-outline-danger ml-2"@onclick="()=>IrEliminar(T.TecnicoId)">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
+                        <th>T&eacute;cnicos</th>
+                        <th>Nombres</th>
+                        <th>SueldoHora</th>
+                        <th>Ver</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    @foreach (var T in ListaTecnicos)
+                    {
+                        <tr>
+                            <td>@T.TecnicoId</td>
+                            <td>@T.Nombres</td>
+                            <td>@T.SueldoHora</td>
+
+                            <td>
+                                <a href="/Tecnicos/Details/@T.TecnicoId" type="button" class="btn btn-outline-primary ml-2">
+                                    <i class="bi bi-info-circle-fill"></i>
+                                </a>
+                            </td>
+
+                            <td>
+                                <a href="/Tecnicos/Edit/@T.TecnicoId" type="button" class="btn btn-outline-success ml-2">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                            </td>
+
+                            <td>
+                                <button type="button" class="btn btn-outline-danger ml-2" @onclick="()=>IrEliminar(T.TecnicoId)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="card-footer text-start">
@@ -76,10 +99,35 @@
 @code {
     public Tecnicos? T = new Tecnicos();
     public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
+    public string filtro = "Id";
+    public string valorfiltro = "";
     //El Metodo OnInitialized
     protected override async Task OnInitializedAsync()
     {
         ListaTecnicos = await tecnicosServices.Listar(t => true);
+    }
+    //El Metdo Buscar
+    public async Task Buscar()
+    {
+        if (string.IsNullOrWhiteSpace(valorfiltro))
+        {
+            ListaTecnicos = await tecnicosServices.Listar(t => true);
+        }
+        else
+        {
+            if(filtro=="Id"&&int.TryParse(valorfiltro,out int TecnicoId))
+            {
+                ListaTecnicos = await tecnicosServices.Listar(t => t.TecnicoId==TecnicoId);
+            }
+            else if (filtro == "Nombres")
+            {
+                ListaTecnicos = await tecnicosServices.Listar(t => t.Nombres.Contains(valorfiltro));
+            }
+            else if (filtro == "SueldoHora" && decimal.TryParse(valorfiltro, out decimal SueldoHora))
+            {
+                ListaTecnicos = await tecnicosServices.Listar(t => t.SueldoHora==SueldoHora);
+            }
+        }
     }
     //El Metodo IrEliminar
     private async Task IrEliminar(int TecnicoId)
