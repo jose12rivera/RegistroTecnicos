@@ -32,8 +32,6 @@ public class TecnicosServices
         _contexto.Tecnicos.Update(tecnico);
         var modificado = await _contexto
             .SaveChangesAsync() > 0;
-        _contexto.Entry(tecnico)
-            .State = EntityState.Detached;
         return modificado;
     }
     //Metodo del Guardar
