@@ -79,7 +79,7 @@
     //El Metodo Validar
     public async Task<bool> Validar()
     {
-        Existe = await tecnicosServices.Existe(tecnico.TecnicoId ,tecnico.Nombres);
+        Existe = await tecnicosServices.Existe(tecnico.TecnicoId);
         return !Existe;
     }
     //El Metodo Guardar
