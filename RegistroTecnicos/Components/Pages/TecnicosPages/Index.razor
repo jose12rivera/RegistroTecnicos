@@ -79,7 +79,7 @@
                             </td>
 
                             <td>
-                                <button type="button" class="btn btn-outline-danger ml-2" @onclick="()=>IrEliminar(T.TecnicoId)">
+                                <button type="button" class="btn btn-outline-danger ml-2" @onclick="()=>Eliminar(T.TecnicoId)">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </td>
@@ -130,7 +130,7 @@
         }
     }
     //El Metodo IrEliminar
-    private async Task IrEliminar(int TecnicoId)
+    private async Task Eliminar(int TecnicoId)
     {
         navigationManager.NavigateTo($"/Tecnicos/Delete/TecnicoId={TecnicoId}");
     }
