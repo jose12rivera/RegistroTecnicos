@@ -16,20 +16,20 @@ public class TecnicosServices
     //Metodo del Existe
     public async Task<bool> Existe(int tecnicoId )
     {
-        return await _contexto.tecnicos
+        return await _contexto.Tecnicos
             .AnyAsync(T => T.TecnicoId == tecnicoId );
     }
     //Metodo del Insertar
     private async Task<bool> Insertar(Tecnicos tecnico)
     {
-        _contexto.tecnicos.Add(tecnico);
+        _contexto.Tecnicos.Add(tecnico);
         return await _contexto
             .SaveChangesAsync() > 0;
     }
     //Metodo del Modificar
     private async Task<bool> Modificar(Tecnicos tecnico)
     {
-        _contexto.tecnicos.Update(tecnico);
+        _contexto.Tecnicos.Update(tecnico);
         var modificado = await _contexto
             .SaveChangesAsync() > 0;
         _contexto.Entry(tecnico)
@@ -49,7 +49,7 @@ public class TecnicosServices
     //Metodo del Eliminar
     public async Task<bool> Eliminar(int id)
     {
-        var eliminado = await _contexto.tecnicos
+        var eliminado = await _contexto.Tecnicos
             .Where(t => t.TecnicoId == id)
             .ExecuteDeleteAsync();
         return eliminado > 0;
@@ -57,14 +57,14 @@ public class TecnicosServices
     //Metodo del Buscar
     public async Task<Tecnicos?> Buscar(int id)
     {
-        return await _contexto.tecnicos
+        return await _contexto.Tecnicos
             .AsNoTracking()
             .FirstOrDefaultAsync(T => T.TecnicoId == id);
     }
     //Metodo del listar
     public async Task<List<Tecnicos>>Listar(Expression<Func<Tecnicos, bool>> Criterio)
     {
-        return await _contexto.tecnicos
+        return await _contexto.Tecnicos
             .Where(Criterio).
             AsNoTracking()
             .ToListAsync();
