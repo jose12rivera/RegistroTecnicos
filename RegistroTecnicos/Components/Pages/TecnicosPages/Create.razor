@@ -4,7 +4,7 @@
 @rendermode InteractiveServer
 
 <EditForm Model="tecnico" OnValidSubmit="Guardar">
-    <DataAnnotationsValidator/>
+    <DataAnnotationsValidator />
 
     <div class="card shadow-lg border-0 rounded" style="background-color: white;">
         <div class="card-header bg-primary text-white text-center p-2 rounded">
@@ -19,19 +19,20 @@
                     <div class="input-group">
                         <div style="width: 40%; height: 1mm;">
 
-                            <InputNumber @bind-Value="tecnico.TecnicoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="bottonbuscar"/>
+                            <InputNumber @bind-Value="tecnico.TecnicoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="bottonbuscar" />
                         </div>
                     </div>
                 </div>
             </div>
 
-          @*   Nombres *@
-          <div class="mb-5">
+            @*   Nombres *@
+            <div class="mb-5">
                 <label for="Nombres" class="form-label"><strong>Nombres:</strong></label>
                 <InputText @bind-Value="tecnico.Nombres" class="form-control" />
-                <ValidationMessage For="@(()=>tecnico.Nombres)"/>
-          </div>
+                <ValidationMessage For="@(()=>tecnico.Nombres)" />
+            </div>
 
+           
             @*   SueldoHora *@
             <div class="mb-5">
                 <label for="SueldoHora" class="form-label"><strong>SueldoHora:</strong></label>
@@ -42,7 +43,7 @@
 
         <div class="card-footer  bg-light d-flex: justify-content-center mt-3">
             <div class="btn-group">
-                <button type="button" class="btn btn-outline-secondary ml-2"@onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
+                <button type="button" class="btn btn-outline-secondary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
                 <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span>Guardar</button>
                 <button type="button" class="btn btn-outline-primary" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
             </div>
@@ -53,7 +54,7 @@
 
 @code {
     [Parameter]
-    public int TecnicoId{ get; set; }
+    public int TecnicoId { get; set; }
     public Tecnicos? tecnico { get; set; } = new Tecnicos();
     private bool Existe = false;
 
@@ -68,7 +69,7 @@
     {
         Existe = false;
         var TecnicoEncontrado = await tecnicosServices.Buscar(tecnico.TecnicoId);
-        if(TecnicoEncontrado != null)
+        if (TecnicoEncontrado != null)
         {
             tecnico = TecnicoEncontrado;
         }
@@ -86,7 +87,7 @@
     //El Metodo Guardar
     public async Task Guardar()
     {
-        if(!await Validar())
+        if (!await Validar())
         {
             return;
         }

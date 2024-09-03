@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RegistroTecnicos.Components;
 using RegistroTecnicos.DAL;
+using RegistroTecnicos.Models;
 using RegistroTecnicos.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,9 @@ builder.Services.AddDbContext<Contexto>(o => o.UseSqlite(ConStr));
 
 //La inyeccion Del services
 builder.Services.AddScoped<TecnicosServices>();
+
+//La inyeccion del services TiposTecnicos
+builder.Services.AddScoped<TiposTecnicosServices>();
 
 //La inyeccion del Bootstrap
 builder.Services.AddBlazorBootstrap();

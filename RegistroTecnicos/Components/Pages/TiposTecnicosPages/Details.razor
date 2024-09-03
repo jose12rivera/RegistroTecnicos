@@ -1,0 +1,54 @@
+﻿@page "/TiposTecnicos/Details"
+@page "/TiposTecnicos/Details/{TipoId:int}"
+@inject TiposTecnicosServices tiposTecnicosServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+@if(tiposTecnicos != null)
+{
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white text-center p-3 rounded">
+                <h3 class="text-center"><strong>Detalles del Tipos T&eacute;cnico</strong></h3>
+            </div>
+
+            
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>TipoId:</strong>@tiposTecnicos.TipoId</li>
+                                 <li><strong>Descripci&oacute;n:</strong>@tiposTecnicos.Descripcion</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-outline-primary ml-2" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
+        </div>
+    </div>
+}
+else
+{
+    <p>No encotrado el tecnico</p>
+}
+@code {
+    [Parameter]
+    public int TipoId { get; set; }
+    public TiposTecnicos? tiposTecnicos { get; set; } = new TiposTecnicos();
+    private bool existe = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+            tiposTecnicos = await tiposTecnicosServices.Buscar(TipoId);
+        
+    }
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/TiposTecnicos/Index ");
+    }
+}
