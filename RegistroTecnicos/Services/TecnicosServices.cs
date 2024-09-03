@@ -35,7 +35,7 @@ public class TecnicosServices
         return modificado;
     }
     //Metodo del Guardar
-    public async Task<bool> Save(Tecnicos tecnico )
+    public async Task<bool> Guardar(Tecnicos tecnico )
     {
         if (!await Existe(tecnico.TecnicoId ))
         

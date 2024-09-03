@@ -76,14 +76,14 @@
         var TecnicoEliminado = await tecnicosServices.Listar(T => T.Nombres.ToLower() == tecnico.Nombres.ToLower() && T.TecnicoId != tecnico.TecnicoId);
         return TecnicoEliminado.Count == 0;
     }
-    //El Metodo Save
-    public async Task Save()
+    //El Metodo Guardar
+    public async Task Guardar()
     {
         if (!await Validar())
         {
             return;
         }
-        var guardado = await tecnicosServices.Save(tecnico);
+        var guardado = await tecnicosServices.Guardar(tecnico);
         if (guardado)
         {
             Nuevo();

@@ -82,14 +82,14 @@
         Existe = await tecnicosServices.Existe(tecnico.TecnicoId);
         return !Existe;
     }
-    //El Metodo Save
-    public async Task Save()
+    //El Metodo Guardar
+    public async Task Guardar()
     {
         if(!await Validar())
         {
             return;
         }
-        var guardado = await tecnicosServices.Save(tecnico);
+        var guardado = await tecnicosServices.Guardar(tecnico);
         if (guardado)
         {
             Nuevo();
