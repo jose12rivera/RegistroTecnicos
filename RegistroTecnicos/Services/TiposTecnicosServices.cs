@@ -18,7 +18,6 @@ public class TiposTecnicosServices
     {
         return await _contexto.TiposTecnicos.AnyAsync(t=>t.TipoTecnicoId == tipoTecnicoId);
     }
-
     //Metodo del Insertar
     private async Task<bool>Insertar(TiposTecnicos tiposTecnico)
     {
