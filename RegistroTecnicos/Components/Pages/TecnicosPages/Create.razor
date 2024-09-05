@@ -72,7 +72,7 @@
     public Tecnicos? tecnico { get; set; } = new Tecnicos();
     public List<TiposTecnicos> TiposTecnicos { get; set; } = new List<TiposTecnicos>();
     private bool Existe = false;
-
+    //Metodo OnInitialized
     protected override async Task OnInitializedAsync()
     {
         TiposTecnicos = await tiposTecnicosServices.Listar(t =>true);
