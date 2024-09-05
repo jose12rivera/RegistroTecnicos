@@ -3,10 +3,10 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-<EditForm Model="tiposTecnicos" OnValidSubmit="Guardar">
+<EditForm Model="tiposTecnico" OnValidSubmit="Guardar">
     <DataAnnotationsValidator/>
     <div class="card-header bg-primary text-white text-center p-3 rounded">
-        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Registro TiposTecnicos</h3>
+        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Registro TiposTecnic&oacute;</h3>
     </div>
     <div class="card-body">
        @*  TipoId *@
@@ -15,7 +15,7 @@
                 <label for=" TipoId" class="form-label">TipoId:</label>
                 <div class="input-group">
                     <div style="width: 40%; height: 1mm;">
-                        <InputNumber @bind-Value="tiposTecnicos.TipoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="bottobuscar"/>
+                        <InputNumber @bind-Value="tiposTecnico.TipoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="bottobuscar"/>
                     </div>
                 </div>
             </div>
@@ -23,9 +23,9 @@
         </div>
        @*  Descripcion *@
        <div class="mb-5">
-            <label for=" Descripcion " class="form-label">Descripcion:</label>
-            <InputText @bind-Value="tiposTecnicos.Descripcion " class="form-control" />
-            <ValidationMessage For="@(()=>tiposTecnicos.Descripcion)"/>
+            <label for=" Descripcion" class="form-label">Descripci&oacute;n:</label>
+            <InputText @bind-Value="tiposTecnico.Descripcion " class="form-control" />
+            <ValidationMessage For="@(()=>tiposTecnico.Descripcion)"/>
        </div>
     </div>
     <div class="card-footer: aligh; d-flex: justify-content-center;">
@@ -40,44 +40,49 @@
 @code {
     [Parameter]
     public int TipoId{ get; set; }
-    public TiposTecnicos? tiposTecnicos { get; set; } = new TiposTecnicos();
+    public TiposTecnicos? tiposTecnico { get; set; } = new TiposTecnicos();
     private bool existe = false;
 
+    //Metodo Nuevo
     public async Task Nuevo()
     {
-        tiposTecnicos = new TiposTecnicos();
+        tiposTecnico = new TiposTecnicos();
         existe = false;
     }
+    //Metodo Buscar
     public async Task Buscar()
     {
         existe = false;
-        var encontrado = await tiposTecnicosServices.Buscar(tiposTecnicos.TipoId);
+        var encontrado = await tiposTecnicosServices.Buscar(tiposTecnico.TipoId);
         if(encontrado != null)
         {
-            tiposTecnicos = encontrado;
+            tiposTecnico = encontrado;
         }
         else
         {
             Nuevo();
         }
     }
+    //Metodo Validar
     public async Task<bool> Validar()
     {
-        existe = await tiposTecnicosServices.Existe(tiposTecnicos.TipoId);
+        existe = await tiposTecnicosServices.Existe(tiposTecnico.TipoId);
         return !existe;
     }
+    //Metodo Guardar
     public async Task Guardar()
     {
         if(!await Validar())
         {
             return;
         }
-        var guadado = await tiposTecnicosServices.Guardar(tiposTecnicos);
+        var guadado = await tiposTecnicosServices.Guardar(tiposTecnico);
         if (guadado)
         {
             Nuevo();
         }
     }
+    //Metodo Volver
     public async Task Volver()
     {
         navigationManager.NavigateTo("/TiposTecnicos/Index ");
