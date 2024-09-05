@@ -17,7 +17,7 @@ builder.Services.AddDbContext<Contexto>(o => o.UseSqlite(ConStr));
 //La inyeccion Del services
 builder.Services.AddScoped<TecnicosServices>();
 
-//La inyeccion del services TiposTecnicos
+//La inyeccion del services Tipos Tecnicos
 builder.Services.AddScoped<TiposTecnicosServices>();
 
 //La inyeccion del Bootstrap
