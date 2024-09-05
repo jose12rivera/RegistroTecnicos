@@ -4,7 +4,6 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header bg-primary text-white text-center p-3 rounded">
@@ -19,7 +18,7 @@
                     <div class="col-md-10">
                         <div class="card shadow-lg">
                             <div class="card-header bg-primary text-white">
-                            <h3 class="text-center"><strong>Eliminar el Tipos T&eacute;cnico</strong></h3>
+                                  <h3 class="text-center"><strong>Eliminar el Tipos T&eacute;cnico</strong></h3>
                             </div>
 
                             <div class="card-body">
@@ -28,8 +27,8 @@
                                         <div class="row">
                                             <div class="col-md-10">
                                                   <ul class="list-unstyled">
-                                                     <li><strong>TipoId:</strong>@tiposTecnicos.TipoId</li>
-                                                     <li><strong>Descripci&oacute;n:</strong>@tiposTecnicos.Descripcion</li>
+                                                     <li><strong>TipoId:</strong>@tiposTecnico.TipoId</li>
+                                                     <li><strong>Descripci&oacute;n:</strong>@tiposTecnico.Descripcion</li>
                                                   </ul>
                                             </div>
                                         </div>
@@ -48,7 +47,7 @@
             <button type="button" class="btn btn-outline-primary ml-2" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
         </div>
     </div>
-@if(tiposTecnicos ==null)
+@if(tiposTecnico ==null)
 {
     <p>No encotrado el tecnico</p>
 }
@@ -56,20 +55,20 @@
 @code {
     [Parameter]
     public int TipoId { get; set; }
-    public TiposTecnicos? tiposTecnicos { get; set; } = new TiposTecnicos();
+    public TiposTecnicos? tiposTecnico { get; set; } = new TiposTecnicos();
     private bool existe = false;
 
     protected override async Task OnInitializedAsync()
     {
         if (TipoId != 0)
         {
-            tiposTecnicos = await tiposTecnicosServices.Buscar(TipoId);
+            tiposTecnico = await tiposTecnicosServices.Buscar(TipoId);
         }
     }
 
     public async Task EliminarTiposTecnico()
     {
-        if(TipoId == 0 || tiposTecnicos == null)
+        if(TipoId == 0 || tiposTecnico == null)
         {
             return;
         }
