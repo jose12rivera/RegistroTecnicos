@@ -39,7 +39,7 @@
 
                 <InputSelect @bind-Value="tecnico.TipoId" class="form-select">
                     <option value="0">Elejir Un tipo T&eacute;cnicos</option>
-                    @foreach (var tipo in TiposTecnicos)
+                    @foreach (var tipo in tiposTecnico)
                     {
                         <option value="@tipo.TipoId">@tipo.Descripcion</option>
                     }
@@ -70,15 +70,17 @@
     [Parameter]
     public int TecnicoId { get; set; }
     public Tecnicos? tecnico { get; set; } = new Tecnicos();
-    public List<TiposTecnicos> TiposTecnicos { get; set; } = new List<TiposTecnicos>();
+    public List<TiposTecnicos> tiposTecnico { get; set; } = new List<TiposTecnicos>();
     private bool Existe = false;
 
     //El Metodo OnInitialilized
     protected override async Task OnInitializedAsync()
     {
-        if(TecnicoId != 0)
-        {
-            tecnico = await tecnicosServices.Buscar(TecnicoId) ?? new Tecnicos();
+        
+       tiposTecnico = await tiposTecnicosServices.Listar(t=>true);
+        if (TecnicoId != 0)
+         {
+             tecnico = await tecnicosServices.Buscar(TecnicoId) ?? new Tecnicos();
         }
     }
     //El Metodo Nuevo
