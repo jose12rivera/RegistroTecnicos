@@ -1,6 +1,7 @@
 ﻿@page "/Tecnicos/Edit"
 @page "/Tecnicos/Edit/{TecnicoId:int}"
 @inject TecnicosServices tecnicosServices
+@inject TiposTecnicosServices tiposTecnicosServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -9,7 +10,7 @@
 
     <div class="card shadow-lg border-0 rounded" style="background-color: white;">
         <div class="card-header bg-primary text-white text-center p-2 rounded">
-            <h3 style="font-weight: bold;" class="md-4 font-weight: bold; ">Modificar El  T&eacute;cnico</h3>
+            <h3 style="font-weight: bold;" class="md-4 font-weight: bold; ">Registro Del  T&eacute;cnico</h3>
         </div>
 
         <div class="card-body">
@@ -19,17 +20,31 @@
                     <label for="TecnicoId" class="form-label"><strong>T&eacute;cnicoId:</strong></label>
                     <div class="input-group">
                         <div style="width: 40%; height: 1mm;">
+
                             <InputNumber @bind-Value="tecnico.TecnicoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="bottonbuscar" />
                         </div>
                     </div>
                 </div>
             </div>
-
             @*   Nombres *@
             <div class="mb-5">
                 <label for="Nombres" class="form-label"><strong>Nombres:</strong></label>
                 <InputText @bind-Value="tecnico.Nombres" class="form-control" />
                 <ValidationMessage For="@(()=>tecnico.Nombres)" />
+            </div>
+
+            @* TipoId *@
+            <div class="mb-5">
+                <label> Tipo de T&eacute;cnico </label>
+
+                <InputSelect @bind-Value="tecnico.TipoId" class="form-select">
+                    <option value="0">Elejir Un tipo T&eacute;cnicos</option>
+                    @foreach (var tipo in TiposTecnicos)
+                    {
+                        <option value="@tipo.TipoId">@tipo.Descripcion</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(()=>tecnico.SueldoHora)" />
             </div>
 
             @*   SueldoHora *@
@@ -40,11 +55,11 @@
             </div>
         </div>
 
-        <div class="card-footer bg-light d-flex: justify-content-center mt-3">
+        <div class="card-footer  bg-light d-flex: justify-content-center mt-3">
             <div class="btn-group">
                 <button type="button" class="btn btn-outline-secondary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
                 <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span>Guardar</button>
-                <button type="button"  class="btn btn-outline-primary ml-2" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
+                <button type="button" class="btn btn-outline-primary" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
             </div>
         </div>
     </div>
@@ -55,7 +70,9 @@
     [Parameter]
     public int TecnicoId { get; set; }
     public Tecnicos? tecnico { get; set; } = new Tecnicos();
+    public List<TiposTecnicos> TiposTecnicos { get; set; } = new List<TiposTecnicos>();
     private bool Existe = false;
+
     //El Metodo OnInitialilized
     protected override async Task OnInitializedAsync()
     {
@@ -70,10 +87,13 @@
         tecnico = new Tecnicos();
         Existe = false;
     }
+
     //El Metodo Validar
     public async Task<bool> Validar()
     {
-        var TecnicoEliminado = await tecnicosServices.Listar(T => T.Nombres.ToLower() == tecnico.Nombres.ToLower() && T.TecnicoId != tecnico.TecnicoId);
+        var TecnicoEliminado = await tecnicosServices
+        .Listar(T => T.Nombres
+            .ToLower() == tecnico.Nombres.ToLower() && T.TecnicoId != tecnico.TecnicoId);
         return TecnicoEliminado.Count == 0;
     }
     //El Metodo Guardar
