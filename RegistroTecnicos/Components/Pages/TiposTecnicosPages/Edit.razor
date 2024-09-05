@@ -1,5 +1,5 @@
 ﻿@page "/TiposTecnicos/Edit"
-@page "/TiposTecnicos/Edit/{TipoId:int}"
+@page "/TiposTecnicos/Edit/{TipoTecnicoId:int}"
 @inject TiposTecnicosServices tiposTecnicosServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
@@ -10,13 +10,13 @@
         <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Registro TiposTecnico</h3>
     </div>
     <div class="card-body">
-        @*  TipoId *@
+        @*  TipoTecnicoId  *@
         <div class="row">
             <div class="col-md-8 mb-5">
-                <label for=" TipoId" class="form-label">TipoId:</label>
+                <label for=" TipoTecnicoId " class="form-label">TipoTecnicoId :</label>
                 <div class="input-group">
                     <div style="width: 40%; height: 1mm;">
-                        <InputNumber @bind-Value="tiposTecnico.TipoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="bottobuscar" />
+                        <InputNumber @bind-Value="tiposTecnico.TipoTecnicoId " class="form-control" style="font-size: 0.8rem;" aria-describedby="bottobuscar" />
                     </div>
                 </div>
             </div>
@@ -24,9 +24,9 @@
         </div>
         @*  Descripcion *@
         <div class="mb-5">
-            <label for=" Descripcion " class="form-label">Descripci&oacute;n:</label>
+            <label for=" Descripcion" class="form-label">Descripci&oacute;n:</label>
             <InputText @bind-Value="tiposTecnico.Descripcion " class="form-control" />
-            <ValidationMessage For="@(()=>tiposTecnico.TipoId)" />
+            <ValidationMessage For="@(()=>tiposTecnico.Descripcion)" />
         </div>
     </div>
     <div class="card-footer: aligh; d-flex: justify-content-center;">
@@ -40,15 +40,15 @@
 
 @code {
     [Parameter]
-    public int TipoId { get; set; }
+    public int TipoTecnicoId { get; set; }
     public TiposTecnicos? tiposTecnico { get; set; } = new TiposTecnicos();
     private bool existe = false;
     //Metodo OnIntialize
     protected override async Task OnInitializedAsync()
     {
-        if(TipoId != 0)
+        if (TipoTecnicoId != 0)
         {
-            tiposTecnico = await tiposTecnicosServices.Buscar(TipoId) ?? new TiposTecnicos();
+            tiposTecnico = await tiposTecnicosServices.Buscar(TipoTecnicoId) ?? new TiposTecnicos();
         }
     }
     //Metod Nuevo
@@ -61,7 +61,7 @@
     public async Task<bool> Validar()
     {
         var ListaTiposTecnicos = await tiposTecnicosServices
-        .Listar(t => t.Descripcion.ToLower() == tiposTecnico.Descripcion.ToLower() && t.TipoId != tiposTecnico.TipoId);
+        .Listar(t => t.Descripcion.ToLower() == tiposTecnico.Descripcion.ToLower() && t.TipoTecnicoId != tiposTecnico.TipoTecnicoId);
         return ListaTiposTecnicos.Count == 0;
     }
     //metodo Guardar

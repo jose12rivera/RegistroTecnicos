@@ -11,7 +11,7 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240903235234_TiposTecnicos")]
+    [Migration("20240905231622_TiposTecnicos")]
     partial class TiposTecnicos
     {
         /// <inheritdoc />
@@ -34,12 +34,12 @@ namespace RegistroTecnicos.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TipoId")
+                    b.Property<int>("TipoTecnicoId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("TecnicoId");
 
-                    b.HasIndex("TipoId")
+                    b.HasIndex("TipoTecnicoId")
                         .IsUnique();
 
                     b.ToTable("Tecnicos");
@@ -47,7 +47,7 @@ namespace RegistroTecnicos.Migrations
 
             modelBuilder.Entity("RegistroTecnicos.Models.TiposTecnicos", b =>
                 {
-                    b.Property<int>("TipoId")
+                    b.Property<int>("TipoTecnicoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -55,7 +55,7 @@ namespace RegistroTecnicos.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("TipoId");
+                    b.HasKey("TipoTecnicoId");
 
                     b.ToTable("TiposTecnicos");
                 });
@@ -64,7 +64,7 @@ namespace RegistroTecnicos.Migrations
                 {
                     b.HasOne("RegistroTecnicos.Models.TiposTecnicos", "TiposTecnicos")
                         .WithOne("Tecnicos")
-                        .HasForeignKey("RegistroTecnicos.Models.Tecnicos", "TipoId")
+                        .HasForeignKey("RegistroTecnicos.Models.Tecnicos", "TipoTecnicoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

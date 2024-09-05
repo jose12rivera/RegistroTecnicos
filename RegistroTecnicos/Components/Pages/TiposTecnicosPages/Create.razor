@@ -12,10 +12,10 @@
        @*  TipoId *@
         <div class="row">
             <div class="col-md-8 mb-5">
-                <label for=" TipoId" class="form-label">TipoId:</label>
+                <label for=" TipoTecnicoId " class="form-label">TipoTecnicoId :</label>
                 <div class="input-group">
                     <div style="width: 40%; height: 1mm;">
-                        <InputNumber @bind-Value="tiposTecnico.TipoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="bottobuscar"/>
+                        <InputNumber @bind-Value="tiposTecnico.TipoTecnicoId " class="form-control" style="font-size: 0.8rem;" aria-describedby="bottobuscar" />
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
 
 @code {
     [Parameter]
-    public int TipoId{ get; set; }
+    public int TipoTecnicoId  { get; set; }
     public TiposTecnicos? tiposTecnico { get; set; } = new TiposTecnicos();
     private bool existe = false;
 
@@ -53,7 +53,7 @@
     public async Task Buscar()
     {
         existe = false;
-        var encontrado = await tiposTecnicosServices.Buscar(tiposTecnico.TipoId);
+        var encontrado = await tiposTecnicosServices.Buscar(tiposTecnico.TipoTecnicoId);
         if(encontrado != null)
         {
             tiposTecnico = encontrado;
@@ -66,7 +66,7 @@
     //Metodo Validar
     public async Task<bool> Validar()
     {
-        existe = await tiposTecnicosServices.Existe(tiposTecnico.TipoId);
+        existe = await tiposTecnicosServices.Existe(tiposTecnico.TipoTecnicoId);
         return !existe;
     }
     //Metodo Guardar

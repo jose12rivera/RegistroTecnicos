@@ -14,9 +14,9 @@ public class TiposTecnicosServices
         _contexto = contexto;
     }
     //Metodo del Existe
-    public async Task <bool>Existe(int tipoId)
+    public async Task <bool>Existe(int tipoTecnicoId)
     {
-        return await _contexto.TiposTecnicos.AnyAsync(t=>t.TipoId == tipoId);
+        return await _contexto.TiposTecnicos.AnyAsync(t=>t.TipoTecnicoId == tipoTecnicoId);
     }
 
     //Metodo del Insertar
@@ -35,7 +35,7 @@ public class TiposTecnicosServices
     //Metodo del Guardar
     public async Task<bool>Guardar(TiposTecnicos tiposTecnico)
     {
-        if(!await Existe(tiposTecnico.TipoId))
+        if(!await Existe(tiposTecnico.TipoTecnicoId))
         {
             return await Insertar(tiposTecnico);
         }
@@ -48,7 +48,7 @@ public class TiposTecnicosServices
     public async Task<bool>Eliminar(int id)
     {
         var eliminado = await _contexto.TiposTecnicos
-            .Where(t => t.TipoId == id)
+            .Where(t => t.TipoTecnicoId == id)
             .ExecuteDeleteAsync();
         return eliminado > 0;
     }
@@ -57,7 +57,7 @@ public class TiposTecnicosServices
     {
         return await _contexto.TiposTecnicos
             .AsNoTracking()
-            .FirstOrDefaultAsync(t => t.TipoId == id);
+            .FirstOrDefaultAsync(t => t.TipoTecnicoId == id);
     }
     //Metodo del listar
     public async Task<List<TiposTecnicos>>Listar(Expression<Func<TiposTecnicos, bool>> Criterio)

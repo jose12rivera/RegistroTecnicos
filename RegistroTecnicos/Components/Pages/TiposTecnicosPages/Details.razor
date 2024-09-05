@@ -1,5 +1,5 @@
 ﻿@page "/TiposTecnicos/Details"
-@page "/TiposTecnicos/Details/{TipoId:int}"
+@page "/TiposTecnicos/Details/{TipoTecnicoId:int}"
 @inject TiposTecnicosServices tiposTecnicosServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
@@ -17,7 +17,7 @@
                     <div class="col-md-10">
                         <div class="card-body">
                             <ul class="list-unstyled">
-                                <li><strong>TipoId:</strong>@tiposTecnico.TipoId</li>
+                                <li><strong>TipoId:</strong>@tiposTecnico.TipoTecnicoId </li>
                                  <li><strong>Descripci&oacute;n:</strong>@tiposTecnico.Descripcion</li>
                             </ul>
                         </div>
@@ -36,13 +36,13 @@ else
 }
 @code {
     [Parameter]
-    public int TipoId { get; set; }
+    public int TipoTecnicoId { get; set; }
     public TiposTecnicos? tiposTecnico { get; set; } = new TiposTecnicos();
     private bool existe = false;
 
     protected override async Task OnInitializedAsync()
     {
-            tiposTecnico = await tiposTecnicosServices.Buscar(TipoId);
+        tiposTecnico = await tiposTecnicosServices.Buscar(TipoTecnicoId);
         
     }
     public async Task Volver()

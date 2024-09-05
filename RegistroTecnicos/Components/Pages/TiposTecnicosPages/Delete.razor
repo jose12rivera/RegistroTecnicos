@@ -1,5 +1,5 @@
 ﻿@page "/TiposTecnicos/Delete"
-@page "/TiposTecnicos/Delete/TipoId={TipoId:int}"
+@page "/TiposTecnicos/Delete/TipoTecnicoId={TipoTecnicoId:int}"
 @inject TiposTecnicosServices tiposTecnicosServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
@@ -27,7 +27,7 @@
                                         <div class="row">
                                             <div class="col-md-10">
                                                   <ul class="list-unstyled">
-                                                     <li><strong>TipoId:</strong>@tiposTecnico.TipoId</li>
+                                                  <li><strong>TipoTecnicoId:</strong>@tiposTecnico.TipoTecnicoId </li>
                                                      <li><strong>Descripci&oacute;n:</strong>@tiposTecnico.Descripcion</li>
                                                   </ul>
                                             </div>
@@ -54,25 +54,25 @@
 
 @code {
     [Parameter]
-    public int TipoId { get; set; }
+    public int TipoTecnicoId { get; set; }
     public TiposTecnicos? tiposTecnico { get; set; } = new TiposTecnicos();
     private bool existe = false;
 
     protected override async Task OnInitializedAsync()
     {
-        if (TipoId != 0)
+        if (TipoTecnicoId != 0)
         {
-            tiposTecnico = await tiposTecnicosServices.Buscar(TipoId);
+            tiposTecnico = await tiposTecnicosServices.Buscar(TipoTecnicoId);
         }
     }
 
     public async Task EliminarTiposTecnico()
     {
-        if(TipoId == 0 || tiposTecnico == null)
+        if (TipoTecnicoId == 0 || tiposTecnico == null)
         {
             return;
         }
-        if(await tiposTecnicosServices.Eliminar(TipoId))
+        if (await tiposTecnicosServices.Eliminar(TipoTecnicoId))
         {
             Volver();
         }

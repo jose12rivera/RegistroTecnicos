@@ -24,7 +24,7 @@
         <table class=" table table-bordered text-center">
             <thead class="bg-primary text-white">
                 <tr>
-                    <th>TipoId</th>
+                    <th>TipoTecnicoId</th>
                     <th>Descripci&oacute;n</th>
                     <th>Ver</th>
                     <th>Editar</th>
@@ -35,20 +35,20 @@
                 @foreach (var t in ListaTiposTecnicos)
                 {
                     <tr>
-                        <td>@t.TipoId</td>
+                        <td>@t.TipoTecnicoId </td>
                         <td>@t.Descripcion</td>
                         <td>
-                            <a href="/TiposTecnicos/Details/@t.TipoId" class="btn btn-outline-primary">
+                            <a href="/TiposTecnicos/Details/@t.TipoTecnicoId " class="btn btn-outline-primary">
                                 <i class="bi bi-eye"></i>
                             </a>
                         </td>
                         <td>
-                            <a href="/TiposTecnicos/Edit/@t.TipoId" class="btn btn-outline-secondary">
+                            <a href="/TiposTecnicos/Edit/@t.TipoTecnicoId " class="btn btn-outline-secondary">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-outline-danger ml-2" @onclick="()=>Eliminar(t.TipoId)">
+                            <button type="button" class="btn btn-outline-danger ml-2" @onclick="()=>Eliminar(t.TipoTecnicoId )">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </td>
@@ -69,8 +69,8 @@
         ListaTiposTecnicos = await tiposTecnicosServices.Listar(t => true);
     }
 
-    private async Task Eliminar(int TipoId)
+    private async Task Eliminar(int TipoTecnicoId)
     {
-        navigationManager.NavigateTo($"TiposTecnicos/Delete/TipoId={TipoId}");
+        navigationManager.NavigateTo($"/TiposTecnicos/Delete/TipoTecnicoId={TipoTecnicoId}");
     }
 }
