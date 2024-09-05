@@ -4,7 +4,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>T&eacute;cnicos</PageTitle>
-
 <EditForm Model="ListaTecnicos" class="shadow-lg bolder p-3 rounded">
     <div class="card-header bg-primary text-white text-center p-2 rounded">
         <h3 style="font-weight: bold;" class="md-4 font-weight: bold; ">Consulta De T&eacute;cnicos</h3>
@@ -17,6 +16,7 @@
                 <option value="Id">TecnicoId</option>
                 <option value="Nombres">Nombres</option>
                 <option value="SueldoHora">SueldoHora</option>
+                
             </select>
         </div>
 
@@ -51,6 +51,7 @@
                     <tr>
                         <th>T&eacute;cnicoId</th>
                         <th>Nombres</th>
+                        <th>TipoTecnicos</th>
                         <th>SueldoHora</th>
                         <th>Ver</th>
                         <th>Editar</th>
@@ -59,27 +60,28 @@
                 </thead>
 
                 <tbody>
-                    @foreach (var T in ListaTecnicos)
+                    @foreach (var tecnico in ListaTecnicos)
                     {
                         <tr>
-                            <td>@T.TecnicoId</td>
-                            <td>@T.Nombres</td>
-                            <td>@T.SueldoHora</td>
+                            <td>@tecnico.TecnicoId</td>
+                            <td>@tecnico.Nombres</td>
+                            <td>@tecnico.TiposTecnicos!.Descripcion</td>
+                            <td>@tecnico.SueldoHora</td>
 
                             <td>
-                                <a href="/Tecnicos/Details/@T.TecnicoId" type="button" class="btn btn-outline-primary ml-2">
-                                    <i class="bi bi-info-circle-fill"></i>
+                                <a href="/Tecnicos/Details/@tecnico.TecnicoId" type="button" class="btn btn-outline-primary ml-2">
+                                    <i class="bi bi-eye"></i>
                                 </a>
                             </td>
 
                             <td>
-                                <a href="/Tecnicos/Edit/@T.TecnicoId" type="button" class="btn btn-outline-success ml-2">
+                                <a href="/Tecnicos/Edit/@tecnico.TecnicoId" type="button" class="btn btn-outline-success ml-2">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
                             </td>
 
                             <td>
-                                <button type="button" class="btn btn-outline-danger ml-2" @onclick="()=>Eliminar(T.TecnicoId)">
+                                <button type="button" class="btn btn-outline-danger ml-2" @onclick="()=>Eliminar(tecnico.TecnicoId)">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </td>
@@ -97,10 +99,11 @@
 </EditForm>
 
 @code {
-    public Tecnicos? T = new Tecnicos();
+    public Tecnicos? tecnico = new Tecnicos();
     public List<Tecnicos> ListaTecnicos { get; set; } = new List<Tecnicos>();
     public string filtro = "Id";
     public string valorfiltro = "";
+
     //El Metodo OnInitialized
     protected override async Task OnInitializedAsync()
     {
