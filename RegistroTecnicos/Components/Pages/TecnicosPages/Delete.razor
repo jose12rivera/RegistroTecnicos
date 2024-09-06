@@ -73,6 +73,7 @@
         if (TecnicoId != 0)
         {
             tecnico = await tecnicosServices.Buscar(TecnicoId);
+            tiposTecnico = await tiposTecnicosServices.Buscar(tecnico.TipoTecnicoId);
         }
     }
     //El Metodo EliminarTecnico
