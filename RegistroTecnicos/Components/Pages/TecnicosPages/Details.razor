@@ -51,7 +51,12 @@ else
     //El Metodo OnInitialized
     protected override async Task OnInitializedAsync()
     {
+
+        if (TecnicoId != 0)
+        {
             tecnico = await tecnicosServices.Buscar(TecnicoId);
+            tiposTecnico = await tiposTecnicosServices.Buscar(tecnico.TipoTecnicoId);
+        }
     }
     //El Metodo Volver
     public async Task Volver()
