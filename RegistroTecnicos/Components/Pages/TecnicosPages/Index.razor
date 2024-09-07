@@ -15,6 +15,7 @@
             <select @bind="filtro"  class="form-select">  
                 <option value="Id">TecnicoId</option>
                 <option value="Nombres">Nombres</option>
+                <option value="TipoTecnicoId">TipoT&eacute;cnico</option>
                 <option value="SueldoHora">SueldoHora</option>
                 
             </select>
@@ -126,7 +127,10 @@
             {
                 ListaTecnicos = await tecnicosServices.Listar(t => t.Nombres.Contains(valorfiltro));
             }
-            else if (filtro == "SueldoHora" && decimal.TryParse(valorfiltro, out decimal SueldoHora))
+            else if (filtro == "TipoTecnicoId"&&int.TryParse(valorfiltro,out int TipoTecnicoId))
+            {
+                ListaTecnicos = await tecnicosServices.Listar(t => t.TipoTecnicoId ==TipoTecnicoId);
+            }else if (filtro == "SueldoHora" && decimal.TryParse(valorfiltro, out decimal SueldoHora))
             {
                 ListaTecnicos = await tecnicosServices.Listar(t => t.SueldoHora==SueldoHora);
             }
