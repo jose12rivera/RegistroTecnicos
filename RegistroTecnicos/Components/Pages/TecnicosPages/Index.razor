@@ -15,9 +15,7 @@
             <select @bind="filtro"  class="form-select">  
                 <option value="Id">TecnicoId</option>
                 <option value="Nombres">Nombres</option>
-                <option value="TipoTecnicoId">TipoT&eacute;cnico</option>
                 <option value="SueldoHora">SueldoHora</option>
-                
             </select>
         </div>
 
@@ -113,26 +111,24 @@
     //El Metdo Buscar
     public async Task Buscar()
     {
+
         if (string.IsNullOrWhiteSpace(valorfiltro))
         {
             ListaTecnicos = await tecnicosServices.Listar(t => true);
         }
         else
         {
-            if(filtro=="Id"&&int.TryParse(valorfiltro,out int TecnicoId))
+            if (filtro == "Id" && int.TryParse(valorfiltro, out int TecnicoId))
             {
-                ListaTecnicos = await tecnicosServices.Listar(t => t.TecnicoId==TecnicoId);
+                ListaTecnicos = await tecnicosServices.Listar(t => t.TecnicoId == TecnicoId);
             }
             else if (filtro == "Nombres")
             {
                 ListaTecnicos = await tecnicosServices.Listar(t => t.Nombres.Contains(valorfiltro));
             }
-            else if (filtro == "TipoTecnicoId"&&int.TryParse(valorfiltro,out int TipoTecnicoId))
+            else if (filtro == "SueldoHora" && decimal.TryParse(valorfiltro, out decimal SueldoHora))
             {
-                ListaTecnicos = await tecnicosServices.Listar(t => t.TipoTecnicoId ==TipoTecnicoId);
-            }else if (filtro == "SueldoHora" && decimal.TryParse(valorfiltro, out decimal SueldoHora))
-            {
-                ListaTecnicos = await tecnicosServices.Listar(t => t.SueldoHora==SueldoHora);
+                ListaTecnicos = await tecnicosServices.Listar(t => t.SueldoHora == SueldoHora);
             }
         }
     }
