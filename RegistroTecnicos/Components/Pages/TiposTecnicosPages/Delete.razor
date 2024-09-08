@@ -1,0 +1,86 @@
+﻿@page "/TiposTecnicos/Delete"
+@page "/TiposTecnicos/Delete/TipoTecnicoId={TipoTecnicoId:int}"
+@inject TiposTecnicosServices tiposTecnicosServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white text-center p-3 rounded">
+                <h3><strong>Eliminar el TiposT&eacute;cnico</strong></h3>
+            </div>
+
+            <div class="card-header align-content-center text-center">
+               <h3 class="text-danger">¿Est&aacute; Seguro Que Quiere Eliminar El TiposT&eacute;cnico?</h3>
+            </div>
+
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <div class="card shadow-lg">
+                            <div class="card-header bg-primary text-white">
+                                  <h3 class="text-center"><strong>Eliminar el TiposT&eacute;cnico</strong></h3>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="bolder-primary border-2 bolder">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                  <ul class="list-unstyled">
+                                                  <li><strong>TipoT&eacute;cnicoId:</strong>@tiposTecnico.TipoTecnicoId </li>
+                                                     <li><strong>Descripci&oacute;n:</strong>@tiposTecnico.Descripcion</li>
+                                                  </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer text-center">
+            <button type="button" class="btn btn-outline-danger ml-2" @onclick="EliminarTiposTecnico"><span class="bi bi-trash"></span>Eliminar</button>
+            <button type="button" class="btn btn-outline-primary ml-2" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
+        </div>
+    </div>
+@if(tiposTecnico ==null)
+{
+    <p>No encotrado el tecnico</p>
+}
+
+@code {
+    [Parameter]
+    public int TipoTecnicoId { get; set; }
+    public TiposTecnicos? tiposTecnico { get; set; } = new TiposTecnicos();
+    private bool existe = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (TipoTecnicoId != 0)
+        {
+            tiposTecnico = await tiposTecnicosServices.Buscar(TipoTecnicoId);
+        }
+    }
+
+    public async Task EliminarTiposTecnico()
+    {
+        if (TipoTecnicoId == 0 || tiposTecnico == null)
+        {
+            return;
+        }
+        if (await tiposTecnicosServices.Eliminar(TipoTecnicoId))
+        {
+            Volver();
+        }
+    }
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/TiposTecnicos/Index ");
+    }
+}
+

@@ -1,6 +1,7 @@
 ﻿@page "/Tecnicos/Details"
 @page "/Tecnicos/Details/{TecnicoId:int}"
 @inject TecnicosServices tecnicosServices
+@inject TiposTecnicosServices tiposTecnicosServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -21,7 +22,9 @@
                             <ul class="list-unstyled">
                                 <li><strong>T&eacute;cnicoId:</strong>@tecnico.TecnicoId</li>
                                 <li><strong>Nombres:</strong>@tecnico.Nombres</li>
+                                <li><strong>Descripci&oacute;n:</strong>@tiposTecnico.Descripcion</li>
                                 <li><strong>SueldoHora:</strong>@tecnico.SueldoHora</li>
+                               
                             </ul>
                         </div>
                     </div>
@@ -43,11 +46,17 @@ else
     [Parameter]
     public int TecnicoId { get; set; }
     public Tecnicos? tecnico { get; set; } = new Tecnicos();
+    public TiposTecnicos? tiposTecnico { get; set; } = new TiposTecnicos();
     private bool Existe = false;
     //El Metodo OnInitialized
     protected override async Task OnInitializedAsync()
     {
+
+        if (TecnicoId != 0)
+        {
             tecnico = await tecnicosServices.Buscar(TecnicoId);
+            tiposTecnico = await tiposTecnicosServices.Buscar(tecnico.TipoTecnicoId);
+        }
     }
     //El Metodo Volver
     public async Task Volver()
