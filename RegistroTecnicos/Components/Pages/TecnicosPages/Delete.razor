@@ -30,7 +30,7 @@
                             <div class="bolder-primary border-2 bolder">
                                 <div class="card-body">
                                     <div class="row ">
-                                        <div class="col-md-8 ">
+                                        <div class="col-md-10 ">
                                             <ul class="list-unstyled">
                                                 <li><strong>T&eacute;cnicoId:</strong>@tecnico.TecnicoId</li>
                                                 <li><strong>Nombres:</strong>@tecnico.Nombres</li>
@@ -48,12 +48,12 @@
             </div>
         </div>
     </div>
-
     <div class="card-footer text-center">
         <button type="button" class="btn btn-outline-danger ml-2" @onclick="EliminarTecnico"><i class="bi bi-trash"></i>Eliminar</button>
         <button type="button" class="btn btn-outline-primary ml-2" @onclick="Volver"><i class="bi bi-box-arrow-left"></i>Volver</button>
     </div>
 </div>
+
 
 @if (tecnico == null)
 {

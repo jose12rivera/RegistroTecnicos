@@ -20,6 +20,10 @@ builder.Services.AddScoped<TecnicosServices>();
 //La inyeccion del services Tipos Tecnicos
 builder.Services.AddScoped<TiposTecnicosServices>();
 
+builder.Services.AddScoped<ClientesServices>();
+
+builder.Services.AddScoped<TrabajosServices>();
+
 //La inyeccion del Bootstrap
 builder.Services.AddBlazorBootstrap();
 

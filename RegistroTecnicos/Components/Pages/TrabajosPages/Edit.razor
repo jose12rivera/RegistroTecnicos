@@ -1,0 +1,96 @@
+﻿@page "/Trabajos/Edit"
+@page "/Trabajos/Edit/{TrabajoId:int}"
+@inject TrabajosServices trabajosServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<EditForm Model="trabajo" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card-header bg-primary text-white text-center p-2 rounded">
+        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Registro Trabajos</h3>
+    </div>
+    <div class="card-body">
+        @*   TrabajoId *@
+        <div class="row">
+            <div class="col-md-10 mb-5">
+                <label for="TrabajoId " class="form-label"><strong>TrabajoId :</strong></label>
+                <div class="input-group">
+                    <div style="width: 40%; height: 1mm">
+                        <InputNumber @bind-Value="trabajo.TrabajoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="botonbuscar" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*  Fecha *@
+        <div class="mb-5">
+            <label for="Fecha " class="form-label"><strong>Fecha :</strong></label>
+            <InputDate @bind-Value="trabajo.Fecha" class="form-control" />
+            <ValidationMessage For="@(()=>trabajo.Fecha)" />
+        </div>
+        @*  Descripcion*@
+        <div class="mb-5">
+            <label for="Descripcion" class="form-label"><strong>Descripcion :</strong></label>
+            <InputText @bind-Value="trabajo.Descripcion" class="form-control" />
+            <ValidationMessage For="@(()=>trabajo.Descripcion)" />
+        </div>
+        @*  Monto *@
+        <div class="mb-5">
+            <label for="Monto  " class="form-label"><strong>Monto  :</strong></label>
+            <InputNumber @bind-Value="trabajo.Monto " class="form-control" />
+            <ValidationMessage For="@(()=>trabajo.Monto )" />
+        </div>
+    </div>
+    <div class="card-footer: align; d-flex justify-content-center">
+        <div class="input-group">
+            <button type="button" class="btn btn-outline-secondary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
+            <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle"></span>Guardar</button>
+            <button type="button" class="btn btn-outline-primary ml-2" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
+        </div>
+    </div>
+</EditForm>
+@code {
+    [Parameter]
+    public int TrabajoId { get; set; }
+    public Trabajos? trabajo { get; set; } = new Trabajos();
+    private bool existe = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(TrabajoId != 0)
+        {
+            trabajo = await trabajosServices.Buscar(TrabajoId) ?? new Trabajos();
+        }
+
+    }
+    public async Task Nuevo()
+    {
+        trabajo = new Trabajos();
+        existe = false;
+    }
+
+
+    public async Task<bool> validar()
+    {
+        var ListaTrabajos = await trabajosServices.Listar(t => t.Descripcion.ToLower() == trabajo.Descripcion.ToLower() && t.TrabajoId != trabajo.TrabajoId);
+        return ListaTrabajos.Count == 0;
+    }
+
+    public async Task Guardar()
+    {
+        if (!await validar())
+        {
+            return;
+        }
+        var guardado = await trabajosServices.Guardar(trabajo);
+        if (guardado)
+        {
+            Nuevo();
+        }
+    }
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/Trabajos/Index");
+    }
+}
+
