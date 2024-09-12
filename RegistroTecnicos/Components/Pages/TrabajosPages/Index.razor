@@ -48,6 +48,8 @@
                     <tr>
                         <th>TrabajoId</th>
                         <th>Fecha</th>
+                        <th>ClienteId</th>
+                        <th>TecnicoId</th>
                         <th>Descripcion</th>
                         <th>Monto</th>
                         <th>Ver</th>
@@ -62,6 +64,8 @@
                         <tr>
                             <td>@t.TrabajoId</td>
                             <td>@t.Fecha</td>
+                            <td>@t.Clientes?.Nombres</td>
+                            <td>@t.Tecnicos?.Nombres</td>
                             <td>@t.Descripcion</td>
                             <td>@t.Monto</td>
 

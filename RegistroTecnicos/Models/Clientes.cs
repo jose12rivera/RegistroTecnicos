@@ -10,4 +10,5 @@ public class Clientes
     public string? Nombres{ get; set; }
     [Required(ErrorMessage = "Por favor, asegúrate de que llenes campo")]
     public string? WhatsApp { get; set; }
+    public Trabajos? Trabajos { get; set; }
 }

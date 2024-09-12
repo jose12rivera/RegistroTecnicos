@@ -82,6 +82,9 @@ namespace RegistroTecnicos.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -94,7 +97,16 @@ namespace RegistroTecnicos.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("TecnicoId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("TrabajoId");
+
+                    b.HasIndex("ClienteId")
+                        .IsUnique();
+
+                    b.HasIndex("TecnicoId")
+                        .IsUnique();
 
                     b.ToTable("Trabajos");
                 });
@@ -108,6 +120,35 @@ namespace RegistroTecnicos.Migrations
                         .IsRequired();
 
                     b.Navigation("TiposTecnicos");
+                });
+
+            modelBuilder.Entity("RegistroTecnicos.Models.Trabajos", b =>
+                {
+                    b.HasOne("RegistroTecnicos.Models.Clientes", "Clientes")
+                        .WithOne("Trabajos")
+                        .HasForeignKey("RegistroTecnicos.Models.Trabajos", "ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RegistroTecnicos.Models.Tecnicos", "Tecnicos")
+                        .WithOne("Trabajos")
+                        .HasForeignKey("RegistroTecnicos.Models.Trabajos", "TecnicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Clientes");
+
+                    b.Navigation("Tecnicos");
+                });
+
+            modelBuilder.Entity("RegistroTecnicos.Models.Clientes", b =>
+                {
+                    b.Navigation("Trabajos");
+                });
+
+            modelBuilder.Entity("RegistroTecnicos.Models.Tecnicos", b =>
+                {
+                    b.Navigation("Trabajos");
                 });
 
             modelBuilder.Entity("RegistroTecnicos.Models.TiposTecnicos", b =>

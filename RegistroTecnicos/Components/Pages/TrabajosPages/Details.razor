@@ -1,6 +1,8 @@
 ﻿@page "/Trabajos/Details"
 @page "/Trabajos/Details/{TrabajoId:int}"
 @inject TrabajosServices trabajosServices
+@inject ClientesServices clientesServices
+@inject TecnicosServices tecnicosServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -18,8 +20,11 @@
                             <ul class="list-unstyled">
                                 <li><strong>TrabajoId:</strong>@trabajo.TrabajoId</li>
                                 <li><strong>Fecha:</strong>@trabajo.Fecha</li>
+                                <li><strong>ClienteId:</strong>@cliente.Nombres</li>
+                                <li><strong>TecnicoId:</strong>@tecnico.Nombres</li>
                                 <li><strong>Descripci&oacute;n:</strong>@trabajo.Descripcion</li>
                                 <li><strong>Monto:</strong>@trabajo.Monto</li>
+                             
                             </ul>
                         </div>
                     </div>
@@ -39,11 +44,18 @@ else
     [Parameter]
     public int TrabajoId { get; set; }
     public Trabajos? trabajo { get; set; } = new Trabajos();
+    public Tecnicos? tecnico { get; set; } = new Tecnicos();
+    public Clientes? cliente { get; set; } = new Clientes();
 
     protected override async Task OnInitializedAsync()
     {
-
-        trabajo = await trabajosServices.Buscar(TrabajoId);
+        if(TrabajoId != 0)
+        {
+            trabajo = await trabajosServices.Buscar(TrabajoId);
+            cliente = await clientesServices.Buscar(trabajo.ClienteId);
+            tecnico = await tecnicosServices.Buscar(trabajo.TecnicoId);
+        }
+      
 
     }
 

@@ -1,6 +1,8 @@
 ﻿@page "/Trabajos/Edit"
 @page "/Trabajos/Edit/{TrabajoId:int}"
 @inject TrabajosServices trabajosServices
+@inject ClientesServices clientesServices
+@inject TecnicosServices tecnicosServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -28,6 +30,30 @@
             <InputDate @bind-Value="trabajo.Fecha" class="form-control" />
             <ValidationMessage For="@(()=>trabajo.Fecha)" />
         </div>
+        @*  ClienteId *@
+        <div class="mb-5">
+            <label> <strong>ClienteId:</strong> </label>
+            <InputSelect @bind-Value="trabajo.ClienteId" class="form-control">
+                <option value="0">Elejir Un Cliente</option>
+                @foreach (var clientes in cliente)
+                {
+                    <option value="@clientes.ClienteId">@clientes.Nombres</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(()=>trabajo.ClienteId)" />
+        </div>
+        @*  TecnicoId *@
+        <div class="mb-5">
+            <label> <strong>TecnicoId:</strong> </label>
+            <InputSelect @bind-Value="trabajo.TecnicoId" class="form-control">
+                <option value="0">Elejir Un Tecnico</option>
+                @foreach (var tecnicos in tecnico)
+                {
+                    <option value="@tecnicos.TecnicoId ">@tecnicos.Nombres</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(()=>trabajo.ClienteId)" />
+        </div>
         @*  Descripcion*@
         <div class="mb-5">
             <label for="Descripcion" class="form-label"><strong>Descripcion :</strong></label>
@@ -53,10 +79,14 @@
     [Parameter]
     public int TrabajoId { get; set; }
     public Trabajos? trabajo { get; set; } = new Trabajos();
+    public List<Tecnicos> tecnico { get; set; } = new List<Tecnicos>();
+    public List<Clientes> cliente { get; set; } = new List<Clientes>();
     private bool existe = false;
 
     protected override async Task OnInitializedAsync()
     {
+        cliente = await clientesServices.Listar(t => true);
+        tecnico = await tecnicosServices.Listar(t => true);
         if(TrabajoId != 0)
         {
             trabajo = await trabajosServices.Buscar(TrabajoId) ?? new Trabajos();

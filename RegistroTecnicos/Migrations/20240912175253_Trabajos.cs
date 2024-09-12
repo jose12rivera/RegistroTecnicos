@@ -39,21 +39,6 @@ namespace RegistroTecnicos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Trabajos",
-                columns: table => new
-                {
-                    TrabajoId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
-                    Monto = table.Column<decimal>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Trabajos", x => x.TrabajoId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tecnicos",
                 columns: table => new
                 {
@@ -74,10 +59,51 @@ namespace RegistroTecnicos.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Trabajos",
+                columns: table => new
+                {
+                    TrabajoId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Descripcion = table.Column<string>(type: "TEXT", nullable: false),
+                    Monto = table.Column<decimal>(type: "TEXT", nullable: false),
+                    TecnicoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ClienteId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Trabajos", x => x.TrabajoId);
+                    table.ForeignKey(
+                        name: "FK_Trabajos_Clientes_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "Clientes",
+                        principalColumn: "ClienteId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Trabajos_Tecnicos_TecnicoId",
+                        column: x => x.TecnicoId,
+                        principalTable: "Tecnicos",
+                        principalColumn: "TecnicoId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Tecnicos_TipoTecnicoId",
                 table: "Tecnicos",
                 column: "TipoTecnicoId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Trabajos_ClienteId",
+                table: "Trabajos",
+                column: "ClienteId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Trabajos_TecnicoId",
+                table: "Trabajos",
+                column: "TecnicoId",
                 unique: true);
         }
 
@@ -85,13 +111,13 @@ namespace RegistroTecnicos.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Trabajos");
+
+            migrationBuilder.DropTable(
                 name: "Clientes");
 
             migrationBuilder.DropTable(
                 name: "Tecnicos");
-
-            migrationBuilder.DropTable(
-                name: "Trabajos");
 
             migrationBuilder.DropTable(
                 name: "TiposTecnicos");
