@@ -37,6 +37,13 @@ namespace RegistroTecnicos.Services
                 return await Modificar(trabajo);
             }
         }
+        public async Task<bool> Finalizar(int trabajoId)
+        {
+            var cantidad = await _contexto.Trabajos
+                .Where(t => t.TrabajoId == trabajoId)
+                .ExecuteUpdateAsync( t => t.SetProperty(x => x.Fecha, DateTime.Now));
+            return cantidad > 0;
+        }
         public async Task<bool>Eliminar(int id)
         {
             var eliminado = await _contexto.Trabajos

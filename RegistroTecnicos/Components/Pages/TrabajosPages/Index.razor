@@ -99,7 +99,7 @@
 @code {
     public int TrabajoId{ get; set; }
     public List<Trabajos> Listatrabajos { get; set; } = new List<Trabajos>();
-    public string filtro = "Id";
+    public string filtro="Id";
     public string valorfiltro = "";
 
     protected override async Task OnInitializedAsync()
@@ -130,6 +130,7 @@
             {
                 Listatrabajos = await trabajosServices.Listar(t => t.Monto==Monto);
             }
+            
         }
     }
     public async Task Eliminar(int TrabajoId)
