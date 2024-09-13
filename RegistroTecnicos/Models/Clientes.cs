@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace RegistroTecnicos.Models;
-
 public class Clientes
 {
     [Key]
