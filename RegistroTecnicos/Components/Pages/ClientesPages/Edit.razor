@@ -7,7 +7,7 @@
 <EditForm Model="cliente" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="card-header bg-primary text-white text-center p-2 rounded">
-        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Modificar Clientes</h3>
+        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Modificar el Cliente</h3>
     </div>
     <div class="card-body">
         @*  ClienteId *@
@@ -48,7 +48,7 @@
     public int ClienteId { get; set; }
     public Clientes? cliente { get; set; } = new Clientes();
     private bool existe = false;
-
+    //Metodo onitialize
     protected override async Task OnInitializedAsync()
     {
         if(ClienteId != 0)
@@ -56,17 +56,19 @@
             cliente = await clientesServices.Buscar(ClienteId) ?? new Clientes();
         }
     }
+    //Metodo Nuevo
     public async Task Nuevo()
     {
         cliente = new Clientes();
         existe = false;
     }
-
+    //Metodo Validar
     public async Task<bool> Validar()
     {
         var ListaClientes = await clientesServices.Listar(C => C.Nombres.ToLower() == cliente.Nombres.ToLower() && C.ClienteId != cliente.ClienteId);
         return ListaClientes.Count == 0;
     }
+    //Metodo Guardar
     public async Task Guardar()
     {
         if (!await Validar())
@@ -79,6 +81,7 @@
             Nuevo();
         }
     }
+    //Metodo Volver
     public async Task Volver()
     {
         navigationManager.NavigateTo("/Clientes/Index");
