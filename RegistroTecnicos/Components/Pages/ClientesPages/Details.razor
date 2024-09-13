@@ -35,7 +35,7 @@
 }
 else
 {
-    <p>No encontrado</p>
+    <p>Cliente No encontrado.</p>
 }
 
 
@@ -43,15 +43,12 @@ else
     [Parameter]
     public int ClienteId { get; set; }
     public Clientes? cliente { get; set; } = new Clientes();
-    
-
+    //Metodo onitialize
     protected override async Task OnInitializedAsync()
     {
-        
             cliente = await clientesServices.Buscar(ClienteId);
-        
     }
-
+    //Metodo Volver
     public async Task Volver()
     {
         navigationManager.NavigateTo("/Clientes/Index");
