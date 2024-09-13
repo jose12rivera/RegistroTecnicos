@@ -27,6 +27,7 @@
             <InputText @bind-Value="cliente.Nombres" class="form-control" />
             <ValidationMessage For="@(()=>cliente.Nombres)" />
         </div>
+
         @*  WhatsApp *@
         <div class="mb-5">
             <label for="WhatsApp" class="form-label"><strong>WhatsApp:</strong></label>
@@ -47,12 +48,13 @@
     public int ClienteId{ get; set; }
     public Clientes? cliente { get; set; } = new Clientes();
     private bool existe = false;
-
+    //Metodo Nuevo
     public async Task Nuevo()
     {
         cliente = new Clientes();
         existe = false;
     }
+    //Metodo Buscar
     public async Task Buscar()
     {
         existe = false;
@@ -66,11 +68,13 @@
             Nuevo();
         }
     }
+    //Metodo Validar
     public async Task<bool> Validar()
     {
         existe = await clientesServices.Existe(cliente.ClienteId);
         return !existe;
     }
+    //Metodo Guardar
     public async Task Guardar()
     {
         if(!await Validar())
@@ -83,6 +87,7 @@
             Nuevo();
         }
     }
+    //Metodo Volver
     public async Task Volver()
     {
         navigationManager.NavigateTo("/Clientes/Index");
