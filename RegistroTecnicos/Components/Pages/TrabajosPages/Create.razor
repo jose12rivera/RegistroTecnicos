@@ -109,7 +109,7 @@
     //Metodo Validar
     public async Task<bool> validar()
     {
-        existe = await trabajosServices.Existe(TrabajoId);
+        existe = await trabajosServices.Existe(trabajo.TrabajoId);
         return !existe;
     }
     //Metodo Guardar
