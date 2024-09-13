@@ -24,7 +24,6 @@
                                 <li><strong>TecnicoId:</strong>@tecnico.Nombres</li>
                                 <li><strong>Descripci&oacute;n:</strong>@trabajo.Descripcion</li>
                                 <li><strong>Monto:</strong>@trabajo.Monto</li>
-                             
                             </ul>
                         </div>
                     </div>
@@ -47,7 +46,7 @@ else
     public Trabajos? trabajo { get; set; } = new Trabajos();
     public Tecnicos? tecnico { get; set; } = new Tecnicos();
     public Clientes? cliente { get; set; } = new Clientes();
-
+    //Metodo onitialize
     protected override async Task OnInitializedAsync()
     {
         if(TrabajoId != 0)
@@ -56,14 +55,14 @@ else
             cliente = await clientesServices.Buscar(trabajo.ClienteId);
             tecnico = await tecnicosServices.Buscar(trabajo.TecnicoId);
         }
-
-
     }
+    //Metodo Finalizar
     public void Finalizar()
     {
         var mensaje = $"El{TrabajoId} ya esta Finalizado";
         navigationManager.NavigateTo($"/Trabajos/Index");
     }
+    //Metodo Volver
     public async Task Volver()
     {
         navigationManager.NavigateTo("/Trabajos/Index");
