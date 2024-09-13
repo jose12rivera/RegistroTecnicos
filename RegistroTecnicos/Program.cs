@@ -23,6 +23,7 @@ builder.Services.AddScoped<TiposTecnicosServices>();
 //La inyeccion del services Clientes
 builder.Services.AddScoped<ClientesServices>();
 
+//La inyeccion del services Trabajos
 builder.Services.AddScoped<TrabajosServices>();
 
 //La inyeccion del Bootstrap
