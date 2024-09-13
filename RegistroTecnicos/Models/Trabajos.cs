@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RegistroTecnicos.Models;
-
 public class Trabajos
 {
     [Key]
