@@ -74,11 +74,13 @@
                                     <i class="bi bi-eye"></i>
                                 </a>
                             </td>
+
                             <td>
                                 <a href="/Trabajos/Edit/@t.TrabajoId" class="btn btn-outline-success">
                                     <i class="bi bi-eye"></i>
                                 </a>
                             </td>
+
                             <td>
                                 <button type="button" class="btn btn-outline-danger ml-2"@onclick="()=>Eliminar(t.TrabajoId)">
                                     <i class="bi bi-trash"></i>
@@ -101,12 +103,12 @@
     public List<Trabajos> Listatrabajos { get; set; } = new List<Trabajos>();
     public string filtro="Id";
     public string valorfiltro = "";
-
+    //Metodo onitialize
     protected override async Task OnInitializedAsync()
     {
         Listatrabajos = await trabajosServices.Listar(t => true);
     }
-
+    //Metodo Buscar del filtro
     public async Task Buscar()
     {
         if (string.IsNullOrWhiteSpace(valorfiltro))
@@ -130,9 +132,9 @@
             {
                 Listatrabajos = await trabajosServices.Listar(t => t.Monto==Monto);
             }
-            
         }
     }
+    //Metodo  Eliminar
     public async Task Eliminar(int TrabajoId)
     {
         navigationManager.NavigateTo($"/Trabajos/Delete/TrabajoId={TrabajoId}");
