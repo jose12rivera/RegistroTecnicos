@@ -4,6 +4,7 @@
 @rendermode InteractiveServer
 
 <PageTitle>Clientes</PageTitle>
+
 <EditForm Model="ListaClientes" class="card shadow-lg bolder p-3 rounded">
     <div class="card-header bg-primary text-white text-center p-2 rounded">
         <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Consulta Clientes</h3>
@@ -64,13 +65,15 @@
         <p>Total:@ListaClientes.Count</p>
     </div>
 </EditForm>
+
 @code {
     public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
+    //Metodo onitialize
     protected override async Task OnInitializedAsync()
     {
         ListaClientes = await clientesServices.Listar(c => true);
     }
-
+    //Metodo Eliminar
     private async Task Eliminar(int ClienteId)
     {
         navigationManager.NavigateTo($"/Clientes/Delete/ClienteId={ClienteId}");
