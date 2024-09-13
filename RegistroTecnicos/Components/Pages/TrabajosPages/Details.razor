@@ -56,7 +56,9 @@ else
             tecnico = await tecnicosServices.Buscar(trabajo.TecnicoId);
         }
     }
-    // Método para obtener la URL de WhatsApp
+
+
+    // Método para obtener la URL de WhatsApp usando el número del cliente
     private string ObtenerUrlWhatsApp()
     {
         if (cliente?.WhatsApp != null)
@@ -65,13 +67,13 @@ else
             string mensaje = ObtenerMensajeFinalizar();
             string mensajeEscapado = Uri.EscapeDataString(mensaje);
 
-            // Crear la URL de WhatsApp con el número del cliente y el mensaje escapado
-            string url = $"https://wa.me/8494665689?text={mensajeEscapado}";
+            // Crear la URL de WhatsApp usando el número del cliente y el mensaje escapado
+            string url = $"https://wa.me/{cliente.WhatsApp}?text={mensajeEscapado}";
             return url;
         }
         else
         {
-            // Si no hay número de WhatsApp, devolver un enlace inválido o manejarlo según sea necesario
+            // Si no hay número de WhatsApp, devolver un enlace inválido
             return "#";
         }
     }
@@ -92,7 +94,6 @@ else
             navigationManager.NavigateTo(urlWhatsApp, true); // Navega a la URL de WhatsApp
         }
     }
-
     //Metodo Volver
     public async Task Volver()
     {
