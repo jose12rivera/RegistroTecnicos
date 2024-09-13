@@ -3,6 +3,7 @@ using RegistroTecnicos.DAL;
 using RegistroTecnicos.Models;
 using System.Linq.Expressions;
 
+
 namespace RegistroTecnicos.Services;
 public class TrabajosServices
 {
@@ -46,9 +47,10 @@ public class TrabajosServices
     {
         var cantidad = await _contexto.Trabajos
             .Where(t => t.TrabajoId == trabajoId)
-            .ExecuteUpdateAsync( t => t.SetProperty(x => x.Fecha, DateTime.Now));
+            .ExecuteUpdateAsync(t => t.SetProperty(x => x.Fecha, DateTime.Now));
         return cantidad > 0;
     }
+  
     //Metodo  Eliminar
     public async Task<bool>Eliminar(int id)
     {
