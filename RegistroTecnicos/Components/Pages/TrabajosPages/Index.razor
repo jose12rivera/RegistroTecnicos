@@ -121,9 +121,9 @@
             {
                 Listatrabajos = await trabajosServices.Listar(t => t.TrabajoId==TrabajoId);
             }
-            else if (filtro == "Fecha" && DateTime.TryParse(valorfiltro, out DateTime Fecha))
+            else if (filtro == "Fecha" &&DateTime.TryParse(valorfiltro, out DateTime Fecha))
             {
-                Listatrabajos = await trabajosServices.Listar(t => t.Fecha==Fecha);
+                Listatrabajos = await trabajosServices.Listar(t => t.Fecha == Fecha);
             }
             else if (filtro == "Descripcion")
             {
