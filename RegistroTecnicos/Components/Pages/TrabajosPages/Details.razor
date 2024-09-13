@@ -32,7 +32,7 @@
         </div>
         <div class="card-footer">
             <button type="button" class="btn btn-outline-primary ml-2" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
-            <button type="button" class="btn btn-outline-danger ml-2" @onclick="Finalizar"><span class="bi bi-check-circle"></span>Finalizar</button>
+            <button type="button" class="btn btn-outline-danger ml-2" @onclick="EnviarMensajeWhatsApp"><span class="bi bi-check-circle"></span>Finalizar</button>
         </div>
     </div>
 }
@@ -56,12 +56,43 @@ else
             tecnico = await tecnicosServices.Buscar(trabajo.TecnicoId);
         }
     }
-    //Metodo Finalizar
-    public void Finalizar()
+    // Método para obtener la URL de WhatsApp
+    private string ObtenerUrlWhatsApp()
     {
-        var mensaje = $"El{TrabajoId} ya esta Finalizado";
-        navigationManager.NavigateTo($"/Trabajos/Index");
+        if (cliente?.WhatsApp != null)
+        {
+            // Generar el mensaje personalizado y escaparlo
+            string mensaje = ObtenerMensajeFinalizar();
+            string mensajeEscapado = Uri.EscapeDataString(mensaje);
+
+            // Crear la URL de WhatsApp con el número del cliente y el mensaje escapado
+            string url = $"https://wa.me/8494665689?text={mensajeEscapado}";
+            return url;
+        }
+        else
+        {
+            // Si no hay número de WhatsApp, devolver un enlace inválido o manejarlo según sea necesario
+            return "#";
+        }
     }
+
+    // Método para generar el mensaje de finalización
+    private string ObtenerMensajeFinalizar()
+    {
+        return $"El trabajo con ID {trabajo?.TrabajoId} para {cliente?.Nombres} ya está finalizado.";
+    }
+
+    // Método para enviar el mensaje de WhatsApp
+    private void EnviarMensajeWhatsApp()
+    {
+        string urlWhatsApp = ObtenerUrlWhatsApp();
+
+        if (urlWhatsApp != "#")
+        {
+            navigationManager.NavigateTo(urlWhatsApp, true); // Navega a la URL de WhatsApp
+        }
+    }
+
     //Metodo Volver
     public async Task Volver()
     {
