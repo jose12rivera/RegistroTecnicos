@@ -74,5 +74,4 @@ public class TrabajosServices
             .Where(Criterio)
             .ToListAsync();
     }
-
 }
