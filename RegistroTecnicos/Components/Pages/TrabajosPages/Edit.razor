@@ -83,7 +83,7 @@
     public List<Tecnicos> tecnico { get; set; } = new List<Tecnicos>();
     public List<Clientes> cliente { get; set; } = new List<Clientes>();
     private bool existe = false;
-
+    //Metodo onitialize
     protected override async Task OnInitializedAsync()
     {
         cliente = await clientesServices.Listar(t => true);
@@ -92,21 +92,20 @@
         {
             trabajo = await trabajosServices.Buscar(TrabajoId) ?? new Trabajos();
         }
-
     }
+    //Metodo Nuevo
     public async Task Nuevo()
     {
         trabajo = new Trabajos();
         existe = false;
     }
-
-
+    //Metodo Validar
     public async Task<bool> validar()
     {
         var ListaTrabajos = await trabajosServices.Listar(t => t.Descripcion.ToLower() == trabajo.Descripcion.ToLower() && t.TrabajoId != trabajo.TrabajoId);
         return ListaTrabajos.Count == 0;
     }
-
+    //Metodo Guardar
     public async Task Guardar()
     {
         if (!await validar())
@@ -119,6 +118,7 @@
             Nuevo();
         }
     }
+    //Metodo Volver
     public async Task Volver()
     {
         navigationManager.NavigateTo("/Trabajos/Index");
