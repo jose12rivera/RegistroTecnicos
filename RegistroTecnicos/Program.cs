@@ -20,6 +20,7 @@ builder.Services.AddScoped<TecnicosServices>();
 //La inyeccion del services Tipos Tecnicos
 builder.Services.AddScoped<TiposTecnicosServices>();
 
+//La inyeccion del services Clientes
 builder.Services.AddScoped<ClientesServices>();
 
 builder.Services.AddScoped<TrabajosServices>();
