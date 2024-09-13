@@ -22,8 +22,6 @@
                 </div>
             </div>
         </div>
-
-
        @*  Fecha *@
        <div class="mb-5">
             <label for="Fecha " class="form-label"><strong>Fecha :</strong></label>
@@ -82,17 +80,19 @@
     public List<Tecnicos> tecnico { get; set; } = new List<Tecnicos>();
     public List<Clientes> cliente { get; set; } = new List<Clientes>();
     private bool existe = false;
+    //Metodo onitialize
     protected override async Task OnInitializedAsync()
     {
         cliente = await clientesServices.Listar(t => true);
         tecnico = await tecnicosServices.Listar(t => true);
     }
+    //Metodo Nuevo
     public async Task Nuevo()
     {
         trabajo = new Trabajos();
         existe = false;
     }
-
+    //Metodo Buscar
     public async Task Buscar()
     {
         existe = false;
@@ -106,12 +106,13 @@
             Nuevo();
         }
     }
+    //Metodo Validar
     public async Task<bool> validar()
     {
         existe = await trabajosServices.Existe(TrabajoId);
         return !existe;
     }
-
+    //Metodo Guardar
     public async Task Guardar()
     {
         if(!await validar())
@@ -124,6 +125,7 @@
             Nuevo();
         }
     }
+    //Metodo Volver
     public async Task Volver()
     {
         navigationManager.NavigateTo("/Trabajos/Index");
