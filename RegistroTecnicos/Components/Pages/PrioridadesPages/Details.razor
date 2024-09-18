@@ -4,6 +4,7 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
+<PageTitle>Detalles Prioridades</PageTitle>
 @if (Prioridad != null)
 {
     <div class="container">
@@ -17,7 +18,7 @@
                         <div class="card-body">
                             <ul class="list-unstyled">
                                 <li><strong>PrioridadId:</strong>@Prioridad.PrioridadId</li>
-                                <li><strong>Descripcion:</strong>@Prioridad.Descripcion</li>
+                                <li><strong>Descripci&oacute;n:</strong>@Prioridad.Descripcion</li>
                                 <li><strong>Tiempo:</strong>@Prioridad.Tiempo</li>
                             </ul>
                         </div>
@@ -38,11 +39,12 @@ else
     [Parameter]
     public int PrioridadId { get; set; }
     public Prioridades? Prioridad { get; set; } = new Prioridades();
-
+    //Metodo onitialize
     protected override async Task OnInitializedAsync()
     {
         Prioridad = await prioridadesServices.Buscar(PrioridadId);
     }
+    //Metodo Volver
     public async Task Volver()
     {
         navigationManager.NavigateTo("/Prioridades/Index");
