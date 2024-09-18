@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace RegistroTecnicos.Models;
-
 public class Prioridades
 {
     [Key]
