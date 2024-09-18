@@ -2,7 +2,6 @@
 using RegistroTecnicos.Models;
 
 namespace RegistroTecnicos.DAL;
-
 public class Contexto : DbContext
 {
     public Contexto(DbContextOptions<Contexto> options)
