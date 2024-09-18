@@ -26,6 +26,9 @@ builder.Services.AddScoped<ClientesServices>();
 //La inyeccion del services Trabajos
 builder.Services.AddScoped<TrabajosServices>();
 
+//La inyeccion del services Prioridades
+builder.Services.AddScoped<PrioridadesServices>();
+
 //La inyeccion del Bootstrap
 builder.Services.AddBlazorBootstrap();
 
