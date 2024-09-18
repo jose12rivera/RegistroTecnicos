@@ -7,7 +7,7 @@
 <EditForm Model="Prioridad" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
     <div class="card-header bg-primary text-white text-center p-2 rounded">
-        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Registro Prioridades</h3>
+        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Registro de Prioridades</h3>
     </div>
     <div class="card-body">
         @*  PrioridadId *@
@@ -24,7 +24,7 @@
 
         @*   Descripcion *@
         <div>
-            <label for="Descripcion" class="form-label"><strong>Descripcion:</strong></label>
+            <label for="Descripcion" class="form-label"><strong>Descripci&oacute;n:</strong></label>
             <InputText @bind-Value="Prioridad.Descripcion" class="form-control" />
             <ValidationMessage For="@(()=>Prioridad.Descripcion)" />
         </div>
@@ -49,25 +49,27 @@
     public int PrioridadId { get; set; }
     public Prioridades? Prioridad { get; set; } = new Prioridades();
     private bool existe = false;
+    //Metodo onitialize
     protected override async Task OnInitializedAsync()
     {
         if(PrioridadId != 0)
         {
             Prioridad = await prioridadesServices.Buscar(PrioridadId) ?? new Prioridades();
         }
-       
     }
+    //Metodo Nuevo
     public async Task Nuevo()
     {
         Prioridad = new Prioridades();
         existe = false;
     }
-
+    //Metodo Validar
     public async Task<bool> Validar()
     {
         var ListaPrioridad = await prioridadesServices.Listar(p => p.Descripcion.ToLower() == Prioridad.Descripcion.ToLower() && p.PrioridadId != Prioridad.PrioridadId);
         return ListaPrioridad.Count == 0;
     }
+    //Metodo Guardar
     public async Task Guardar()
     {
         if (!await Validar())
@@ -80,6 +82,7 @@
             Nuevo();
         }
     }
+    //Metodo Guardar
     public async Task Volver()
     {
         navigationManager.NavigateTo("/Prioridades/Index");
