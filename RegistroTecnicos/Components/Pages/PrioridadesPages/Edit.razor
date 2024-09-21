@@ -23,10 +23,10 @@
         </div>
 
         @*   Descripcion *@
-        <div>
-            <label for="Descripcion" class="form-label"><strong>Descripci&oacute;n:</strong></label>
-            <InputText @bind-Value="prioridad.Descripcion" class="form-control" />
-            <ValidationMessage For="@(()=>prioridad.Descripcion)" />
+        <div class="mb-3">
+            <label for="Descripcion" class="form-label"><strong>Descripción:</strong></label>
+            <InputText @bind-Value="prioridad.Descripcion" class="form-control"/>
+            <ValidationMessage For="@(() => prioridad.Descripcion)" />
         </div>
        
         @*   Tiempo *@
