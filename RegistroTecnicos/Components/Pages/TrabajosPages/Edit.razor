@@ -3,6 +3,7 @@
 @inject TrabajosServices trabajosServices
 @inject ClientesServices clientesServices
 @inject TecnicosServices tecnicosServices
+@inject PrioridadesServices prioridadesServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -11,6 +12,7 @@
     <div class="card-header bg-primary text-white text-center p-2 rounded">
         <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Modificar el Trabajo</h3>
     </div>
+
     <div class="card-body">
         @*   TrabajoId *@
         <div class="row">
@@ -42,7 +44,6 @@
             </InputSelect>
             <ValidationMessage For="@(()=>trabajo.Descripcion)" />
         </div>
-
         @*  TecnicoId *@
         <div class="mb-5">
             <label> <strong>TecnicoId:</strong> </label>
@@ -54,6 +55,18 @@
                 }
             </InputSelect>
             <ValidationMessage For="@(()=>trabajo.Descripcion)" />
+        </div>
+        @*   PrioridadId *@
+        <div class="mb-5">
+            <label> <strong> PrioridadId:</strong> </label>
+            <InputSelect @bind-Value="trabajo.PrioridadId" class="form-control">
+                <option value="0">Elejir Una Prioridad</option>
+                @foreach (var Prioridad in prioridad)
+                {
+                    <option value="@Prioridad.PrioridadId">@Prioridad.Descripcion</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(()=>trabajo.PrioridadId)" />
         </div>
         @*  Descripcion*@
         <div class="mb-5">
@@ -82,12 +95,15 @@
     public Trabajos? trabajo { get; set; } = new Trabajos();
     public List<Tecnicos> tecnico { get; set; } = new List<Tecnicos>();
     public List<Clientes> cliente { get; set; } = new List<Clientes>();
+    public List<Prioridades> prioridad { get; set; } = new List<Prioridades>();
     private bool existe = false;
     //Metodo onitialize
     protected override async Task OnInitializedAsync()
     {
+
         cliente = await clientesServices.Listar(t => true);
         tecnico = await tecnicosServices.Listar(t => true);
+        prioridad = await prioridadesServices.Listar(t => true);
         if(TrabajoId != 0)
         {
             trabajo = await trabajosServices.Buscar(TrabajoId) ?? new Trabajos();
