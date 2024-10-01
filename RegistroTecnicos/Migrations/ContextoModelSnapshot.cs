@@ -46,7 +46,7 @@ namespace RegistroTecnicos.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeSpan?>("Tiempo")
+                    b.Property<string>("Tiempo")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -116,12 +116,18 @@ namespace RegistroTecnicos.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("PrioridadId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("TecnicoId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("TrabajoId");
 
                     b.HasIndex("ClienteId")
+                        .IsUnique();
+
+                    b.HasIndex("PrioridadId")
                         .IsUnique();
 
                     b.HasIndex("TecnicoId")
@@ -149,6 +155,12 @@ namespace RegistroTecnicos.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("RegistroTecnicos.Models.Prioridades", "Prioridades")
+                        .WithOne("Trabajos")
+                        .HasForeignKey("RegistroTecnicos.Models.Trabajos", "PrioridadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RegistroTecnicos.Models.Tecnicos", "Tecnicos")
                         .WithOne("Trabajos")
                         .HasForeignKey("RegistroTecnicos.Models.Trabajos", "TecnicoId")
@@ -157,10 +169,17 @@ namespace RegistroTecnicos.Migrations
 
                     b.Navigation("Clientes");
 
+                    b.Navigation("Prioridades");
+
                     b.Navigation("Tecnicos");
                 });
 
             modelBuilder.Entity("RegistroTecnicos.Models.Clientes", b =>
+                {
+                    b.Navigation("Trabajos");
+                });
+
+            modelBuilder.Entity("RegistroTecnicos.Models.Prioridades", b =>
                 {
                     b.Navigation("Trabajos");
                 });
