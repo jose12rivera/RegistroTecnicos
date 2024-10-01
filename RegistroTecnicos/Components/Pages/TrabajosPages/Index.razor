@@ -4,7 +4,6 @@
 @rendermode InteractiveServer
 
 <PageTitle>Trabajos</PageTitle>
-<EditForm Model="Listatrabajos" class="card shadow-lg border p-3 rounded">
     <div class="card-header bg-primary text-white text-center p-2 rounded">
         <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Consulta de Trabajos</h3>
     </div>
@@ -98,7 +97,7 @@
     <div class="card-footer">
         <p>Total:@Listatrabajos.Count</p>
     </div>
-</EditForm>
+
 
 @code {
     public int TrabajoId{ get; set; }
