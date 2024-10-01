@@ -11,4 +11,6 @@ public class Prioridades
 
     [Required(ErrorMessage = "Por favor, asegúrate de que llenes campo")]
     public string? Tiempo { get; set; }
+
+    public Trabajos? Trabajos { get; set; }
 }
