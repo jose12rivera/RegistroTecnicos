@@ -2,32 +2,33 @@
 @inject TrabajosServices trabajosServices
 @inject ClientesServices clientesServices
 @inject TecnicosServices tecnicosServices
+@inject PrioridadesServices prioridadesServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-<EditForm Model="trabajo" OnValidSubmit="Guardar"> 
-    <DataAnnotationsValidator/>
+<EditForm Model="trabajo" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
     <div class="card-header bg-primary text-white text-center p-2 rounded">
         <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Registro Trabajos</h3>
     </div>
     <div class="card-body">
-      @*   TrabajoId *@
+        @*   TrabajoId *@
         <div class="row">
             <div class="col-md-10 mb-5">
                 <label for="TrabajoId " class="form-label"><strong>TrabajoId :</strong></label>
                 <div class="input-group">
                     <div style="width: 40%; height: 1mm">
-                        <InputNumber @bind-Value="trabajo.TrabajoId" class="form-control" style="font-size: 0.8rem;"aria-describedby="botonbuscar"/>
+                        <InputNumber @bind-Value="trabajo.TrabajoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="botonbuscar" />
                     </div>
                 </div>
             </div>
         </div>
-       @*  Fecha *@
-       <div class="mb-5">
+        @*  Fecha *@
+        <div class="mb-5">
             <label for="Fecha " class="form-label"><strong>Fecha :</strong></label>
             <InputDate @bind-Value="trabajo.Fecha" class="form-control" />
-             <ValidationMessage For="@(()=>trabajo.Fecha)"/>
-       </div>
+            <ValidationMessage For="@(()=>trabajo.Fecha)" />
+        </div>
         @*  ClienteId *@
         <div class="mb-5">
             <label> <strong>ClienteId:</strong> </label>
@@ -40,6 +41,7 @@
             </InputSelect>
             <ValidationMessage For="@(()=>trabajo.Descripcion)" />
         </div>
+
         @*  TecnicoId *@
         <div class="mb-5">
             <label> <strong>TecnicoId:</strong> </label>
@@ -52,6 +54,19 @@
             </InputSelect>
             <ValidationMessage For="@(()=>trabajo.Descripcion)" />
         </div>
+        @*   PrioridadId *@
+        <div class="mb-5">
+            <label> <strong> PrioridadId:</strong> </label>
+            <InputSelect @bind-Value="trabajo.PrioridadId" class="form-control">
+                <option value="0">Elejir Una Prioridad</option>
+                @foreach (var Prioridad in prioridad)
+                {
+                    <option value="@Prioridad.PrioridadId">@Prioridad.Descripcion</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(()=>trabajo.PrioridadId)" />
+        </div>
+
         @*  Descripcion*@
         <div class="mb-5">
             <label for="Descripcion" class="form-label"><strong>Descripcion :</strong></label>
@@ -67,7 +82,7 @@
     </div>
     <div class="card-footer: align; d-flex justify-content-center">
         <div class="input-group">
-            <button type="button" class="btn btn-outline-secondary ml-2"@onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
+            <button type="button" class="btn btn-outline-secondary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
             <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle"></span>Guardar</button>
             <button type="button" class="btn btn-outline-primary ml-2" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
         </div>
@@ -75,16 +90,19 @@
 </EditForm>
 @code {
     [Parameter]
-    public int TrabajoId{ get; set; }
+    public int TrabajoId { get; set; }
     public Trabajos? trabajo { get; set; } = new Trabajos();
     public List<Tecnicos> tecnico { get; set; } = new List<Tecnicos>();
     public List<Clientes> cliente { get; set; } = new List<Clientes>();
+    public List<Prioridades> prioridad { get; set; } = new List<Prioridades>();
     private bool existe = false;
     //Metodo onitialize
     protected override async Task OnInitializedAsync()
     {
+
         cliente = await clientesServices.Listar(t => true);
         tecnico = await tecnicosServices.Listar(t => true);
+        prioridad = await prioridadesServices.Listar(t => true);
     }
     //Metodo Nuevo
     public async Task Nuevo()
@@ -97,7 +115,7 @@
     {
         existe = false;
         var encontrado = await trabajosServices.Buscar(trabajo.TrabajoId);
-        if(encontrado != null)
+        if (encontrado != null)
         {
             trabajo = encontrado;
         }
@@ -115,7 +133,7 @@
     //Metodo Guardar
     public async Task Guardar()
     {
-        if(!await validar())
+        if (!await validar())
         {
             return;
         }
