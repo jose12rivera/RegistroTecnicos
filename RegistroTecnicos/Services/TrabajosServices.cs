@@ -72,6 +72,7 @@ public class TrabajosServices
         return await _contexto.Trabajos
             .Include(t => t.Tecnicos)
             .Include(t => t.Clientes)
+            .Include(t => t.Prioridades)
             .AsNoTracking()
             .Where(Criterio)
             .ToListAsync();
