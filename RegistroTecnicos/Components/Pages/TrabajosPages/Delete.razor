@@ -3,13 +3,14 @@
 @inject ClientesServices clientesServices
 @inject TecnicosServices tecnicosServices
 @inject TrabajosServices trabajosServices
+@inject PrioridadesServices prioridadesServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
 <div class="container">
     <div class="card shadow-header">
         <div class="card-header bg-primary text-white text-center p-2 rounded">
-            <h3><strong>Eliminar Trabajos</strong></h3>
+            <h3><strong>Eliminar Trabajo</strong></h3>
         </div>
         <div class="card-header justify-content-center text-center">
             <h3 class="text-danger">¿Est&aacute; Seguro Que Quiere Eliminar El Trabajo?</h3>
@@ -32,6 +33,7 @@
                                                 <li><strong>Fecha:</strong>@trabajo.Fecha</li>
                                                 <li><strong>ClienteId:</strong>@cliente.Nombres</li>
                                                 <li><strong>TecnicoId:</strong>@tecnico.Nombres</li>
+                                                <li><strong>PrioridadId:</strong>@prioridad.Descripcion</li>
                                                 <li><strong>Descripci&oacute;n:</strong>@trabajo.Descripcion</li>
                                                 <li><strong>Monto:</strong>@trabajo.Monto</li>
                                             </ul>
@@ -60,6 +62,7 @@
     public Trabajos? trabajo { get; set; } = new Trabajos();
     public Tecnicos? tecnico { get; set; } = new Tecnicos();
     public Clientes? cliente { get; set; } = new Clientes();
+    public Prioridades? prioridad { get; set; } = new Prioridades();
     //Metodo onitialze
     protected override async Task OnInitializedAsync()
     {
@@ -68,6 +71,8 @@
             trabajo = await trabajosServices.Buscar(TrabajoId);
             cliente = await clientesServices.Buscar(trabajo.ClienteId);
             tecnico = await tecnicosServices.Buscar(trabajo.TecnicoId);
+            prioridad = await prioridadesServices.Buscar(trabajo.PrioridadId);
+           
         }
     }
     //Metodo EliminarTrabajo
