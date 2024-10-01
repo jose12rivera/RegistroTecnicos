@@ -6,7 +6,7 @@
 <PageTitle>Trabajos</PageTitle>
 <EditForm Model="Listatrabajos" class="card shadow-lg border p-3 rounded">
     <div class="card-header bg-primary text-white text-center p-2 rounded">
-        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Consulta Trabajos</h3>
+        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Consulta de Trabajos</h3>
     </div>
     <div class="row md-3 align-content-center">
         <div class="col-md-3">
@@ -50,6 +50,7 @@
                         <th>Fecha</th>
                         <th>ClienteId</th>
                         <th>TecnicoId</th>
+                        <th>PrioridadId</th>
                         <th>Descripcion</th>
                         <th>Monto</th>
                         <th>Ver</th>
@@ -66,6 +67,7 @@
                             <td>@t.Fecha</td>
                             <td>@t.Clientes?.Nombres</td>
                             <td>@t.Tecnicos?.Nombres</td>
+                            <td>@t.Prioridades?.Descripcion</td>
                             <td>@t.Descripcion</td>
                             <td>@t.Monto</td>
 
