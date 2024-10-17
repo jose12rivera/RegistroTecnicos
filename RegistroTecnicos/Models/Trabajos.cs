@@ -10,7 +10,7 @@ public class Trabajos
     public  DateTime? Fecha { get; set; }
     [Required(ErrorMessage = "Por favor, asegúrate de que llenes campo")]
     public string? Descripcion { get; set; }
-    [Required(ErrorMessage = "Por favor, asegúrate de que llenes campo")]
+    
     public decimal? Monto { get; set; }
 
     [ForeignKey("Tecnicos")]

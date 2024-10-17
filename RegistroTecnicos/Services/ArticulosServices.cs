@@ -21,4 +21,6 @@ public class ArticulosServices(Contexto _contexto)
             .AsNoTracking()
             .ToListAsync();
     }
+  
+
 }

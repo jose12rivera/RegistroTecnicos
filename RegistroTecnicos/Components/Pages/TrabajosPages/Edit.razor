@@ -76,7 +76,7 @@
         @*  Monto *@
         <div class="mb-5">
             <label for="Monto" class="form-label"><strong>Monto:</strong></label>
-            <InputNumber @bind-Value="trabajo.Monto" class="form-control" Disabled />
+            <InputNumber @bind-Value="trabajo.Monto" class="form-control" />
             <ValidationMessage For="@(() => trabajo.Monto)" />
         </div>
 
@@ -244,6 +244,7 @@
         if (resultado)
         {
             guardar = true;
+            
         }
     }
 
@@ -265,7 +266,7 @@
                 {
                     ArticuloId = articuloSeleccionado.ArticuloId,
                     Cantidad = TrabajosDetalle.Cantidad,
-                    Precio = articuloSeleccionado.Precio * TrabajosDetalle.Cantidad 
+                    Precio = articuloSeleccionado.Precio 
                 };
 
             ListaTrabajosDetalle.Add(nuevoDetalle);
@@ -279,9 +280,16 @@
 
     public void EliminarDetalle(TrabajosDetalle detalle)
     {
+
+        selectedArticuloId = detalle.ArticuloId;
+        TrabajosDetalle.Cantidad = detalle.Cantidad;
+        TrabajosDetalle.Precio = detalle.Precio;
+
+
         ListaTrabajosDetalle.Remove(detalle);
         eliminado = true;
     }
+    
 
     private void Volver()
     {
