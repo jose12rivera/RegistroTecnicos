@@ -102,7 +102,42 @@ public class TrabajosServices
         return true; // Retornar verdadero si se guardó correctamente
     }
 
-   
 
+    // Método para validar si un trabajo con la misma descripción ya existe
+    public async Task<bool> Validar(Trabajos trabajo)
+    {
+        var listaTrabajo = await Listar(t => t.Descripcion.ToLower() == trabajo.Descripcion.ToLower() && t.TrabajoId != trabajo.TrabajoId);
+        return listaTrabajo.Any();
+    }
+    // Método para actualizar un trabajo y sus detalles
+    public async Task Actualizar(Trabajos trabajo, List<TrabajosDetalle> detalles)
+    {
+        // Buscar el trabajo existente
+        var trabajoExistente = await Buscar(trabajo.TrabajoId);
+        if (trabajoExistente != null)
+        {
+            // Actualizar los campos del trabajo
+            trabajoExistente.Fecha = trabajo.Fecha;
+            trabajoExistente.ClienteId = trabajo.ClienteId;
+            trabajoExistente.TecnicoId = trabajo.TecnicoId;
+            trabajoExistente.PrioridadId = trabajo.PrioridadId;
+            trabajoExistente.Descripcion = trabajo.Descripcion;
+            trabajoExistente.Monto = trabajo.Monto;
+
+            // Eliminar detalles existentes
+            var detallesExistentes = _contexto.TrabajosDetalle.Where(td => td.TrabajoId == trabajo.TrabajoId);
+            _contexto.TrabajosDetalle.RemoveRange(detallesExistentes);
+
+            // Agregar nuevos detalles
+            foreach (var detalle in detalles)
+            {
+                detalle.TrabajoId = trabajo.TrabajoId; // Asegúrate de asignar el ID del trabajo
+                _contexto.TrabajosDetalle.Add(detalle);
+            }
+
+            // Guardar cambios en la base de datos
+            await _contexto.SaveChangesAsync();
+        }
+    }
 
 }

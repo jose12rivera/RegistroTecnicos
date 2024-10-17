@@ -70,7 +70,7 @@
         @*  Monto  *@
         <div class="mb-3">
             <label for="Monto" class="form-label"><strong>Monto:</strong></label>
-            <InputNumber @bind-Value="trabajo.Monto" class="form-control" />
+            <InputNumber @bind-Value="trabajo.Monto" class="form-control" Disabled />
             <ValidationMessage For="@(() => trabajo.Monto)" />
         </div>
 
@@ -101,7 +101,7 @@
                     <div class="col-md-3 p-0">
                         <div class="input-group">
                             <span class="input-group-text">Precio:</span>
-                            <InputNumber @bind-Value="TrabajosDetalle.Precio" class="form-control" />
+                            <InputNumber @bind-Value="TrabajosDetalle.Precio" class="form-control" Disabled />
                         </div>
 
                         <ValidationMessage For="@(() => TrabajosDetalle.Precio)" />
@@ -217,7 +217,10 @@
         ListaTrabajosDetalle.Remove(detalle);
         eliminado = true;
     }
-
+    private async Task CalcularTotal()
+    {
+        trabajo.Monto = ListaTrabajosDetalle.Sum(d => d.Precio * d.Cantidad);
+    }
     public void AgregarDetalle()
     {
         var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.ArticuloId == selectedArticuloId);
@@ -227,7 +230,7 @@
                 {
                     ArticuloId = articuloSeleccionado.ArticuloId,
                     Cantidad = TrabajosDetalle.Cantidad,
-                    Precio = articuloSeleccionado.Precio
+                    Precio = articuloSeleccionado.Precio * TrabajosDetalle.Cantidad
                 };
             ListaTrabajosDetalle.Add(nuevoDetalle);
             TrabajosDetalle = new TrabajosDetalle();

@@ -76,7 +76,7 @@
         @*  Monto *@
         <div class="mb-5">
             <label for="Monto" class="form-label"><strong>Monto:</strong></label>
-            <InputNumber @bind-Value="trabajo.Monto" class="form-control" />
+            <InputNumber @bind-Value="trabajo.Monto" class="form-control" Disabled />
             <ValidationMessage For="@(() => trabajo.Monto)" />
         </div>
 
@@ -110,7 +110,7 @@
                     <div class="col-md-3 p-0">
                         <div class="input-group">
                             <span class="input-group-text">Precio:</span>
-                            <InputNumber @bind-Value="TrabajosDetalle.Precio" class="form-control" />
+                            <InputNumber @bind-Value="TrabajosDetalle.Precio" class="form-control" Disabled />
                         </div>
                        
                         <ValidationMessage For="@(() => TrabajosDetalle.Precio)" />
@@ -141,7 +141,7 @@
                                 <td>@detalle.Cantidad</td>
                                 <td>@detalle.Precio</td>
                                 <td>
-                                    <button @onclick="() => Remover(detalle)" class="btn btn-outline-dark">
+                                    <button @onclick="() => EliminarDetalle(detalle)" class="btn btn-outline-dark">
                                         <span class="bi bi-trash"></span> Remover
                                     </button>
                                 </td>
@@ -206,22 +206,29 @@
 
     protected override async Task OnInitializedAsync()
     {
+      
         cliente = await clientesServices.Listar(t => true);
         tecnico = await tecnicosServices.Listar(t => true);
         prioridad = await prioridadesServices.Listar(t => true);
         ListaArticulos = await articulosServices.Listar(a => true);
 
+     
         if (TrabajoId > 0)
         {
             trabajo = await trabajosServices.Buscar(TrabajoId);
-            ListaTrabajosDetalle = trabajo.TrabajosDetalle.ToList();
+            ListaTrabajosDetalle = trabajo.TrabajosDetalle.ToList(); 
         }
     }
 
+    private async Task CalcularTotal()
+    {
+        trabajo.Monto = ListaTrabajosDetalle.Sum(d => d.Precio * d.Cantidad);
+    }
     private void Nuevo()
     {
+        ListaTrabajosDetalle = new List<TrabajosDetalle>();
         trabajo = new Trabajos();
-        ListaTrabajosDetalle.Clear();
+        existe = false;
     }
 
     private async Task Guardar()
@@ -242,41 +249,35 @@
 
     public async Task<bool> Validar()
     {
-        existe = await trabajosServices.Existe(trabajo.TrabajoId);
-        return !existe;
+        var listaTrabajo = await trabajosServices.Listar(t => t.Descripcion.ToLower() == trabajo.Descripcion.ToLower() && t.TrabajoId != trabajo.TrabajoId);
+        return listaTrabajo.Count == 0;
     }
-    public async Task Buscar()
+   
+    public async Task AgregarDetalle()
     {
-        existe = false;
-        var encontrado = await trabajosServices.Buscar(trabajo.TrabajoId);
-        if (encontrado != null)
+        var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.ArticuloId == selectedArticuloId);
+
+        if (articuloSeleccionado != null && TrabajosDetalle.Cantidad > 0)
         {
-            trabajo = encontrado;
-        }
-        else
-        {
-            Nuevo();
+            TrabajosDetalle.Precio = articuloSeleccionado.Precio;
+
+            var nuevoDetalle = new TrabajosDetalle
+                {
+                    ArticuloId = articuloSeleccionado.ArticuloId,
+                    Cantidad = TrabajosDetalle.Cantidad,
+                    Precio = articuloSeleccionado.Precio * TrabajosDetalle.Cantidad 
+                };
+
+            ListaTrabajosDetalle.Add(nuevoDetalle);
+            TrabajosDetalle = new TrabajosDetalle(); 
+            await CalcularTotal(); 
+            agregar = true;
         }
     }
 
-    private void AgregarDetalle()
-    {
-        var articulo = ListaArticulos.FirstOrDefault(a => a.ArticuloId == selectedArticuloId);
-        if (articulo == null)
-        {
-            return;
-        }
+  
 
-        TrabajosDetalle.ArticuloId = articulo.ArticuloId;
-        TrabajosDetalle.Precio = articulo.Precio;
-        TrabajosDetalle.Costo = TrabajosDetalle.Cantidad * TrabajosDetalle.Precio;
-
-        ListaTrabajosDetalle.Add(TrabajosDetalle);
-        TrabajosDetalle = new TrabajosDetalle();
-        agregar = true;
-    }
-
-    private void Remover(TrabajosDetalle detalle)
+    public void EliminarDetalle(TrabajosDetalle detalle)
     {
         ListaTrabajosDetalle.Remove(detalle);
         eliminado = true;
