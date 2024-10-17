@@ -76,7 +76,7 @@
         @*  Monto *@
         <div class="mb-5">
             <label for="Monto" class="form-label"><strong>Monto:</strong></label>
-            <InputNumber @bind-Value="trabajo.Monto" class="form-control" />
+            <InputNumber @bind-Value="trabajo.Monto" class="form-control" Disabled />
             <ValidationMessage For="@(() => trabajo.Monto)" />
         </div>
 
