@@ -1,11 +1,11 @@
 ﻿@page "/Tecnicos/Create"
 @inject TecnicosServices tecnicosServices
+@inject TiposTecnicosServices tiposTecnicosServices
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
 <EditForm Model="tecnico" OnValidSubmit="Guardar">
-    <DataAnnotationsValidator/>
-
+    <DataAnnotationsValidator />
     <div class="card shadow-lg border-0 rounded" style="background-color: white;">
         <div class="card-header bg-primary text-white text-center p-2 rounded">
             <h3 style="font-weight: bold;" class="md-4 font-weight: bold; ">Registro Del  T&eacute;cnico</h3>
@@ -19,19 +19,31 @@
                     <div class="input-group">
                         <div style="width: 40%; height: 1mm;">
 
-                            <InputNumber @bind-Value="tecnico.TecnicoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="bottonbuscar"/>
+                            <InputNumber @bind-Value="tecnico.TecnicoId" class="form-control" style="font-size: 0.8rem;" aria-describedby="bottonbuscar" />
                         </div>
                     </div>
                 </div>
             </div>
-
-          @*   Nombres *@
-          <div class="mb-5">
+            @*   Nombres *@
+            <div class="mb-5">
                 <label for="Nombres" class="form-label"><strong>Nombres:</strong></label>
                 <InputText @bind-Value="tecnico.Nombres" class="form-control" />
-                <ValidationMessage For="@(()=>tecnico.Nombres)"/>
-          </div>
+                <ValidationMessage For="@(()=>tecnico.Nombres)" />
+            </div>
 
+            @* TipoTecnicoId  *@
+            <div class="mb-5">
+                <label for="TipoTecnicoId " class="form-label"> <strong>TipoT&eacute;cnicoId:</strong> </label>
+                <InputSelect @bind-Value="tecnico.TipoTecnicoId " class="form-control">
+                   <option value="0">Elejir Un tipoT&eacute;cnicos</option>
+                    @foreach (var tiposTecnicos in tiposTecnico)
+                    {
+                        <option value="@tiposTecnicos.TipoTecnicoId ">@tiposTecnicos.Descripcion</option>
+                    }
+                </InputSelect> 
+               <ValidationMessage For="@(()=>tecnico.SueldoHora)"/>
+            </div>
+           
             @*   SueldoHora *@
             <div class="mb-5">
                 <label for="SueldoHora" class="form-label"><strong>SueldoHora:</strong></label>
@@ -42,7 +54,7 @@
 
         <div class="card-footer  bg-light d-flex: justify-content-center mt-3">
             <div class="btn-group">
-                <button type="button" class="btn btn-outline-secondary ml-2"@onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
+                <button type="button" class="btn btn-outline-secondary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
                 <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle-fill"></span>Guardar</button>
                 <button type="button" class="btn btn-outline-primary" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
             </div>
@@ -53,9 +65,15 @@
 
 @code {
     [Parameter]
-    public int TecnicoId{ get; set; }
+    public int TecnicoId { get; set; }
     public Tecnicos? tecnico { get; set; } = new Tecnicos();
+    public List<TiposTecnicos> tiposTecnico { get; set; } = new List<TiposTecnicos>();
     private bool Existe = false;
+    //Metodo OnInitialized
+    protected override async Task OnInitializedAsync()
+    {
+        tiposTecnico = await tiposTecnicosServices.Listar(t => true);
+    }
     //El Metodo Nuevo
     public async Task Nuevo()
     {
@@ -67,7 +85,7 @@
     {
         Existe = false;
         var TecnicoEncontrado = await tecnicosServices.Buscar(tecnico.TecnicoId);
-        if(TecnicoEncontrado != null)
+        if (TecnicoEncontrado != null)
         {
             tecnico = TecnicoEncontrado;
         }
@@ -82,14 +100,14 @@
         Existe = await tecnicosServices.Existe(tecnico.TecnicoId);
         return !Existe;
     }
-    //El Metodo Save
-    public async Task Save()
+    //El Metodo Guardar
+    public async Task Guardar()
     {
-        if(!await Validar())
+        if (!await Validar())
         {
             return;
         }
-        var guardado = await tecnicosServices.Save(tecnico);
+        var guardado = await tecnicosServices.Guardar(tecnico);
         if (guardado)
         {
             Nuevo();

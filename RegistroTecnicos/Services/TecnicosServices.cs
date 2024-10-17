@@ -35,7 +35,7 @@ public class TecnicosServices
         return modificado;
     }
     //Metodo del Guardar
-    public async Task<bool> Save(Tecnicos tecnico )
+    public async Task<bool> Guardar(Tecnicos tecnico )  
     {
         if (!await Existe(tecnico.TecnicoId ))
         
@@ -63,8 +63,10 @@ public class TecnicosServices
     public async Task<List<Tecnicos>>Listar(Expression<Func<Tecnicos, bool>> Criterio)
     {
         return await _contexto.Tecnicos
+            .Include(t=>t.TiposTecnicos)
             .AsNoTracking()
             .Where(Criterio)
             .ToListAsync();
     }
+   
 }

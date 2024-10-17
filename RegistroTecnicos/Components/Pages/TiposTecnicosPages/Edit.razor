@@ -1,0 +1,88 @@
+﻿@page "/TiposTecnicos/Edit"
+@page "/TiposTecnicos/Edit/{TipoTecnicoId:int}"
+@inject TiposTecnicosServices tiposTecnicosServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<EditForm Model="tiposTecnico" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card shadow-lg border-0 rounded" style="background-color: white;">
+        <div class="card-header bg-primary text-white text-center p-2 rounded">
+            <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Modificar el TiposT&eacute;cnico</h3>
+        </div>
+
+        <div class="card-body">
+            @*  TipoTecnicoId*@
+            <div class="row">
+                <div class="col-md-10 mb-5">
+                    <label for=" TipoTecnicoId " class="form-label"><strong>TipoT&eacute;cnicoId:</strong></label>
+                    <div class="input-group">
+                        <div style="width: 40%; height: 1mm;">
+                            <InputNumber @bind-Value="tiposTecnico.TipoTecnicoId " class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*  Descripcion *@
+            <div class="mb-5">
+                <label for=" Descripcion" class="form-label"><strong>Descripci&oacute;n:</strong></label>
+                <InputText @bind-Value="tiposTecnico.Descripcion " class="form-control" />
+                <ValidationMessage For="@(()=>tiposTecnico.Descripcion)" />
+            </div>
+        </div>
+        <div class="card-footer: aligh; d-flex: justify-content-center;">
+            <div class="input-group">
+                <button type="button" class="btn btn-outline-secondary ml-2" @onclick="Nuevo"><span class="bi bi-plus"></span>Nuevo</button>
+                <button type="submit" class="btn btn-outline-success ml-2"><span class="bi bi-check-circle"></span>Guardar</button>
+                <button type="button" class="btn btn-outline-primary ml-2" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int TipoTecnicoId { get; set; }
+    public TiposTecnicos? tiposTecnico { get; set; } = new TiposTecnicos();
+    private bool existe = false;
+    //Metodo OnIntialize
+    protected override async Task OnInitializedAsync()
+    {
+        if (TipoTecnicoId != 0)
+        {
+            tiposTecnico = await tiposTecnicosServices.Buscar(TipoTecnicoId) ?? new TiposTecnicos();
+        }
+    }
+    //Metod Nuevo
+    public async Task Nuevo()
+    {
+        tiposTecnico = new TiposTecnicos();
+        existe = false;
+    }
+    //Metodo Validar
+    public async Task<bool> Validar()
+    {
+        var ListaTiposTecnicos = await tiposTecnicosServices
+        .Listar(t => t.Descripcion.ToLower() == tiposTecnico.Descripcion.ToLower() && t.TipoTecnicoId != tiposTecnico.TipoTecnicoId);
+        return ListaTiposTecnicos.Count == 0;
+    }
+    //metodo Guardar
+    public async Task Guardar()
+    {
+        if (!await Validar())
+        {
+            return;
+        }
+        var guadado = await tiposTecnicosServices.Guardar(tiposTecnico);
+        if (guadado)
+        {
+            Nuevo();
+        }
+    }
+    //Metodo volver
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/TiposTecnicos/Index ");
+    }
+}
+

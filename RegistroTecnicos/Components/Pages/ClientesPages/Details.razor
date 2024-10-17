@@ -1,0 +1,56 @@
+﻿@page "/Clientes/Details"
+@page "/Clientes/Details/{ClienteId:int}"
+@inject ClientesServices clientesServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Detalles Cliente</PageTitle>
+
+@if(cliente != null)
+{
+    <div class="container">
+        <div class="card shadow-header">
+            <div class="card-header bg-primary text-white text-center p-2 rounded">
+                <h3 class="text-center"><strong>Detalles cliente</strong></h3>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li><strong>ClienteId:</strong>@cliente.ClienteId</li>
+                                <li><strong>Nombres:</strong>@cliente.Nombres</li>
+                                <li><strong>WhatsApp:</strong>@cliente.WhatsApp</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-outline-primary ml-2" @onclick="Volver"><span class="bi bi-box-arrow-left"></span>Volver</button>
+        </div>
+    </div>
+}
+else
+{
+    <p>Cliente No encontrado.</p>
+}
+
+
+@code {
+    [Parameter]
+    public int ClienteId { get; set; }
+    public Clientes? cliente { get; set; } = new Clientes();
+    //Metodo onitialize
+    protected override async Task OnInitializedAsync()
+    {
+            cliente = await clientesServices.Buscar(ClienteId);
+    }
+    //Metodo Volver
+    public async Task Volver()
+    {
+        navigationManager.NavigateTo("/Clientes/Index");
+    }
+}

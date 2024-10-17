@@ -1,0 +1,185 @@
+﻿@page "/Trabajos/Details"
+@page "/Trabajos/Details/{TrabajoId:int}"
+@rendermode InteractiveServer
+@inject TrabajosServices trabajosServices
+@inject ClientesServices clientesServices
+@inject TecnicosServices tecnicosServices
+@inject ArticulosServices articulosServices
+@inject PrioridadesServices prioridadesServices
+@inject NavigationManager navigationManager
+
+
+@if (trabajo != null)
+{
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header ">
+                <h5 class="card-header ">Detalles del Trabajo</h5>
+            </div>
+            <div class="container">
+                <div class="mb-3 row">
+                    <label for="TrabajoId" class="col-md-2 text-end col-form-label"><strong>TrabajoId:</strong></label>
+                    <div class="col-md-1">
+                        <p class="form-control-plaintext">@trabajo?.TrabajoId</p>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label for="Fecha" class="col-md-2 text-end col-form-label"><strong>Fecha:</strong></label>
+                    <div class="col-md-1">
+                        <p class="form-control-plaintext">@trabajo?.Fecha</p>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label for="Cliente" class="col-md-2 text-end col-form-label"><strong>Cliente:</strong></label>
+                    <div class="col-md-1">
+                        <p class="form-control-plaintext">@cliente?.Nombres</p>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label for="Tecnico" class="col-md-2 text-end col-form-label"><strong>Técnico:</strong></label>
+                    <div class="col-md-1">
+                        <p class="form-control-plaintext">@tecnico?.Nombres</p>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label for="Prioridad" class="col-md-2 text-end col-form-label"><strong>Prioridad:</strong></label>
+                    <div class="col-md-1">
+                        <p class="form-control-plaintext">@prioridad?.Descripcion</p>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label for="Descripcion" class="col-md-2 text-end col-form-label"><strong>Descripción:</strong></label>
+                    <div class="col-md-1">
+                        <p class="form-control-plaintext">@trabajo?.Descripcion</p>
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label for="Monto" class="col-md-2 text-end col-form-label"><strong>Monto:</strong></label>
+                    <div class="col-md-1">
+                        <p class="form-control-plaintext">@trabajo?.Monto</p>
+                    </div>
+                </div>
+
+                <div class="card shadow-lg mt-3 border-success">
+                    <h5 class="card-header ">Detalles TrabajosDetalle</h5>
+
+                    @foreach (var detalle in trabajo.TrabajosDetalle)
+                    {
+                        <div class="row mb-3">
+                            <!-- ArticuloId -->
+                            <div class="col-md-6 d-flex align-items-center">
+                                <label class="col-md-4 text-end col-form-label"><strong>ArticuloId:</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">@detalle.ArticuloId</p>
+                                </div>
+                            </div>
+
+                            <!-- Precio -->
+                            <div class="col-md-6 d-flex align-items-center">
+                                <label class="col-md-4 text-end col-form-label"><strong>Precio:</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">@detalle.Precio.ToString("C")</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Cantidad -->
+                            <div class="col-md-6 d-flex align-items-center">
+                                <label class="col-md-4 text-end col-form-label"><strong>Cantidad:</strong></label>
+                                <div class="col-md-8">
+                                    <p class="form-control-plaintext">@detalle.Cantidad</p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    }
+
+                    <table class="table table-light table-bordered">
+                        <thead class="table table-striped text-center">
+                            <tr>
+                                <th>ArticuloId</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detalle in trabajo.TrabajosDetalle)
+                            {
+                                <tr>
+                                    <td>@detalle.ArticuloId</td>
+                                    <td>@detalle.Cantidad</td>
+                                    <td>@detalle.Precio.ToString("C")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <button type="button" @onclick="Volver" class="btn btn-outline-primary">
+            <span class="bi bi-arrow-left"></span> Volver
+        </button>
+        <button type="button" @onclick="EnviarMensajeWhatsApp" class="btn btn-outline-danger">
+            <span class="bi bi-whatsapp"></span> Finalizar
+        </button>
+    </div>
+}
+else
+{
+    <p>No se encontró el trabajo.</p>
+}
+
+@code {
+    [Parameter]
+    public int TrabajoId { get; set; }
+    public Trabajos? trabajo { get; set; }
+    public Clientes? cliente { get; set; }
+    public Tecnicos? tecnico { get; set; }
+    public Prioridades? prioridad { get; set; }
+    public List<Articulos> ListaArticulos { get; set; } = new List<Articulos>();
+    protected override async Task OnInitializedAsync()
+    {
+        trabajo = await trabajosServices.Buscar(TrabajoId);
+        if (trabajo != null)
+        {
+            cliente = await clientesServices.Buscar(trabajo.ClienteId);
+            tecnico = await tecnicosServices.Buscar(trabajo.TecnicoId);
+            prioridad = await prioridadesServices.Buscar(trabajo.PrioridadId);
+            ListaArticulos = await articulosServices.ListarArticulos();
+        }
+    }
+
+    private string ObtenerUrlWhatsApp()
+    {
+        if (cliente?.WhatsApp != null)
+        {
+            string mensaje = $"El trabajo con ID {trabajo?.TrabajoId} para {cliente?.Nombres} ya está finalizado.";
+            return $"https://wa.me/{cliente.WhatsApp}?text={Uri.EscapeDataString(mensaje)}";
+        }
+        return "#";
+    }
+
+    private void EnviarMensajeWhatsApp()
+    {
+        string urlWhatsApp = ObtenerUrlWhatsApp();
+        if (urlWhatsApp != "#")
+        {
+            navigationManager.NavigateTo(urlWhatsApp, true);
+        }
+    }
+
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/Trabajos/Index");
+    }
+}

@@ -1,0 +1,126 @@
+﻿@page "/Prioridades/Index"
+@inject PrioridadesServices prioridadesServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Prioridades</PageTitle>
+<EditForm Model="ListaPrioridad" class="card shadow-lg bolder p-3 rounded">
+    <div class="card-header bg-primary text-white text-center p-2 rounded">
+        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Consulta  de Prioridades</h3>
+    </div>
+    <div class="row md-3 align-content-center">
+        <div class="col-md-3">
+            <label for="filtro" class="form-label">Filtrar Por:</label>
+            <select @bind="filtro" class="form-select">
+                <option value="Id">PrioridadId</option>
+                <option value="Descripcion">Descripci&oacute;n</option>
+                <option value="Tiempo">Tiempo</option>
+            </select>
+        </div>
+
+        <div class="col-md-5">
+            <label for="valorfiltro" class="form-label">Busqueda:</label>
+            <div class="input-group">
+                <input @bind="valorfiltro" class="form-control" />
+                <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                    <i class="bi bi-search"></i>
+                    Buscar
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-15 text-end">
+                    <div class="col-md-15">
+                        <a href="/Prioridades/Create" class="btn btn-outline-success" type="button">
+                            <i class="bi bi-pencil-square"></i>
+                            Crear
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="table table-responsive">
+                <table class="table table-bordered text-center">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <th>PrioridadId</th>
+                            <th>Descripci&oacute;n</th>
+                            <th>Tiempo</th>
+                            <th>Ver</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var p in ListaPrioridad)
+                        {
+                            <tr>
+                                <td>@p.PrioridadId</td>
+                                <td>@p.Descripcion</td>
+                                <td>@p.Tiempo</td>
+
+                                <td>
+                                    <a href="/Prioridades/Details/@p.PrioridadId" class="btn btn-outline-primary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="/Prioridades/Edit/@p.PrioridadId" class="btn btn-outline-success">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger ml-2"@onclick="()=>Eliminar(p.PrioridadId)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer text-start">
+        <p>Total:@ListaPrioridad.Count</p>
+    </div>
+</EditForm>
+@code {
+    public List<Prioridades> ListaPrioridad { get; set; } = new List<Prioridades>();
+    public string filtro = "Id";
+    public string valorfiltro = "";
+    //Metodo onitialize
+    protected override async Task OnInitializedAsync()
+    {
+        ListaPrioridad = await prioridadesServices.Listar(p => true);
+    }
+    //Metod Buscar
+    public async Task Buscar()
+    {
+        if (string.IsNullOrWhiteSpace(valorfiltro))
+        {
+            ListaPrioridad = await prioridadesServices.Listar(p => true);
+        }
+        else
+        {
+            if (filtro == "Id" && int.TryParse(valorfiltro, out int PrioridadId))
+            {
+                ListaPrioridad = await prioridadesServices.Listar(p => p.PrioridadId == PrioridadId);
+            }
+            else if (filtro == "Descripcion")
+            {
+                ListaPrioridad = await prioridadesServices.Listar(p => p.Descripcion.Contains(valorfiltro));
+            }
+            else if (filtro == "Tiempo" )
+            {
+                ListaPrioridad = await prioridadesServices.Listar(p => p.Tiempo.Contains(valorfiltro));
+            }
+        }
+    }
+    //Metodo Eliminar
+    public async Task Eliminar(int PrioridadId)
+    {
+        navigationManager.NavigateTo($"/Prioridades/Delete/PrioridadId={PrioridadId}");
+    }
+}

@@ -1,0 +1,81 @@
+﻿@page "/Clientes/Index"
+@inject ClientesServices clientesServices
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Clientes</PageTitle>
+
+<EditForm Model="ListaClientes" class="card shadow-lg bolder p-3 rounded">
+    <div class="card-header bg-primary text-white text-center p-2 rounded">
+        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Consulta Clientes</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-15">
+                <div class="col-md-15 text-end">
+                    <a href="/Clientes/Create" class="btn btn-outline-success" type="button">
+                        <i class="bi bi-pencil-square"></i>
+                        Crear
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table table-responsive">
+        <table class="table table-bordered text-center">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th>ClienteId</th>
+                    <th>Nombres</th>
+                    <th>WhatsApp</th>
+                    <th>Ver</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in ListaClientes)
+                {
+                    <tr>
+                        <td>@c.ClienteId</td>
+                        <td>@c.Nombres</td>
+                        <td>@c.WhatsApp</td>
+
+                        <td>
+                            <a href="/Clientes/Details/@c.ClienteId" class="btn btn-outline-primary">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/Clientes/Edit/@c.ClienteId" class="btn btn-outline-secondary">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger ml-2"@onclick="()=>Eliminar(c.ClienteId)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer text-start">
+        <p>Total:@ListaClientes.Count</p>
+    </div>
+</EditForm>
+
+@code {
+    public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
+    //Metodo onitialize
+    protected override async Task OnInitializedAsync()
+    {
+        ListaClientes = await clientesServices.Listar(c => true);
+    }
+    //Metodo Eliminar
+    private async Task Eliminar(int ClienteId)
+    {
+        navigationManager.NavigateTo($"/Clientes/Delete/ClienteId={ClienteId}");
+    }
+}
