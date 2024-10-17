@@ -4,105 +4,105 @@
 @rendermode InteractiveServer
 
 <PageTitle>Trabajos</PageTitle>
-    <div class="card-header bg-primary text-white text-center p-2 rounded">
-        <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Consulta de Trabajos</h3>
+<div class="card-header bg-primary text-white text-center p-2 rounded">
+    <h3 style="font-weight: bold;" class="md-3 font-weight: bold;">Consulta de Trabajos</h3>
+</div>
+<div class="row md-3 align-content-center">
+    <div class="col-md-3">
+        <label for=" filtro" class="form-label">Filtrar Por:</label>
+        <select @bind="filtro" class="form-control">
+            <option value="Id">TrabajoId</option>
+            <option value="Fecha">Fecha</option>
+            <option value="Descripcion">Descripcion</option>
+            <option value="Monto">Monto</option>
+        </select>
     </div>
-    <div class="row md-3 align-content-center">
-        <div class="col-md-3">
-            <label for=" filtro" class="form-label">Filtrar Por:</label>
-            <select @bind="filtro" class="form-control">
-                <option value="Id">TrabajoId</option>
-                <option value="Fecha">Fecha</option>
-                <option value="Descripcion">Descripcion</option>
-                <option value="Monto">Monto</option>
-            </select>
-        </div>
 
-        <div class="col-md-5">
-            <label for=" valorfiltro" class="form-label">Busqueda:</label>
-            <div class="input-group">
-                <input @bind="valorfiltro" class="form-control"/>
-                <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
-                    <i class="bi bi-search-circle"></i>
-                    Buscar
-                </button>
-            </div>
+    <div class="col-md-5">
+        <label for=" valorfiltro" class="form-label">Busqueda:</label>
+        <div class="input-group">
+            <input @bind="valorfiltro" class="form-control" />
+            <button @onclick="Buscar" class="btn btn-outline-primary" type="button">
+                <i class="bi bi-search-circle"></i>
+                Buscar
+            </button>
         </div>
+    </div>
 
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-15">
-                    <div class="col-md-15 text-end">
-                        <a href=" /Trabajos/Create" class="btn btn-outline-success" type="button">
-                            <i class="bi bi-pencil-square"></i>
-                            Crear
-                        </a>
-                    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-15">
+                <div class="col-md-15 text-end">
+                    <a href=" /Trabajos/Create" class="btn btn-outline-success" type="button">
+                        <i class="bi bi-pencil-square"></i>
+                        Crear
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="table table-responsive">
-            <table class="table table-bordered Text-center">
-                <thead class="bg-primary text-white">
+    </div>
+    <div class="table table-responsive">
+        <table class="table table-bordered Text-center">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th>TrabajoId</th>
+                    <th>Fecha</th>
+                    <th>ClienteId</th>
+                    <th>TecnicoId</th>
+                    <th>PrioridadId</th>
+                    <th>Descripcion</th>
+                    <th>Monto</th>
+                    <th>Ver</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var t in Listatrabajos)
+                {
                     <tr>
-                        <th>TrabajoId</th>
-                        <th>Fecha</th>
-                        <th>ClienteId</th>
-                        <th>TecnicoId</th>
-                        <th>PrioridadId</th>
-                        <th>Descripcion</th>
-                        <th>Monto</th>
-                        <th>Ver</th>
-                        <th>Editar</th>
-                        <th>Eliminar</th>
-                      
+                        <td>@t.TrabajoId</td>
+                        <td>@t.Fecha</td>
+                        <td>@t.Clientes?.Nombres</td>
+                        <td>@t.Tecnicos?.Nombres</td>
+                        <td>@t.Prioridades?.Descripcion</td>
+                        <td>@t.Descripcion</td>
+                        <td>@t.Monto</td>
+
+                        <td>
+                            <a href="/Trabajos/Details/@t.TrabajoId" class="btn btn-outline-primary">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="/Trabajos/Edit/@t.TrabajoId" class="btn btn-outline-success">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="/Trabajos/Delete/@t.TrabajoId" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach(var t in Listatrabajos)
-                    {
-                        <tr>
-                            <td>@t.TrabajoId</td>
-                            <td>@t.Fecha</td>
-                            <td>@t.Clientes?.Nombres</td>
-                            <td>@t.Tecnicos?.Nombres</td>
-                            <td>@t.Prioridades?.Descripcion</td>
-                            <td>@t.Descripcion</td>
-                            <td>@t.Monto</td>
-
-                            <td>
-                                <a href="/Trabajos/Details/@t.TrabajoId" class="btn btn-outline-primary">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                            </td>
-
-                            <td>
-                                <a href="/Trabajos/Edit/@t.TrabajoId" class="btn btn-outline-success">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                            </td>
-
-                            <td>
-                                <button type="button" class="btn btn-outline-danger ml-2"@onclick="()=>Eliminar(t.TrabajoId)">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
     </div>
-    <div class="card-footer">
-        <p>Total:@Listatrabajos.Count</p>
-    </div>
+</div>
+<div class="card-footer">
+    <p>Total:@Listatrabajos.Count</p>
+</div>
 
 
 @code {
-    public int TrabajoId{ get; set; }
+    public int TrabajoId { get; set; }
     public List<Trabajos> Listatrabajos { get; set; } = new List<Trabajos>();
-    public string filtro="Id";
+    public string filtro = "Id";
     public string valorfiltro = "";
     //Metodo onitialize
     protected override async Task OnInitializedAsync()
@@ -118,26 +118,23 @@
         }
         else
         {
-            if(filtro =="Id"&&int.TryParse(valorfiltro, out int TrabajoId))
+            if (filtro == "Id" && int.TryParse(valorfiltro, out int TrabajoId))
             {
-                Listatrabajos = await trabajosServices.Listar(t => t.TrabajoId==TrabajoId);
+                Listatrabajos = await trabajosServices.Listar(t => t.TrabajoId == TrabajoId);
             }
-            else if (filtro == "Fecha" &&DateTime.TryParse(valorfiltro, out DateTime Fecha))
+            else if (filtro == "Fecha" && DateTime.TryParse(valorfiltro, out DateTime Fecha))
             {
                 Listatrabajos = await trabajosServices.Listar(t => t.Fecha == Fecha);
             }
             else if (filtro == "Descripcion")
             {
                 Listatrabajos = await trabajosServices.Listar(t => t.Descripcion.Contains(valorfiltro));
-            }else if(filtro=="Monto"&&decimal.TryParse(valorfiltro, out decimal Monto))
+            }
+            else if (filtro == "Monto" && decimal.TryParse(valorfiltro, out decimal Monto))
             {
-                Listatrabajos = await trabajosServices.Listar(t => t.Monto==Monto);
+                Listatrabajos = await trabajosServices.Listar(t => t.Monto == Monto);
             }
         }
     }
-    //Metodo  Eliminar
-    public async Task Eliminar(int TrabajoId)
-    {
-        navigationManager.NavigateTo($"/Trabajos/Delete/TrabajoId={TrabajoId}");
-    }
+
 }

@@ -10,7 +10,7 @@ public class Prioridades
     public string? Descripcion { get; set; }
 
     [Required(ErrorMessage = "Por favor, asegúrate de que llenes campo")]
-    public string? Tiempo { get; set; }
+    public string Tiempo { get; set; }
 
     public Trabajos? Trabajos { get; set; }
 }

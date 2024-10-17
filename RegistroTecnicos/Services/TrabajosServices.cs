@@ -59,13 +59,26 @@ public class TrabajosServices
             .ExecuteDeleteAsync();
         return eliminado > 0;
     }
-    //Metodo Buscar
-    public async Task<Trabajos?>Buscar(int id)
+    // Método para eliminar un detalle específico
+    public async Task<bool> EliminarDetalle(int trabajoDetalleId)
+    {
+        var detalle = await _contexto.TrabajosDetalle.FindAsync(trabajoDetalleId);
+        if (detalle != null)
+        {
+            _contexto.TrabajosDetalle.Remove(detalle);
+            return await _contexto.SaveChangesAsync() > 0;
+        }
+        return false;
+    }
+
+
+    public async Task<Trabajos?> Buscar(int id)
     {
         return await _contexto.Trabajos
-            .AsNoTracking()
-            .FirstOrDefaultAsync(t=>t.TrabajoId == id);
+            .Include(t => t.TrabajosDetalle) // Carga los detalles
+            .FirstOrDefaultAsync(t => t.TrabajoId == id);
     }
+
     //Metodo  Listar
     public async Task<List<Trabajos>>Listar(Expression<Func<Trabajos, bool>> Criterio)
     {
@@ -73,8 +86,23 @@ public class TrabajosServices
             .Include(t => t.Tecnicos)
             .Include(t => t.Clientes)
             .Include(t => t.Prioridades)
+            .Include(t=>t.TrabajosDetalle)
             .AsNoTracking()
             .Where(Criterio)
             .ToListAsync();
     }
+
+    public async Task<bool> GuardarDetalles(List<TrabajosDetalle> detalles)
+    {
+        foreach (var detalle in detalles)
+        {
+            _contexto.TrabajosDetalle.Add(detalle); // Asegúrate de tener el DbSet correspondiente
+        }
+        await _contexto.SaveChangesAsync(); // Guardar todos los cambios a la base de datos
+        return true; // Retornar verdadero si se guardó correctamente
+    }
+
+   
+
+
 }

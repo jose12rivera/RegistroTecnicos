@@ -17,6 +17,96 @@ namespace RegistroTecnicos.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
+            modelBuilder.Entity("RegistroTecnicos.Models.Articulos", b =>
+                {
+                    b.Property<int>("ArticuloId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Costo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Existencia")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ArticuloId");
+
+                    b.ToTable("Articulos");
+
+                    b.HasData(
+                        new
+                        {
+                            ArticuloId = 1,
+                            Costo = 15m,
+                            Descripcion = "Refresco",
+                            Existencia = 24,
+                            Precio = 25m
+                        },
+                        new
+                        {
+                            ArticuloId = 2,
+                            Costo = 10m,
+                            Descripcion = "Galletas",
+                            Existencia = 50,
+                            Precio = 20m
+                        },
+                        new
+                        {
+                            ArticuloId = 3,
+                            Costo = 30m,
+                            Descripcion = "Café",
+                            Existencia = 40,
+                            Precio = 45m
+                        },
+                        new
+                        {
+                            ArticuloId = 4,
+                            Costo = 20m,
+                            Descripcion = "Leche",
+                            Existencia = 60,
+                            Precio = 35m
+                        },
+                        new
+                        {
+                            ArticuloId = 5,
+                            Costo = 8m,
+                            Descripcion = "Azúcar",
+                            Existencia = 100,
+                            Precio = 15m
+                        },
+                        new
+                        {
+                            ArticuloId = 6,
+                            Costo = 5m,
+                            Descripcion = "Pan",
+                            Existencia = 80,
+                            Precio = 10m
+                        },
+                        new
+                        {
+                            ArticuloId = 7,
+                            Costo = 18m,
+                            Descripcion = "Jugo de naranja",
+                            Existencia = 30,
+                            Precio = 30m
+                        },
+                        new
+                        {
+                            ArticuloId = 8,
+                            Costo = 25m,
+                            Descripcion = "Cereal",
+                            Existencia = 45,
+                            Precio = 40m
+                        });
+                });
+
             modelBuilder.Entity("RegistroTecnicos.Models.Clientes", b =>
                 {
                     b.Property<int>("ClienteId")
@@ -136,6 +226,36 @@ namespace RegistroTecnicos.Migrations
                     b.ToTable("Trabajos");
                 });
 
+            modelBuilder.Entity("RegistroTecnicos.Models.TrabajosDetalle", b =>
+                {
+                    b.Property<int>("DetalleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ArticuloId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Costo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TrabajoId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("DetalleId");
+
+                    b.HasIndex("ArticuloId");
+
+                    b.HasIndex("TrabajoId");
+
+                    b.ToTable("TrabajosDetalle");
+                });
+
             modelBuilder.Entity("RegistroTecnicos.Models.Tecnicos", b =>
                 {
                     b.HasOne("RegistroTecnicos.Models.TiposTecnicos", "TiposTecnicos")
@@ -174,6 +294,25 @@ namespace RegistroTecnicos.Migrations
                     b.Navigation("Tecnicos");
                 });
 
+            modelBuilder.Entity("RegistroTecnicos.Models.TrabajosDetalle", b =>
+                {
+                    b.HasOne("RegistroTecnicos.Models.Articulos", "Articulo")
+                        .WithMany()
+                        .HasForeignKey("ArticuloId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RegistroTecnicos.Models.Trabajos", "Trabajo")
+                        .WithMany("TrabajosDetalle")
+                        .HasForeignKey("TrabajoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Articulo");
+
+                    b.Navigation("Trabajo");
+                });
+
             modelBuilder.Entity("RegistroTecnicos.Models.Clientes", b =>
                 {
                     b.Navigation("Trabajos");
@@ -192,6 +331,11 @@ namespace RegistroTecnicos.Migrations
             modelBuilder.Entity("RegistroTecnicos.Models.TiposTecnicos", b =>
                 {
                     b.Navigation("Tecnicos");
+                });
+
+            modelBuilder.Entity("RegistroTecnicos.Models.Trabajos", b =>
+                {
+                    b.Navigation("TrabajosDetalle");
                 });
 #pragma warning restore 612, 618
         }
