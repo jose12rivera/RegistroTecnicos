@@ -17,48 +17,49 @@
                 <h5 class="card-header ">Detalles del Trabajo</h5>
             </div>
             <div class="container">
+                @*   TrabajoId *@
                 <div class="mb-3 row">
                     <label for="TrabajoId" class="col-md-2 text-end col-form-label"><strong>TrabajoId:</strong></label>
                     <div class="col-md-1">
                         <p class="form-control-plaintext">@trabajo?.TrabajoId</p>
                     </div>
                 </div>
-
+                @*   Fecha *@
                 <div class="mb-3 row">
                     <label for="Fecha" class="col-md-2 text-end col-form-label"><strong>Fecha:</strong></label>
                     <div class="col-md-1">
                         <p class="form-control-plaintext">@trabajo?.Fecha</p>
                     </div>
                 </div>
-
+                @*    ClienteId *@
                 <div class="mb-3 row">
-                    <label for="Cliente" class="col-md-2 text-end col-form-label"><strong>Cliente:</strong></label>
+                    <label for="Cliente" class="col-md-2 text-end col-form-label"><strong>ClienteId:</strong></label>
                     <div class="col-md-1">
                         <p class="form-control-plaintext">@cliente?.Nombres</p>
                     </div>
                 </div>
-
+                @* TecnicoId *@
                 <div class="mb-3 row">
-                    <label for="Tecnico" class="col-md-2 text-end col-form-label"><strong>Técnico:</strong></label>
+                    <label for="Tecnico" class="col-md-2 text-end col-form-label"><strong>TécnicoId:</strong></label>
                     <div class="col-md-1">
                         <p class="form-control-plaintext">@tecnico?.Nombres</p>
                     </div>
                 </div>
-
+                @* PrioridadId  *@
                 <div class="mb-3 row">
-                    <label for="Prioridad" class="col-md-2 text-end col-form-label"><strong>Prioridad:</strong></label>
+                    <label for="Prioridad" class="col-md-2 text-end col-form-label"><strong>PrioridadId:</strong></label>
                     <div class="col-md-1">
                         <p class="form-control-plaintext">@prioridad?.Descripcion</p>
                     </div>
                 </div>
-
+                @*  Descripcion *@
                 <div class="mb-3 row">
-                    <label for="Descripcion" class="col-md-2 text-end col-form-label"><strong>Descripción:</strong></label>
+                    <label for="Descripcion" class="col-md-2 text-end col-form-label"><strong>Descripci&oacute;n:</strong></label>
                     <div class="col-md-1">
                         <p class="form-control-plaintext">@trabajo?.Descripcion</p>
                     </div>
                 </div>
-
+                @*  Monto *@
                 <div class="mb-3 row">
                     <label for="Monto" class="col-md-2 text-end col-form-label"><strong>Monto:</strong></label>
                     <div class="col-md-1">
@@ -71,31 +72,23 @@
 
                     @foreach (var detalle in trabajo.TrabajosDetalle)
                     {
-                        <div class="row mb-3">
-                            <!-- ArticuloId -->
-                            <div class="col-md-6 d-flex align-items-center">
-                                <label class="col-md-4 text-end col-form-label"><strong>ArticuloId:</strong></label>
-                                <div class="col-md-8">
-                                    <p class="form-control-plaintext">@detalle.ArticuloId</p>
-                                </div>
+                        <div class="row mb-3 m-0">
+                            @* ArticuloId *@
+                            <div class="col-md-4 d-flex align-items-center">
+                                <label class="col-form-label"><strong>ArticuloId:</strong></label>
+                                <p class="form-control-plaintext ms-2">@detalle.ArticuloId</p>
                             </div>
 
-                            <!-- Precio -->
-                            <div class="col-md-6 d-flex align-items-center">
-                                <label class="col-md-4 text-end col-form-label"><strong>Precio:</strong></label>
-                                <div class="col-md-8">
-                                    <p class="form-control-plaintext">@detalle.Precio.ToString("C")</p>
-                                </div>
+                            @* Cantidad *@
+                            <div class="col-md-4 d-flex align-items-center">
+                                <label class="col-form-label"><strong>Cantidad:</strong></label>
+                                <p class="form-control-plaintext ms-2">@detalle.Cantidad</p>
                             </div>
-                        </div>
 
-                        <div class="row mb-3">
-                            <!-- Cantidad -->
-                            <div class="col-md-6 d-flex align-items-center">
-                                <label class="col-md-4 text-end col-form-label"><strong>Cantidad:</strong></label>
-                                <div class="col-md-8">
-                                    <p class="form-control-plaintext">@detalle.Cantidad</p>
-                                </div>
+                            @* Precio *@
+                            <div class="col-md-4 d-flex align-items-center">
+                                <label class="col-form-label"><strong>Precio:</strong></label>
+                                <p class="form-control-plaintext ms-2">@detalle.Precio.ToString("C")</p>
                             </div>
                         </div>
                         <hr />
@@ -125,12 +118,12 @@
         </div>
     </div>
 
-    <div class="card-footer">
+    <div class="card-footer justify-content-center text-center">
         <button type="button" @onclick="Volver" class="btn btn-outline-primary">
-            <span class="bi bi-arrow-left"></span> Volver
+            <span class="bi bi-arrow-left mt-3"></span> Volver
         </button>
-        <button type="button" @onclick="EnviarMensajeWhatsApp" class="btn btn-outline-danger">
-            <span class="bi bi-whatsapp"></span> Finalizar
+        <button type="button" @onclick="EnviarMensajeWhatsApp" class="btn btn-outline-success">
+            <span class="bi bi-whatsapp mt-3"></span> Finalizar
         </button>
     </div>
 }

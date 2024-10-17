@@ -15,24 +15,24 @@
     </div>
 
     <div class="card-body">
-        <!-- TrabajoId -->
+        @*   TrabajoId *@
         <div class="mb-5">
             <label for="TrabajoId" class="form-label"><strong>TrabajoId:</strong></label>
             <InputNumber @bind-Value="trabajo.TrabajoId" class="form-control" />
         </div>
 
-        <!-- Fecha -->
+        @*   Fecha *@
         <div class="mb-5">
             <label for="Fecha" class="form-label"><strong>Fecha:</strong></label>
             <InputDate @bind-Value="trabajo.Fecha" class="form-control" />
             <ValidationMessage For="@(() => trabajo.Fecha)" />
         </div>
 
-        <!-- ClienteId -->
+        @*    ClienteId *@
         <div class="mb-5">
-            <label><strong>Cliente:</strong></label>
+            <label><strong>ClienteId:</strong></label>
             <InputSelect @bind-Value="trabajo.ClienteId" class="form-control">
-                <option value="0">Elegir un Cliente</option>
+                <option value="0">Selecionar un Cliente</option>
                 @foreach (var cliente in this.cliente)
                 {
                     <option value="@cliente.ClienteId">@cliente.Nombres</option>
@@ -40,12 +40,11 @@
             </InputSelect>
             <ValidationMessage For="@(() => trabajo.ClienteId)" />
         </div>
-
-        <!-- TecnicoId -->
+        @* TecnicoId *@
         <div class="mb-5">
-            <label><strong>Técnico:</strong></label>
+            <label><strong>TécnicoId:</strong></label>
             <InputSelect @bind-Value="trabajo.TecnicoId" class="form-control">
-                <option value="0">Elegir un Técnico</option>
+                <option value="0">Selecionar un Técnico</option>
                 @foreach (var tecnico in this.tecnico)
                 {
                     <option value="@tecnico.TecnicoId">@tecnico.Nombres</option>
@@ -54,11 +53,11 @@
             <ValidationMessage For="@(() => trabajo.TecnicoId)" />
         </div>
 
-        <!-- PrioridadId -->
+        @* PrioridadId  *@
         <div class="mb-5">
-            <label><strong>Prioridad:</strong></label>
+            <label><strong>PrioridadId:</strong></label>
             <InputSelect @bind-Value="trabajo.PrioridadId" class="form-control">
-                <option value="0">Elegir una Prioridad</option>
+                <option value="0">Selecionar un una Prioridad</option>
                 @foreach (var prioridad in this.prioridad)
                 {
                     <option value="@prioridad.PrioridadId">@prioridad.Descripcion</option>
@@ -67,29 +66,29 @@
             <ValidationMessage For="@(() => trabajo.PrioridadId)" />
         </div>
 
-        <!-- Descripción -->
+        @*  Descripcion *@
         <div class="mb-5">
             <label for="Descripcion" class="form-label"><strong>Descripción:</strong></label>
             <InputText @bind-Value="trabajo.Descripcion" class="form-control" />
             <ValidationMessage For="@(() => trabajo.Descripcion)" />
         </div>
 
-        <!-- Monto -->
+        @*  Monto *@
         <div class="mb-5">
             <label for="Monto" class="form-label"><strong>Monto:</strong></label>
             <InputNumber @bind-Value="trabajo.Monto" class="form-control" />
             <ValidationMessage For="@(() => trabajo.Monto)" />
         </div>
 
-        <!-- Detalle Trabajos -->
+
         <div class="border border-success p-3 mt-3">
             <h5 class="card-header">Detalle de Trabajos</h5>
             <div class="card-body">
                 <div class="row align-items-end m-0">
-                    <!-- Artículo -->
+                    @*  ArticuloId *@
                     <div class="col-md-4 p-0">
                         <InputSelect class="form-control" @bind-Value="selectedArticuloId">
-                            <option value="0" selected disabled>Elegir un Artículo</option>
+                            <option value="0" selected disabled>Selecionar un Artículo</option>
                             @foreach (var articulo in ListaArticulos)
                             {
                                 <option value="@articulo.ArticuloId">@articulo.Descripcion - Precio: @articulo.Precio</option>
@@ -97,22 +96,30 @@
                         </InputSelect>
                     </div>
 
-                    <!-- Cantidad -->
+                    @* cantidad *@
                     <div class="col-md-3 p-0">
-                        <InputNumber @bind-Value="TrabajosDetalle.Cantidad" class="form-control" />
+                        <div class="input-group">
+                            <span class="input-group-text">Cantidad:</span>
+                            <InputNumber @bind-Value="TrabajosDetalle.Cantidad" class="form-control" />
+                        </div>
+                        
                         <ValidationMessage For="@(() => TrabajosDetalle.Cantidad)" />
                     </div>
 
-                    <!-- Precio -->
+                    @* Precio *@
                     <div class="col-md-3 p-0">
-                        <InputNumber @bind-Value="TrabajosDetalle.Precio" class="form-control" />
+                        <div class="input-group">
+                            <span class="input-group-text">Precio:</span>
+                            <InputNumber @bind-Value="TrabajosDetalle.Precio" class="form-control" />
+                        </div>
+                       
                         <ValidationMessage For="@(() => TrabajosDetalle.Precio)" />
                     </div>
 
-                    <!-- Botón Agregar -->
+                       @* Botón Agregar  *@
                     <div class="col-md-2 p-0">
                         <button type="button" @onclick="AgregarDetalle" class="btn btn-outline-primary">
-                            <span class="bi bi-plus"></span> Agregar
+                            <span class="bi bi-plus mt-3"></span> Agregar
                         </button>
                     </div>
                 </div>
@@ -123,7 +130,7 @@
                             <th>Artículo</th>
                             <th>Cantidad</th>
                             <th>Precio</th>
-                            <th>Acciones</th>
+                           
                         </tr>
                     </thead>
                     <tbody>
@@ -146,11 +153,19 @@
         </div>
     </div>
 
-    <!-- Botones de acción -->
+  
     <div class="card-footer d-flex justify-content-center">
-        <button type="button" @onclick="Nuevo" class="btn btn-outline-secondary"><span class="bi bi-plus"></span> Nuevo</button>
-        <button type="submit" class="btn btn-outline-success"><span class="bi bi-check-circle"></span> Guardar</button>
-        <button type="button" @onclick="Volver" class="btn btn-outline-primary"><span class="bi bi-box-arrow-left"></span> Volver</button>
+        <button type="button" @onclick="Nuevo" class="btn btn-outline-secondary">
+            <span class="bi bi-plus mt-3"></span> Nuevo
+        </button>
+
+        <button type="submit" class="btn btn-outline-success">
+            <span class="bi bi-floppy mt-3"></span> Guardar
+        </button>
+        <button type="button" @onclick="Volver" class="btn btn-outline-primary">
+            <span class="bi bi-arrow-left mt-3"></span>
+            Volver
+        </button>
     </div>
 </EditForm>
 
