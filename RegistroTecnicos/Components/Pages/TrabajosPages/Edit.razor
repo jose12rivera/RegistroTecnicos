@@ -217,6 +217,7 @@
         {
             trabajo = await trabajosServices.Buscar(TrabajoId);
             ListaTrabajosDetalle = trabajo.TrabajosDetalle.ToList(); 
+            await CalcularTotal();
         }
     }
 
@@ -270,25 +271,25 @@
                 };
 
             ListaTrabajosDetalle.Add(nuevoDetalle);
+           
+            await CalcularTotal();
             TrabajosDetalle = new TrabajosDetalle(); 
-            await CalcularTotal(); 
+         
             agregar = true;
         }
     }
 
   
 
-    public void EliminarDetalle(TrabajosDetalle detalle)
+    public async Task EliminarDetalle(TrabajosDetalle detalle)
     {
-
-        selectedArticuloId = detalle.ArticuloId;
-        TrabajosDetalle.Cantidad = detalle.Cantidad;
-        TrabajosDetalle.Precio = detalle.Precio;
-
-
+       
         ListaTrabajosDetalle.Remove(detalle);
+        await CalcularTotal();
+
         eliminado = true;
     }
+
     
 
     private void Volver()
