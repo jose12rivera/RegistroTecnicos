@@ -153,6 +153,25 @@
         </div>
     </div>
 
+    @if (guardar)
+    {
+        <div class="alert alert-success" role="alert">
+            Se guardaron los detalles del trabajo.
+        </div>
+    }
+    @if (agregar)
+    {
+        <div class="alert alert-info" role="alert">
+            Ya se agrego en detalles del trabajo.
+        </div>
+    }
+    @if (eliminado)
+    {
+        <div class="alert alert-danger" role="alert">
+            El detalle ha sido eliminado.
+        </div>
+    }
+
   
     <div class="card-footer d-flex justify-content-center">
         <button type="button" @onclick="Nuevo" class="btn btn-outline-secondary">
@@ -180,6 +199,10 @@
     public List<Articulos> ListaArticulos { get; set; } = new List<Articulos>();
     public TrabajosDetalle TrabajosDetalle { get; set; } = new TrabajosDetalle();
     private int selectedArticuloId;
+    private bool eliminado = false;
+    private bool agregar = false;
+    private bool guardar = false;
+    private bool existe = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -203,7 +226,7 @@
 
     private async Task Guardar()
     {
-        if (!Validar())
+        if (!await Validar())
         {
             return;
         }
@@ -213,15 +236,27 @@
 
         if (resultado)
         {
-            Nuevo();
-            navigationManager.NavigateTo("/Trabajos/Index");
+            guardar = true;
         }
     }
 
-    private bool Validar()
+    public async Task<bool> Validar()
     {
-        // Lógica para validar el formulario
-        return true; // Cambia esto según tus necesidades
+        existe = await trabajosServices.Existe(trabajo.TrabajoId);
+        return !existe;
+    }
+    public async Task Buscar()
+    {
+        existe = false;
+        var encontrado = await trabajosServices.Buscar(trabajo.TrabajoId);
+        if (encontrado != null)
+        {
+            trabajo = encontrado;
+        }
+        else
+        {
+            Nuevo();
+        }
     }
 
     private void AgregarDetalle()
@@ -238,11 +273,13 @@
 
         ListaTrabajosDetalle.Add(TrabajosDetalle);
         TrabajosDetalle = new TrabajosDetalle();
+        agregar = true;
     }
 
     private void Remover(TrabajosDetalle detalle)
     {
         ListaTrabajosDetalle.Remove(detalle);
+        eliminado = true;
     }
 
     private void Volver()
