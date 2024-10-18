@@ -9,7 +9,6 @@
 
 <EditForm Model="trabajo" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
-
     <div class="card-header bg-primary text-white text-center p-2 rounded">
         <h3 class="font-weight-bold">Registro Trabajos</h3>
     </div>
@@ -219,7 +218,6 @@
         TrabajosDetalle.Cantidad = detalle.Cantidad;
         TrabajosDetalle.Precio = detalle.Precio;
 
-
         ListaTrabajosDetalle.Remove(detalle);
         eliminado = true;
     }
@@ -228,6 +226,7 @@
     {
         trabajo.Monto = ListaTrabajosDetalle.Sum(d => d.Precio * d.Cantidad);
     }
+
     public void AgregarDetalle()
     {
         var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.ArticuloId == selectedArticuloId);
@@ -253,6 +252,7 @@
         existe = await trabajosServices.Existe(trabajo.TrabajoId);
         return !existe;
     }
+
     public async Task Buscar()
     {
         existe = false;
@@ -273,7 +273,6 @@
         {
             return;
         }
-
 
         trabajo.TrabajosDetalle = ListaTrabajosDetalle;
 
