@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace RegistroTecnicos.Models;
-
 public class Articulos
 {
     [Key]
@@ -21,5 +20,4 @@ public class Articulos
     [Required(ErrorMessage = "La existencia es obligatoria.")]
     [Range(0, int.MaxValue, ErrorMessage = "La existencia no puede ser negativa.")]
     public int Existencia { get; set; }
-
 }
