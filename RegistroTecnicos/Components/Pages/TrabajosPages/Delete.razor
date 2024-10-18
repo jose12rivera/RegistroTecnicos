@@ -11,126 +11,105 @@
 <div class="container">
     <div class="card shadow-lg">
         <div class="card-header bg-primary text-white text-center">
-            <h3><strong>Eliminar Trabajo</strong></h3>
+            <h5><strong>Eliminar Trabajo</strong></h5>
         </div>
 
         <div class="container mt-3">
-          @*   TrabajoId *@
-            <div class="mb-3 row">
-                <label for="TrabajoId" class="col-md-2 text-end col-form-label"><strong>TrabajoId:</strong></label>
-                <div class="col-md-1">
-                    <p class="form-control-plaintext">@trabajo?.TrabajoId</p>
-                </div>
-            </div>
 
-             @*   Fecha *@
-            <div class="mb-3 row">
-                <label for="Fecha" class="col-md-2 text-end col-form-label"><strong>Fecha:</strong></label>
-                <div class="col-md-3">
-                    <p class="form-control-plaintext">@trabajo?.Fecha</p>
-                </div>
-            </div>
-           @*    ClienteId *@
-            <div class="mb-3 row">
-                <label for="ClienteId" class="col-md-2 text-end col-form-label"><strong>ClienteId:</strong></label>
-                <div class="col-md-4">
-                    <p class="form-control-plaintext">@cliente?.Nombres</p>
-                </div>
-            </div>
-             @* TecnicoId *@
-            <div class="mb-3 row">
-                <label for="TecnicoId" class="col-md-2 text-end col-form-label"><strong>TecnicoId:</strong></label>
-                <div class="col-md-4">
-                    <p class="form-control-plaintext">@tecnico?.Nombres</p>
-                </div>
-            </div>
-            @* PrioridadId  *@
-            <div class="mb-3 row">
-                <label for="PrioridadId" class="col-md-2 text-end col-form-label"><strong>PrioridadId:</strong></label>
-                <div class="col-md-2">
-                    <p class="form-control-plaintext">@prioridad?.Descripcion</p>
-                </div>
-            </div>
-            @*  Descripcion *@
-            <div class="mb-3 row">
-                <label for="Descripcion" class="col-md-2 text-end col-form-label"><strong>Descripci&oacute;n:</strong></label>
-                <div class="col-md-4">
-                    <p class="form-control-plaintext">@trabajo?.Descripcion</p>
-                </div>
-            </div>
-             @*  Monto *@
-            <div class="mb-3 row">
-                <label for="Monto" class="col-md-2 text-end col-form-label"><strong>Monto:</strong></label>
-                <div class="col-md-2">
-                    <p class="form-control-plaintext">@trabajo?.Monto</p>
-                </div>
-            </div>
-
-            <div class="border border-success p-3 mt-3">
-                <h5 class="card-header">Detalle TrabajosDetalle</h5>
-
-                @foreach (var detalle in trabajo.TrabajosDetalle)
-                {
-                    <div class="row mb-3 m-0">
-                        @* ArticuloId *@
-                        <div class="col-md-4 d-flex align-items-center">
-                            <label class="col-form-label"><strong>ArticuloId:</strong></label>
-                            <p class="form-control-plaintext ms-2">@detalle.ArticuloId</p>
-                        </div>
-
-                        @* Cantidad *@
-                        <div class="col-md-4 d-flex align-items-center">
-                            <label class="col-form-label"><strong>Cantidad:</strong></label>
-                            <p class="form-control-plaintext ms-2">@detalle.Cantidad</p>
-                        </div>
-
-                        @* Precio *@
-                        <div class="col-md-4 d-flex align-items-center">
-                            <label class="col-form-label"><strong>Precio:</strong></label>
-                            <p class="form-control-plaintext ms-2">@detalle.Precio.ToString("C")</p>
-                        </div>
+            <div class="card-body">
+                @*   TrabajoId *@
+                <div class="mb-3 row">
+                    <label for="TrabajoId" class="col-md-2 text-end col-form-label"><strong>TrabajoId:</strong></label>
+                    <div class="col-md-1">
+                        <p class="form-control-plaintext">@trabajo?.TrabajoId</p>
                     </div>
-                    <hr />
+                </div>
 
-                }
+                @*   Fecha *@
+                <div class="mb-3 row">
+                    <label for="Fecha" class="col-md-2 text-end col-form-label"><strong>Fecha:</strong></label>
+                    <div class="col-md-3">
+                        <p class="form-control-plaintext">@trabajo?.Fecha</p>
+                    </div>
+                </div>
+                @*    ClienteId *@
+                <div class="mb-3 row">
+                    <label for="ClienteId" class="col-md-2 text-end col-form-label"><strong>ClienteId:</strong></label>
+                    <div class="col-md-4">
+                        <p class="form-control-plaintext">@cliente?.Nombres</p>
+                    </div>
+                </div>
+                @* TecnicoId *@
+                <div class="mb-3 row">
+                    <label for="TecnicoId" class="col-md-2 text-end col-form-label"><strong>TecnicoId:</strong></label>
+                    <div class="col-md-4">
+                        <p class="form-control-plaintext">@tecnico?.Nombres</p>
+                    </div>
+                </div>
+                @* PrioridadId  *@
+                <div class="mb-3 row">
+                    <label for="PrioridadId" class="col-md-2 text-end col-form-label"><strong>PrioridadId:</strong></label>
+                    <div class="col-md-2">
+                        <p class="form-control-plaintext">@prioridad?.Descripcion</p>
+                    </div>
+                </div>
+                @*  Descripcion *@
+                <div class="mb-3 row">
+                    <label for="Descripcion" class="col-md-2 text-end col-form-label"><strong>Descripci&oacute;n:</strong></label>
+                    <div class="col-md-4">
+                        <p class="form-control-plaintext">@trabajo?.Descripcion</p>
+                    </div>
+                </div>
+                @*  Monto *@
+                <div class="mb-3 row">
+                    <label for="Monto" class="col-md-2 text-end col-form-label"><strong>Monto:</strong></label>
+                    <div class="col-md-2">
+                        <p class="form-control-plaintext">@trabajo?.Monto</p>
+                    </div>
+                </div>
 
-                <table class="table table-bordered">
-                    <thead class="table-striped text-center">
-                        <tr>
-                            <th>ArticuloId</th>
-                            <th>Cantidad</th>
-                            <th>Precio</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var detalle in trabajo.TrabajosDetalle)
-                        {
+                <div class="border border-success p-3 mt-3">
+                    <h5 class="card-header">Detalle TrabajosDetalle</h5>
+
+                    <table class="table table-light table-bordered mt-3">
+                        <thead class="table table-striped text-center">
                             <tr>
-                                <td>@detalle.ArticuloId</td>
-                                <td>@detalle.Cantidad</td>
-                                <td>@detalle.Precio.ToString("C")</td>
+                                <th>ArticuloId</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var detalle in trabajo.TrabajosDetalle)
+                            {
+                                var descripcionArticulo = ListaArticulos.FirstOrDefault(a => a.ArticuloId == detalle.ArticuloId)?.Descripcion ?? "No encontrado";
+                                <tr>
+                                    <td>@descripcionArticulo</td>
+                                    <td>@detalle.Cantidad</td>
+                                    <td>@detalle.Precio.ToString("C")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-footer text-center">
+                    <button type="button" class="btn btn-outline-danger" @onclick="EliminarTrabajo">
+                        <span class="bi bi-trash"></span> Eliminar
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" @onclick="Volver">
+                        <span class="bi bi-arrow-left"></span> Volver
+                    </button>
+                </div>
+
+                @if (eliminado)
+                {
+                    <div class="alert alert-danger " role="alert">
+                        El trabajo ha sido eliminado correctamente.
+                    </div>
+                }
             </div>
         </div>
-
-        <div class="card-footer text-center">
-            <button type="button" class="btn btn-outline-danger" @onclick="EliminarTrabajo">
-                <span class="bi bi-trash"></span> Eliminar
-            </button>
-            <button type="button" class="btn btn-outline-primary" @onclick="Volver">
-                <span class="bi bi-arrow-left"></span> Volver
-            </button>
-        </div>
-
-        @if (eliminado)
-        {
-            <div class="alert alert-danger " role="alert">
-                El trabajo ha sido eliminado correctamente.
-            </div>
-        }
     </div>
 </div>
 
