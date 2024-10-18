@@ -4,7 +4,6 @@ using RegistroTecnicos.Models;
 using System.Linq.Expressions;
 
 namespace RegistroTecnicos.Services;
-
 public class ArticulosServices(Contexto _contexto)
 {
     public async Task<List<Articulos>> Listar(Expression<Func<Articulos, bool>> criterio)
@@ -14,13 +13,10 @@ public class ArticulosServices(Contexto _contexto)
             .AsNoTracking()
             .ToListAsync();
     }
-
     public async Task<List<Articulos>> ListarArticulos()
     {
         return await _contexto.Articulos
             .AsNoTracking()
             .ToListAsync();
     }
-  
-
 }
