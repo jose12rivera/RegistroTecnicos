@@ -35,6 +35,7 @@ builder.Services.AddScoped<ArticulosServices>();
 //La inyeccion del Bootstrap
 builder.Services.AddBlazorBootstrap();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
