@@ -12,7 +12,6 @@ public class TrabajosDetalle
     public Trabajos Trabajo { get; set; }
 
     public int ArticuloId { get; set; }
-
     [ForeignKey("ArticuloId")]
     public Articulos Articulo { get; set; }
 
