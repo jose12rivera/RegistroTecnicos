@@ -12,7 +12,6 @@ public class Contexto : DbContext
     public DbSet<Trabajos> Trabajos { get; set; }
     public DbSet<Prioridades> Prioridades { get; set; }
     public DbSet<Articulos> Articulos { get; set; }
-
     public DbSet<TrabajosDetalle> TrabajosDetalle { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,7 +28,5 @@ public class Contexto : DbContext
         new Articulos() {ArticuloId = 8, Descripcion = "Cereal", Costo = 25, Precio = 40, Existencia = 45}
         });
     }
-
-
 }
 
