@@ -80,7 +80,6 @@
             <ValidationMessage For="@(() => trabajo.Monto)" />
         </div>
 
-
         <div class="border border-success p-3 mt-3">
             <h5 class="card-header">Detalle de Trabajos</h5>
             <div class="card-body">
@@ -212,7 +211,6 @@
         prioridad = await prioridadesServices.Listar(t => true);
         ListaArticulos = await articulosServices.Listar(a => true);
 
-     
         if (TrabajoId > 0)
         {
             trabajo = await trabajosServices.Buscar(TrabajoId);
@@ -279,8 +277,6 @@
         }
     }
 
-  
-
     public async Task EliminarDetalle(TrabajosDetalle detalle)
     {
        
@@ -289,8 +285,6 @@
 
         eliminado = true;
     }
-
-    
 
     private void Volver()
     {
