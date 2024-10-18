@@ -59,7 +59,6 @@ public class TrabajosServices
             .ExecuteDeleteAsync();
         return eliminado > 0;
     }
-    // Método para eliminar un detalle específico
     public async Task<bool> EliminarDetalle(int trabajoDetalleId)
     {
         var detalle = await _contexto.TrabajosDetalle.FindAsync(trabajoDetalleId);
@@ -70,16 +69,12 @@ public class TrabajosServices
         }
         return false;
     }
-
-
     public async Task<Trabajos?> Buscar(int id)
     {
         return await _contexto.Trabajos
-            .Include(t => t.TrabajosDetalle) // Carga los detalles
+            .Include(t => t.TrabajosDetalle) 
             .FirstOrDefaultAsync(t => t.TrabajoId == id);
     }
-
-    //Metodo  Listar
     public async Task<List<Trabajos>>Listar(Expression<Func<Trabajos, bool>> Criterio)
     {
         return await _contexto.Trabajos
@@ -91,32 +86,28 @@ public class TrabajosServices
             .Where(Criterio)
             .ToListAsync();
     }
-
     public async Task<bool> GuardarDetalles(List<TrabajosDetalle> detalles)
     {
         foreach (var detalle in detalles)
         {
-            _contexto.TrabajosDetalle.Add(detalle); // Asegúrate de tener el DbSet correspondiente
+            _contexto.TrabajosDetalle.Add(detalle); 
         }
-        await _contexto.SaveChangesAsync(); // Guardar todos los cambios a la base de datos
-        return true; // Retornar verdadero si se guardó correctamente
+        await _contexto.SaveChangesAsync();
+        return true; 
     }
-
-
-    // Método para validar si un trabajo con la misma descripción ya existe
     public async Task<bool> Validar(Trabajos trabajo)
     {
         var listaTrabajo = await Listar(t => t.Descripcion.ToLower() == trabajo.Descripcion.ToLower() && t.TrabajoId != trabajo.TrabajoId);
         return listaTrabajo.Any();
     }
-    // Método para actualizar un trabajo y sus detalles
+   
     public async Task Actualizar(Trabajos trabajo, List<TrabajosDetalle> detalles)
     {
-        // Buscar el trabajo existente
+      
         var trabajoExistente = await Buscar(trabajo.TrabajoId);
         if (trabajoExistente != null)
         {
-            // Actualizar los campos del trabajo
+           
             trabajoExistente.Fecha = trabajo.Fecha;
             trabajoExistente.ClienteId = trabajo.ClienteId;
             trabajoExistente.TecnicoId = trabajo.TecnicoId;
@@ -124,20 +115,16 @@ public class TrabajosServices
             trabajoExistente.Descripcion = trabajo.Descripcion;
             trabajoExistente.Monto = trabajo.Monto;
 
-            // Eliminar detalles existentes
             var detallesExistentes = _contexto.TrabajosDetalle.Where(td => td.TrabajoId == trabajo.TrabajoId);
             _contexto.TrabajosDetalle.RemoveRange(detallesExistentes);
 
-            // Agregar nuevos detalles
             foreach (var detalle in detalles)
             {
-                detalle.TrabajoId = trabajo.TrabajoId; // Asegúrate de asignar el ID del trabajo
+                detalle.TrabajoId = trabajo.TrabajoId; 
                 _contexto.TrabajosDetalle.Add(detalle);
             }
 
-            // Guardar cambios en la base de datos
             await _contexto.SaveChangesAsync();
         }
     }
-
 }
