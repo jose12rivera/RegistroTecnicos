@@ -7,7 +7,7 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
-<EditForm Model="trabajo" OnValidSubmit="Guardar">
+<EditForm Model="trabajo" OnValidSubmit="async () => await Guardar()">
     <DataAnnotationsValidator />
     <div class="card-header bg-primary text-white text-center">
         <h5><strong>Registro Trabajos</strong></h5>
@@ -178,7 +178,6 @@
         </div>
     </div>
 </EditForm>
-
 @code {
     [Parameter]
     public int TrabajoId { get; set; }
@@ -206,21 +205,20 @@
 
     public async Task Nuevo()
     {
-
         trabajo = new Trabajos();
         TrabajosDetalle = new TrabajosDetalle();
         existe = false;
     }
 
-    public void EliminarDetalle(TrabajosDetalle detalle)
+    public async Task EliminarDetalle(TrabajosDetalle detalle)
     {
-
         selectedArticuloId = detalle.ArticuloId;
         TrabajosDetalle.Cantidad = detalle.Cantidad;
         TrabajosDetalle.Precio = detalle.Precio;
 
         ListaTrabajosDetalle.Remove(detalle);
         eliminado = true;
+        CalcularTotal();
     }
 
     private async Task CalcularTotal()
@@ -228,23 +226,34 @@
         trabajo.Monto = ListaTrabajosDetalle.Sum(d => d.Precio * d.Cantidad);
     }
 
-    public void AgregarDetalle()
+    
+    public async Task AgregarDetalle()
     {
         var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.ArticuloId == selectedArticuloId);
         if (articuloSeleccionado != null && TrabajosDetalle.Cantidad > 0)
         {
+            if (articuloSeleccionado.Existencia < TrabajosDetalle.Cantidad)
+            {
+               
+                return;
+            }
+
             TrabajosDetalle.Precio = articuloSeleccionado.Precio;
+
             var nuevoDetalle = new TrabajosDetalle
                 {
                     ArticuloId = articuloSeleccionado.ArticuloId,
                     Cantidad = TrabajosDetalle.Cantidad,
                     Precio = articuloSeleccionado.Precio
                 };
+
             ListaTrabajosDetalle.Add(nuevoDetalle);
             trabajo.Monto = ListaTrabajosDetalle.Sum(d => d.Precio * d.Cantidad);
 
+            
             TrabajosDetalle = new TrabajosDetalle();
-            agregar = true;
+            CalcularTotal();
+            agregar = true; 
         }
     }
 
@@ -270,21 +279,43 @@
 
     public async Task Guardar()
     {
-        if (!await Validar())
-        {
-            return;
-        }
+        
+            foreach (var detalle in ListaTrabajosDetalle)
+            {
+                var articulo = await articulosServices.ObtenerArticuloPorId(detalle.ArticuloId);
+                if (articulo == null || articulo.Existencia < detalle.Cantidad)
+                {
+                    
+                    return;
+                }
+            }
 
-        trabajo.TrabajosDetalle = ListaTrabajosDetalle;
+            if (trabajo.TrabajoId == 0)
+            {
+               
+                if (await trabajosServices.Existe(trabajo.TrabajoId))
+                {
+                   
+                    return;
+                }
+            }
 
-        var guardado = await trabajosServices.Guardar(trabajo);
-        if (guardado)
-        {
-            guardar = true;
-        }
+            foreach (var detalle in ListaTrabajosDetalle)
+            {
+                await articulosServices.ActualizarExistencia(detalle.ArticuloId, -detalle.Cantidad); 
+            }
+
+            trabajo.TrabajosDetalle = ListaTrabajosDetalle;
+            var guardado = await trabajosServices.Guardar(trabajo);
+            if (guardado)
+            {
+                guardar = true;
+             
+            }
+       
     }
 
-    public void Volver()
+    public async Task Volver()
     {
         navigationManager.NavigateTo("/Trabajos/Index");
     }
