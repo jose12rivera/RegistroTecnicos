@@ -99,7 +99,7 @@ namespace RegistroTecnicos.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Descripcion = table.Column<string>(type: "TEXT", nullable: false),
-                    Monto = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Monto = table.Column<decimal>(type: "TEXT", nullable: true),
                     TecnicoId = table.Column<int>(type: "INTEGER", nullable: false),
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
                     PrioridadId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -161,14 +161,21 @@ namespace RegistroTecnicos.Migrations
                 columns: new[] { "ArticuloId", "Costo", "Descripcion", "Existencia", "Precio" },
                 values: new object[,]
                 {
-                    { 1, 15m, "Refresco", 24, 25m },
-                    { 2, 10m, "Galletas", 50, 20m },
-                    { 3, 30m, "Café", 40, 45m },
-                    { 4, 20m, "Leche", 60, 35m },
-                    { 5, 8m, "Azúcar", 100, 15m },
-                    { 6, 5m, "Pan", 80, 10m },
-                    { 7, 18m, "Jugo de naranja", 30, 30m },
-                    { 8, 25m, "Cereal", 45, 40m }
+                    { 1, 100m, "Mouse", 50, 150m },
+                    { 2, 80m, "Teclado", 40, 120m },
+                    { 3, 200m, "Monitor", 20, 300m },
+                    { 4, 250m, "Impresora", 15, 400m },
+                    { 5, 50m, "Webcam", 25, 90m },
+                    { 6, 15m, "Pendrive", 70, 30m },
+                    { 7, 10m, "Cable HDMI", 60, 20m },
+                    { 8, 100m, "Disco Duro Externo", 30, 180m },
+                    { 9, 60m, "Router", 25, 110m },
+                    { 10, 50m, "Altavoces", 40, 90m },
+                    { 11, 300m, "Tarjeta Gráfica", 10, 500m },
+                    { 12, 800m, "Laptop", 8, 1200m },
+                    { 13, 300m, "Smartphone", 15, 500m },
+                    { 14, 100m, "Smartwatch", 20, 150m },
+                    { 15, 200m, "Tableta", 18, 300m }
                 });
 
             migrationBuilder.CreateIndex(

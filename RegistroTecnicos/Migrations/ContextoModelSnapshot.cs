@@ -44,66 +44,122 @@ namespace RegistroTecnicos.Migrations
                         new
                         {
                             ArticuloId = 1,
-                            Costo = 15m,
-                            Descripcion = "Refresco",
-                            Existencia = 24,
-                            Precio = 25m
+                            Costo = 100m,
+                            Descripcion = "Mouse",
+                            Existencia = 50,
+                            Precio = 150m
                         },
                         new
                         {
                             ArticuloId = 2,
-                            Costo = 10m,
-                            Descripcion = "Galletas",
-                            Existencia = 50,
-                            Precio = 20m
+                            Costo = 80m,
+                            Descripcion = "Teclado",
+                            Existencia = 40,
+                            Precio = 120m
                         },
                         new
                         {
                             ArticuloId = 3,
-                            Costo = 30m,
-                            Descripcion = "Café",
-                            Existencia = 40,
-                            Precio = 45m
+                            Costo = 200m,
+                            Descripcion = "Monitor",
+                            Existencia = 20,
+                            Precio = 300m
                         },
                         new
                         {
                             ArticuloId = 4,
-                            Costo = 20m,
-                            Descripcion = "Leche",
-                            Existencia = 60,
-                            Precio = 35m
+                            Costo = 250m,
+                            Descripcion = "Impresora",
+                            Existencia = 15,
+                            Precio = 400m
                         },
                         new
                         {
                             ArticuloId = 5,
-                            Costo = 8m,
-                            Descripcion = "Azúcar",
-                            Existencia = 100,
-                            Precio = 15m
+                            Costo = 50m,
+                            Descripcion = "Webcam",
+                            Existencia = 25,
+                            Precio = 90m
                         },
                         new
                         {
                             ArticuloId = 6,
-                            Costo = 5m,
-                            Descripcion = "Pan",
-                            Existencia = 80,
-                            Precio = 10m
-                        },
-                        new
-                        {
-                            ArticuloId = 7,
-                            Costo = 18m,
-                            Descripcion = "Jugo de naranja",
-                            Existencia = 30,
+                            Costo = 15m,
+                            Descripcion = "Pendrive",
+                            Existencia = 70,
                             Precio = 30m
                         },
                         new
                         {
+                            ArticuloId = 7,
+                            Costo = 10m,
+                            Descripcion = "Cable HDMI",
+                            Existencia = 60,
+                            Precio = 20m
+                        },
+                        new
+                        {
                             ArticuloId = 8,
-                            Costo = 25m,
-                            Descripcion = "Cereal",
-                            Existencia = 45,
-                            Precio = 40m
+                            Costo = 100m,
+                            Descripcion = "Disco Duro Externo",
+                            Existencia = 30,
+                            Precio = 180m
+                        },
+                        new
+                        {
+                            ArticuloId = 9,
+                            Costo = 60m,
+                            Descripcion = "Router",
+                            Existencia = 25,
+                            Precio = 110m
+                        },
+                        new
+                        {
+                            ArticuloId = 10,
+                            Costo = 50m,
+                            Descripcion = "Altavoces",
+                            Existencia = 40,
+                            Precio = 90m
+                        },
+                        new
+                        {
+                            ArticuloId = 11,
+                            Costo = 300m,
+                            Descripcion = "Tarjeta Gráfica",
+                            Existencia = 10,
+                            Precio = 500m
+                        },
+                        new
+                        {
+                            ArticuloId = 12,
+                            Costo = 800m,
+                            Descripcion = "Laptop",
+                            Existencia = 8,
+                            Precio = 1200m
+                        },
+                        new
+                        {
+                            ArticuloId = 13,
+                            Costo = 300m,
+                            Descripcion = "Smartphone",
+                            Existencia = 15,
+                            Precio = 500m
+                        },
+                        new
+                        {
+                            ArticuloId = 14,
+                            Costo = 100m,
+                            Descripcion = "Smartwatch",
+                            Existencia = 20,
+                            Precio = 150m
+                        },
+                        new
+                        {
+                            ArticuloId = 15,
+                            Costo = 200m,
+                            Descripcion = "Tableta",
+                            Existencia = 18,
+                            Precio = 300m
                         });
                 });
 
@@ -203,7 +259,6 @@ namespace RegistroTecnicos.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("Monto")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PrioridadId")
