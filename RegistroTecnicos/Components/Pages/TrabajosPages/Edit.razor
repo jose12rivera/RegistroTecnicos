@@ -216,10 +216,10 @@
     {
         trabajo.Monto = ListaTrabajosDetalle.Sum(d => d.Precio * d.Cantidad);
     }
-    private void Nuevo()
+    public async Task Nuevo()
     {
-        ListaTrabajosDetalle = new List<TrabajosDetalle>();
         trabajo = new Trabajos();
+        TrabajosDetalle = new TrabajosDetalle();
         existe = false;
     }
 
@@ -308,7 +308,7 @@
 
 
 
-    private void Volver()
+    private async Task Volver()
     {
         navigationManager.NavigateTo("/Trabajos/Index");
     }
