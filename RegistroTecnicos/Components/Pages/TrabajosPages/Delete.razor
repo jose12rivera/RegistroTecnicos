@@ -126,6 +126,9 @@
     public Tecnicos? tecnico { get; set; }
     public Clientes? cliente { get; set; }
     public Prioridades? prioridad { get; set; }
+    public List<TrabajosDetalle> Listatrabajodetalle { get; set; } = new List<TrabajosDetalle>();
+    public Articulos articulos { get; set; } = new Articulos();
+    public TrabajosDetalle trabajosDetalle { get; set; } = new TrabajosDetalle();
     public List<Articulos> ListaArticulos { get; set; } = new List<Articulos>();
     private bool eliminado = false;
 
@@ -148,8 +151,16 @@
     {
         if (TrabajoId == 0 || trabajo == null) return;
 
+        var detalles = await trabajosServices.ListarDetalles(TrabajoId);
+
+
         if (await trabajosServices.Eliminar(TrabajoId))
         {
+            
+            foreach (var detalle in detalles)
+            {
+                await articulosServices.AgregarCantidad(detalle.ArticuloId, detalle.Cantidad);
+            }
             eliminado = true;
         }
     }
