@@ -245,39 +245,68 @@
         var listaTrabajo = await trabajosServices.Listar(t => t.Descripcion.ToLower() == trabajo.Descripcion.ToLower() && t.TrabajoId != trabajo.TrabajoId);
         return listaTrabajo.Count == 0;
     }
-   
     public async Task AgregarDetalle()
     {
         var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.ArticuloId == selectedArticuloId);
 
         if (articuloSeleccionado != null && TrabajosDetalle.Cantidad > 0)
         {
+         
+            if (TrabajosDetalle.Cantidad > articuloSeleccionado.Existencia)
+            {
+                agregar = false;
+                return;
+            }
+
             TrabajosDetalle.Precio = articuloSeleccionado.Precio;
 
             var nuevoDetalle = new TrabajosDetalle
                 {
                     ArticuloId = articuloSeleccionado.ArticuloId,
                     Cantidad = TrabajosDetalle.Cantidad,
-                    Precio = articuloSeleccionado.Precio 
+                    Precio = articuloSeleccionado.Precio
                 };
 
             ListaTrabajosDetalle.Add(nuevoDetalle);
-           
-            await CalcularTotal();
-            TrabajosDetalle = new TrabajosDetalle(); 
+
          
+            try
+            {
+                await articulosServices.ActualizarExistencia(articuloSeleccionado.ArticuloId, -TrabajosDetalle.Cantidad);
+            }
+            catch (InvalidOperationException ex)
+            {
+               
+                agregar = false;
+                return;
+            }
+
+            // Calcular el total
+            await CalcularTotal();
+
+            TrabajosDetalle = new TrabajosDetalle();
+
             agregar = true;
         }
     }
 
     public async Task EliminarDetalle(TrabajosDetalle detalle)
     {
-       
+        var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.ArticuloId == detalle.ArticuloId);
+        if (articuloSeleccionado != null)
+        {
+          
+            await articulosServices.ActualizarExistencia(articuloSeleccionado.ArticuloId, detalle.Cantidad);
+        }
+
+     
         ListaTrabajosDetalle.Remove(detalle);
         await CalcularTotal();
 
         eliminado = true;
     }
+
+
 
     private void Volver()
     {
