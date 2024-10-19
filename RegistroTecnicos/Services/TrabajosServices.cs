@@ -127,4 +127,14 @@ public class TrabajosServices
             await _contexto.SaveChangesAsync();
         }
     }
+    public async Task<List<TrabajosDetalle>> ListarDetalles(int trabajoId)
+    {
+        
+        var detalles = await _contexto.TrabajosDetalle
+            .Where(td => td.TrabajoId == trabajoId)
+            .ToListAsync();
+
+        return detalles;
+
+    }
 }
