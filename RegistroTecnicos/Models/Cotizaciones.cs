@@ -9,12 +9,14 @@ public class Cotizaciones
     public int CotizacionId { get; set; }
     [Required(ErrorMessage = "La fecha es obligatoria.")]
     public DateTime Fecha  {get;set;}
-    [ForeignKey("ClienteId")]
-    [Required(ErrorMessage = "El ClienteId es obligatorio.")]
+
     public int ClienteId { get; set; }
+    [ForeignKey("ClienteId")]
     public Clientes? Clientes { get; set; }
     [StringLength(500, ErrorMessage = "La observación no puede tener más de 500 caracteres.")]
     public string? Observacion { get; set; }
     [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor que 0.")]
     public double? Monto {  get; set; }
+    public ICollection<CotizacionesDetalle> CotizacionesDetalle { get; set; } = new List<CotizacionesDetalle>();
+    public Articulos? Articulos { get; set; }
 }
