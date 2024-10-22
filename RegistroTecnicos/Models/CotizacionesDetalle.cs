@@ -8,15 +8,12 @@ public class CotizacionesDetalle
     [Key]
     public int DetalleId { get; set; }
 
+    public int CotizacionId { get; set; }
     [ForeignKey("CotizacionId")]
-    [Required(ErrorMessage = "La CotizacionId es obligatorio.")]
-    public int CotizacionId { get; set;}
     public Cotizaciones? Cotizaciones { get; set; }
 
-    [ForeignKey("ArticuloId")]
-    [Required(ErrorMessage = "El ArticuloId es obligatorio.")]
     public int ArticuloId { get; set; }
-
+    [ForeignKey("ArticuloId")]
     public Articulos? Articulos { get; set; }
     [Range(0.01, double.MaxValue, ErrorMessage = "La cantidad debe ser mayor que 0.")]
     public decimal? Cantidad { get; set; }
