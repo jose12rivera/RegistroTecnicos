@@ -10,9 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-//La inyeccion Del Contexto Con SqlServer
-var SqlConStr = builder.Configuration.GetConnectionString("SqlConStr");
-builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(SqlConStr));
+var ConStr = builder.Configuration.GetConnectionString("SqlConStr");
+builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(ConStr));
 
 //La inyeccion Del services
 builder.Services.AddScoped<TecnicosServices>();
