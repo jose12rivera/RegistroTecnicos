@@ -66,4 +66,14 @@ public class ClientesServices(IDbContextFactory<Contexto> DbFactory)
             .Where(Criterio)
             .ToListAsync();
     }
+
+    public async Task<List<Clientes>> ListarClientes()
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.Clientes
+            .AsNoTracking()
+            .ToListAsync();
+    }
 }
+
+
