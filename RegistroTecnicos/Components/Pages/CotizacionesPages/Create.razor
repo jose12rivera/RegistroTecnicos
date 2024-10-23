@@ -1,6 +1,7 @@
 ﻿@page "/Cotizacion/Create"
 @inject CotizacionesServices cotizacionesServices
 @inject ClientesServices clientesServices
+@inject ArticulosServices articulosServices
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
@@ -13,27 +14,23 @@
             </div>
 
             <div class="card-body">
-                @*    CotizacionId *@
-                <div class="row">
-                    <div class="col-md-10 mb-5">
-                        <label for=" CotizacionId" class="form-label"><strong> CotizacionId</strong></label>
-                        <div class="input-group">
-                            <div style="width: 40%; height: 1mm;">
-                                <InputNumber @bind-Value="cotizacion.CotizacionId" class="form-control" />
-                            </div>
-                        </div>
+                @* CotizacionId  *@
+                <div class="mb-3">
+                    <div class="col-md-10 mb-3">
+                        <label for="CotizacionId" class="form-label"><strong>CotizacionId</strong></label>
+                        <InputNumber @bind-Value="cotizacion.CotizacionId" class="form-control" />
                     </div>
-                  @*   Fecha *@
-                    <div class="mb-5">
-                        <label for=" Fecha" class="form-label"><strong> Fecha</strong></label>
+                    @* Fecha *@
+                    <div class="mb-3">
+                        <label for="Fecha" class="form-label"><strong>Fecha</strong></label>
                         <InputDate @bind-Value="cotizacion.Fecha" class="form-control" />
                         <ValidationMessage For="@(()=>cotizacion.Fecha)" />
                     </div>
                     @*  ClienteId *@
                     <div class="mb-3">
-                        <label for="ClienteId" class="form-label"><strong>ClienteId:</strong></label>
+                        <label for="ClienteId" class="form-label"><strong>Cliente:</strong></label>
                         <InputSelect @bind-Value="cotizacion.ClienteId" class="form-control">
-                            <option value="0">Selecionar un Cliente</option>
+                            <option value="0">Seleccionar un Cliente</option>
                             @foreach (var cliente in clientes)
                             {
                                 <option value="@cliente.ClienteId">@cliente.Nombres</option>
@@ -41,31 +38,88 @@
                         </InputSelect>
                         <ValidationMessage For="@(() => cotizacion.ClienteId)" />
                     </div>
-                    @*   Observacion *@
-                    <div class="mb-5">
-                        <label for=" Observacion" class="form-label"><strong> Observacion</strong></label>
+                    @* Observacion  *@
+                    <div class="mb-3">
+                        <label for="Observacion" class="form-label"><strong>Observacion</strong></label>
                         <InputText @bind-Value="cotizacion.Observacion" class="form-control" />
                         <ValidationMessage For="@(()=>cotizacion.Observacion)" />
                     </div>
-                    @*  Monto*@
-                    <div class="mb-5">
-                        <label for=" Monto" class="form-label"><strong> Monto</strong></label>
-                        <InputNumber @bind-Value="cotizacion.Monto" class="form-control" />
+                    @* Monto  *@
+                    <div class="mb-3">
+                        <label for="Monto" class="form-label"><strong>Monto</strong></label>
+                        <InputNumber @bind-Value="cotizacion.Monto" class="form-control" Disabled />
                         <ValidationMessage For="@(()=>cotizacion.Monto)" />
                     </div>
-                    <div class="card-footer; aligh justify-content-center">
-                        <div class="btn-group">
+
+                    <div class="border border-success">
+                        <h5>Cotizacion Detalles</h5>
+                        <div class="card-body">
+                            <div class="row align-items-end m-0">
+                                @* ArticuloId  *@
+                                <div class="col-md-4 p-0">
+                                    <InputSelect class="form-control" @bind-Value="selectedArticuloId">
+                                        <option value="0" disabled>Seleccionar un Artículo</option>
+                                        @foreach (var articulo in ListaArticulos)
+                                        {
+                                            <option value="@articulo.ArticuloId">@articulo.Descripcion - Precio: @articulo.Precio</option>
+                                        }
+                                    </InputSelect>
+                                </div>
+                                @*   Cantidad  *@
+                                <div class="col-md-3 p-0">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Cantidad:</span>
+                                        <InputNumber @bind-Value="CotizacionesDetalle.Cantidad" class="form-control" />
+                                    </div>
+                                    <ValidationMessage For="@(() => CotizacionesDetalle.Cantidad)" />
+                                </div>
+                                @*   Boton Agregar *@
+                                <div class="col-md-2 p-0">
+                                    <button type="button" @onclick="AgregarDetalle" class="btn btn-outline-primary">
+                                        <span class="bi bi-plus mt-3"></span>
+                                        Agregar
+                                    </button>
+                                </div>
+                            </div>
+                            <table class="table table-light table-bordered">
+                                <thead class="table table-striped text-center">
+                                    <tr>
+                                        <th>Artículo</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var detalle in ListaCotizacionesDetalle)
+                                    {
+                                        var descripcionArticulo = ListaArticulos.FirstOrDefault(a => a.ArticuloId == detalle.ArticuloId)?.Descripcion ?? "No encontrado";
+                                        <tr>
+                                            <td>@descripcionArticulo</td>
+                                            <td>@detalle.Cantidad</td>
+                                            <td>@detalle.Precio</td>
+                                            <td>
+                                                <button @onclick="() => RemoverDetalle(detalle)" class="btn btn-outline-dark">
+                                                    <span class="bi bi-trash mt-3"></span>
+                                                    Remover
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer justify-content-center text-center">
                             <button type="button" @onclick="Nuevo" class="btn btn-outline-secondary">
-                                <span class="bi bi-plus mt-3"></span>
-                                Nuevo
+                                <span class="bi bi-plus mt-3"></span> Nuevo
                             </button>
                             <button type="submit" class="btn btn-outline-success">
                                 <span class="bi bi-floppy mt-3"></span>
                                 Guardar
                             </button>
                             <button type="button" @onclick="Volver" class="btn btn-outline-primary">
-                                <span class="bi bi-arrow-left mt-3"></span>
-                               Volver
+                                <span class="bi bi-arrow-left"></span>
+                                Volver
                             </button>
                         </div>
                     </div>
@@ -74,22 +128,65 @@
         </div>
     </div>
 </EditForm>
+
 @code {
     [Parameter]
     public int CotizacionId { get; set; }
-    public List<Clientes> clientes { get; set; } = new ();
-    public Cotizaciones? cotizacion { get; set; } = new Cotizaciones();
-    public CotizacionesDetalle? cotizacionesDetalle { get; set; } = new CotizacionesDetalle();
-    public List<Articulos> ListaArticulos { get; set; } = new List<Articulos>();
-    public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
-    public List<CotizacionesDetalle> ListacotizacionesDetalles { get; set; } = new List<CotizacionesDetalle>();
+    public Cotizaciones cotizacion { get; set; } = new();
+    public CotizacionesDetalle CotizacionesDetalle = new();
+    public List<Clientes> clientes { get; set; } = new();
+    public List<Articulos> ListaArticulos { get; set; } = new();
+    public List<CotizacionesDetalle> ListaCotizacionesDetalle { get; set; } = new();
+    private int selectedArticuloId;
     private bool existe = false;
 
     public async Task Nuevo()
     {
         cotizacion = new Cotizaciones();
-        cotizacionesDetalle = new CotizacionesDetalle();
+        CotizacionesDetalle = new CotizacionesDetalle();
         existe = false;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        clientes = await clientesServices.Listar(c => true);
+        ListaArticulos = await articulosServices.ListarArticulos();
+    }
+
+    private async Task AgregarDetalle()
+    {
+        var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.ArticuloId == selectedArticuloId);
+        if (articuloSeleccionado != null && CotizacionesDetalle.Cantidad > 0)
+        {
+            CotizacionesDetalle.Precio = articuloSeleccionado.Precio;
+
+            var nuevoDetalle = new CotizacionesDetalle
+                {
+                    ArticuloId = articuloSeleccionado.ArticuloId,
+                    Cantidad = CotizacionesDetalle.Cantidad,
+                    Precio = articuloSeleccionado.Precio
+                };
+
+            ListaCotizacionesDetalle.Add(nuevoDetalle);
+            CalcularTotal();
+            CotizacionesDetalle = new CotizacionesDetalle();
+        }
+    }
+
+    private async Task CalcularTotal()
+    {
+        cotizacion.Monto = ListaCotizacionesDetalle.Sum(d => d.Precio * d.Cantidad);
+    }
+
+    private async Task RemoverDetalle(CotizacionesDetalle detalle)
+    {
+        ListaCotizacionesDetalle.Remove(detalle);
+        CalcularTotal();
+    }
+
+    public async Task<bool> Validar()
+    {
+        existe = await cotizacionesServices.Existe(cotizacion.CotizacionId);
+        return !existe;
     }
 
     public async Task Buscar()
@@ -105,28 +202,24 @@
             Nuevo();
         }
     }
-
-    public async Task<bool> Validar()
+    private async Task Guardar()
     {
-        existe = await cotizacionesServices.Existe(cotizacion.CotizacionId);
-        return !existe;
-    }
 
-    public async Task Guardar()
-    {
         if (!await Validar())
         {
             return;
         }
-        var guardo = await cotizacionesServices.Guardar(cotizacion);
-        if (guardo)
+        cotizacion.CotizacionesDetalle = ListaCotizacionesDetalle;
+        var guardado = await cotizacionesServices.Guardar(cotizacion);
+        if (guardado)
         {
             Nuevo();
         }
-    }
-    public async Task Volver()
-    {
-        NavigationManager.NavigateTo("");
+
     }
 
+    private async Task Volver()
+    {
+        NavigationManager.NavigateTo("/Cotizacion/Index");
+    }
 }
