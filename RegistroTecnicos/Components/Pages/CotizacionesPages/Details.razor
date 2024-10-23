@@ -16,7 +16,7 @@
             <div class="card-body">
                @*   CotizacionId *@ 
                 <div class="mb-3 row">
-                    <label for="CotizacionId" class="col-md-2 text-end col-form-label"><strong>Cotización ID:</strong></label>
+                    <label for="CotizacionId" class="col-md-2 text-end col-form-label"><strong>Cotizaci&oacute;nId:</strong></label>
                     <div class="col-md-1">
                         <p class="form-control-plaintext">@cotizacion.CotizacionId</p>
                     </div>
@@ -28,9 +28,9 @@
                         <p class="form-control-plaintext">@cotizacion.Fecha.ToShortDateString()</p>
                     </div>
                 </div>
-                 @*  Cliente  *@
+                 @*  ClienteId  *@
                 <div class="mb-3 row">
-                    <label for="ClienteId" class="col-md-2 text-end col-form-label"><strong>Cliente:</strong></label>
+                    <label for="ClienteId" class="col-md-2 text-end col-form-label"><strong>ClienteId:</strong></label>
                     <div class="col-md-4">
                         <p class="form-control-plaintext">@cliente?.Nombres</p>
                     </div>
@@ -52,7 +52,7 @@
 
                
                 <div class="border border-success mt-3">
-                    <h5 >Detalles de la Cotizaci&oacute;n</h5>
+                    <h5 >Detalle  Cotizaci&oacute;nDetalle</h5>
                     <table class="table table-light table-bordered">
                         <thead class="table table-striped text-center">
                             <tr>
@@ -87,10 +87,7 @@
         </div>
     </div>
 }
-else
-{
-    <p class="text-center text-danger">No se encuentra la cotización solicitada.</p>
-}
+
 
 @code {
     [Parameter]
