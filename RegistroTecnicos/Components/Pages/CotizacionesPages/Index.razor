@@ -58,18 +58,18 @@
                             <tr>
                                 <td>@c.CotizacionId</td>
                                 <td>@c.Fecha</td>
-                                <td>@c.Clientes</td>
+                                <td>@c.Clientes?.Nombres</td>
                                 <td>@c.Observacion</td>
                                 <td>@c.Monto</td>
 
                                 <td class="text-center">
-                                    <a href="Details/@c.CotizacionId" class="btn btn-outline-primary  bi bi-eye mt-3"></a>
+                                    <a href="/Cotizacion/Details/@c.CotizacionId" class="btn btn-outline-primary  bi bi-eye mt-3"></a>
                                 </td>
                                 <td class="text-center">
-                                    <a href="Edit/@c.CotizacionId" class="btn btn-outline-success  bi bi-pencil-square mt-3"></a>
+                                    <a href="/Cotizacion/Edit/@c.CotizacionId" class="btn btn-outline-success  bi bi-pencil-square mt-3"></a>
                                 </td>
                                 <td class="text-center">
-                                    <a href="Delete/@c.CotizacionId" class="btn btn-outline-danger  bi bi-trash mt-3"></a>
+                                    <a href="/Cotizacion/Delete/@c.CotizacionId" class="btn btn-outline-danger  bi bi-trash mt-3"></a>
                                 </td>
 
                             </tr>
@@ -104,7 +104,7 @@
         {
             Listacotizacion = await cotizacionesServices.Listar(c => c.Observacion.Contains(valorfiltro));
         }
-        else if (filtro == "Monto"&&double.TryParse(valorfiltro,out double Monto))
+        else if (filtro == "Monto"&&decimal.TryParse(valorfiltro,out decimal Monto))
         {
             Listacotizacion = await cotizacionesServices.Listar(c => c.Monto==Monto);
         }
