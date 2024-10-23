@@ -60,7 +60,7 @@
                                 <td>@c.Fecha</td>
                                 <td>@c.Clientes?.Nombres</td>
                                 <td>@c.Observacion</td>
-                                <td>@c.Monto</td>
+                                <td>@c.Monto.ToString("C")</td>
 
                                 <td class="text-center">
                                     <a href="/Cotizacion/Details/@c.CotizacionId" class="btn btn-outline-primary  bi bi-eye mt-3"></a>
