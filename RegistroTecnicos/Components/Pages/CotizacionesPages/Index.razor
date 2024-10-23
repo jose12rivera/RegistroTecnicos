@@ -9,75 +9,77 @@
             <h5>Registro de Cotizaciones</h5>
         </div>
 
-        <div class="row md-3 align-content-center">
-            <div class="col-md-3">
-                <label for=" filtro" class="form-label"><strong>Filtrar Por:</strong></label>
-                <select @bind="filtro" class="form-select">
-                    <option value="id">CotizacionId</option>
-                    <option value="Observacion">Observacion</option>
-                    <option value="Monto">Monto</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label for="valorfiltro" class="form-label"><strong>Busqueda:</strong></label>
-                <div class="input-group">
-                    <input @bind="valorfiltro" class="form-control"/>
-                    <button type="button" @onclick="Buscar" class="btn btn-outline-primary">
-                        <span class="bi bi-search mt-3"></span>
-                        Buscar
-                    </button>
+        <div class="card-body">
+            <div class="row md-3 align-content-center">
+                <div class="col-md-3">
+                    <label for=" filtro" class="form-label"><strong>Filtrar Por:</strong></label>
+                    <select @bind="filtro" class="form-select">
+                        <option value="id">CotizacionId</option>
+                        <option value="Observacion">Observacion</option>
+                        <option value="Monto">Monto</option>
+                    </select>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-15 text-end">
-                        <button type="button" href="Create" class="btn btn-outline-success">
-                            <span class="bi bi-pencil-square mt-3"></span>
-                            Crear
+                <div class="col-md-4">
+                    <label for="valorfiltro" class="form-label"><strong>Busqueda:</strong></label>
+                    <div class="input-group">
+                        <input @bind="valorfiltro" class="form-control" />
+                        <button type="button" @onclick="Buscar" class="btn btn-outline-primary">
+                            <span class="bi bi-search mt-3"></span>
+                            Buscar
                         </button>
                     </div>
                 </div>
-            </div>
-            <table class="table table-light table-bordered">
-                <thead class="table table-striped text-center">
-                    <tr>
-                        <th>CotizacionId</th>
-                        <th>Fecha</th>
-                        <th>ClienteId</th>
-                        <th>Obervacion</th>
-                        <th>Monto</th>
-                        <th>Ver</th>
-                        <th>Modificar</th>
-                        <th>Eliminar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach(var c in Listacotizacion)
-                    {
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-15 text-end">
+                            <a type="button" href="/Cotizacion/Create" class="btn btn-outline-success">
+                                <span class="bi bi-pencil-square mt-3"></span>
+                                Crear
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-light table-bordered">
+                    <thead class="table table-striped text-center">
                         <tr>
-                            <td>@c.CotizacionId</td>
-                            <td>@c.Fecha</td>
-                            <td>@c.Clientes</td>
-                            <td>@c.Observacion</td>
-                            <td>@c.Monto</td>
-
-                            <td class="text-center">
-                               <a href="Details/@c.CotizacionId" class="btn btn-outline-primary  bi bi-eye mt-3"></a>
-                            </td>
-                            <td class="text-center">
-                                <a href="Edit/@c.CotizacionId" class="btn btn-outline-success  bi bi-pencil-square mt-3"></a>
-                            </td>
-                            <td class="text-center">
-                                <a href="Delete/@c.CotizacionId" class="btn btn-outline-danger  bi bi-trash mt-3"></a>
-                            </td>
-                           
+                            <th>CotizacionId</th>
+                            <th>Fecha</th>
+                            <th>ClienteId</th>
+                            <th>Obervacion</th>
+                            <th>Monto</th>
+                            <th>Ver</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <div class="card-footer">
-            <p>Toatal:@Listacotizacion.Count</p>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in Listacotizacion)
+                        {
+                            <tr>
+                                <td>@c.CotizacionId</td>
+                                <td>@c.Fecha</td>
+                                <td>@c.Clientes</td>
+                                <td>@c.Observacion</td>
+                                <td>@c.Monto</td>
+
+                                <td class="text-center">
+                                    <a href="Details/@c.CotizacionId" class="btn btn-outline-primary  bi bi-eye mt-3"></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="Edit/@c.CotizacionId" class="btn btn-outline-success  bi bi-pencil-square mt-3"></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="Delete/@c.CotizacionId" class="btn btn-outline-danger  bi bi-trash mt-3"></a>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <p>Toatal:@Listacotizacion.Count</p>
+            </div>
         </div>
     </div>
 </div>
