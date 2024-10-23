@@ -12,8 +12,8 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20241023000445_Cotizaciones")]
-    partial class Cotizaciones
+    [Migration("20241023160926_Cotizacion")]
+    partial class Cotizacion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -211,8 +211,8 @@ namespace RegistroTecnicos.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
-                    b.Property<double?>("Monto")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Observacion")
                         .HasMaxLength(500)
@@ -222,7 +222,8 @@ namespace RegistroTecnicos.Migrations
 
                     b.HasIndex("ArticulosArticuloId");
 
-                    b.HasIndex("ClienteId");
+                    b.HasIndex("ClienteId")
+                        .IsUnique();
 
                     b.ToTable("Cotizaciones");
                 });
@@ -238,14 +239,14 @@ namespace RegistroTecnicos.Migrations
                     b.Property<int>("ArticuloId")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("Cantidad")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
 
                     b.Property<int>("CotizacionId")
                         .HasColumnType("int");
 
-                    b.Property<double?>("Precio")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("DetalleId");
 
@@ -402,8 +403,8 @@ namespace RegistroTecnicos.Migrations
                         .HasForeignKey("ArticulosArticuloId");
 
                     b.HasOne("RegistroTecnicos.Models.Clientes", "Clientes")
-                        .WithMany()
-                        .HasForeignKey("ClienteId")
+                        .WithOne("Cotizaciones")
+                        .HasForeignKey("RegistroTecnicos.Models.Cotizaciones", "ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -490,6 +491,8 @@ namespace RegistroTecnicos.Migrations
 
             modelBuilder.Entity("RegistroTecnicos.Models.Clientes", b =>
                 {
+                    b.Navigation("Cotizaciones");
+
                     b.Navigation("Trabajos");
                 });
 

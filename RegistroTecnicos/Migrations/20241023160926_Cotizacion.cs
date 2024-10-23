@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RegistroTecnicos.Migrations
 {
     /// <inheritdoc />
-    public partial class Cotizaciones : Migration
+    public partial class Cotizacion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -79,7 +79,7 @@ namespace RegistroTecnicos.Migrations
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ClienteId = table.Column<int>(type: "int", nullable: false),
                     Observacion = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    Monto = table.Column<double>(type: "float", nullable: true),
+                    Monto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ArticulosArticuloId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -127,8 +127,8 @@ namespace RegistroTecnicos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CotizacionId = table.Column<int>(type: "int", nullable: false),
                     ArticuloId = table.Column<int>(type: "int", nullable: false),
-                    Cantidad = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Precio = table.Column<double>(type: "float", nullable: true)
+                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    Precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -242,7 +242,8 @@ namespace RegistroTecnicos.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Cotizaciones_ClienteId",
                 table: "Cotizaciones",
-                column: "ClienteId");
+                column: "ClienteId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_CotizacionesDetalle_ArticuloId",
