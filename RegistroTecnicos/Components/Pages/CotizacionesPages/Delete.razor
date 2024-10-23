@@ -44,7 +44,7 @@
             <div class="mb-3 row">
                 <label for="Monto" class="col-md-2 text-end col-form-label"><strong>Monto:</strong></label>
                 <div class="col-md-2">
-                    <p class="form-control-plaintext">@cotizacion?.Monto</p>
+                    <p class="form-control-plaintext">@cotizacion?.Monto.ToString("C")</p>
                 </div>
             </div>
             <div class="border border-success mt-3">
@@ -65,8 +65,7 @@
                             <tr>
                                 <td>@descripcionArticulo</td>
                                 <td>@detalle.Cantidad</td>
-                                <td>@detalle.Precio</td>
-                              
+                                <td>@detalle.Precio.ToString("C")</td>
                             </tr>
                         }
                     </tbody>
@@ -95,30 +94,24 @@
     public Clientes? cliente { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        
-        if (CotizacionId != 0)
+        cotizacion = await cotizacionesServices.ObtenerPorId(CotizacionId);
+        if (cotizacion != null)
         {
-            cotizacion = await cotizacionesServices.Buscar(CotizacionId);
-            if (cotizacion != null)
-            {
-               
-                cliente = await clientesServices.Buscar(cotizacion.ClienteId);
-                ListaArticulos = await articulosServices.ListarArticulos();
-            }
+            ListaCotizacionesDetalle = cotizacion.CotizacionesDetalle.ToList();
+            cliente = await clientesServices.Buscar(cotizacion.ClienteId);
+            ListaArticulos = await articulosServices.ListarArticulos();
         }
     }
 
-    public async Task EliminarCotizacion()
+    private async Task EliminarCotizacion()
     {
-       
-        if (CotizacionId == 0 || cotizacion == null){
+        if (cotizacion == null || CotizacionId == 0)
+        {
             return;
         }
 
-        
-        var detalles = await cotizacionesServices.ListarDetalles(CotizacionId);
+        var detalles = ListaCotizacionesDetalle;
 
-        
         if (await cotizacionesServices.Eliminar(CotizacionId))
         {
             foreach (var detalle in detalles)
@@ -126,7 +119,6 @@
                 await articulosServices.AgregarCantidad(detalle.ArticuloId, detalle.Cantidad);
             }
 
-         
             Volver();
         }
     }
