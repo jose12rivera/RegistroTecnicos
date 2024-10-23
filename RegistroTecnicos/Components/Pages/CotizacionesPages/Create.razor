@@ -1,0 +1,132 @@
+﻿@page "/Cotizacion/Create"
+@inject CotizacionesServices cotizacionesServices
+@inject ClientesServices clientesServices
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<EditForm Model="cotizacion" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5>Registro de Cotizaciones</h5>
+            </div>
+
+            <div class="card-body">
+                @*    CotizacionId *@
+                <div class="row">
+                    <div class="col-md-10 mb-5">
+                        <label for=" CotizacionId" class="form-label"><strong> CotizacionId</strong></label>
+                        <div class="input-group">
+                            <div style="width: 40%; height: 1mm;">
+                                <InputNumber @bind-Value="cotizacion.CotizacionId" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                  @*   Fecha *@
+                    <div class="mb-5">
+                        <label for=" Fecha" class="form-label"><strong> Fecha</strong></label>
+                        <InputDate @bind-Value="cotizacion.Fecha" class="form-control" />
+                        <ValidationMessage For="@(()=>cotizacion.Fecha)" />
+                    </div>
+                    @*  ClienteId *@
+                    <div class="mb-3">
+                        <label for="ClienteId" class="form-label"><strong>ClienteId:</strong></label>
+                        <InputSelect @bind-Value="cotizacion.ClienteId" class="form-control">
+                            <option value="0">Selecionar un Cliente</option>
+                            @foreach (var cliente in clientes)
+                            {
+                                <option value="@cliente.ClienteId">@cliente.Nombres</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => cotizacion.ClienteId)" />
+                    </div>
+                    @*   Observacion *@
+                    <div class="mb-5">
+                        <label for=" Observacion" class="form-label"><strong> Observacion</strong></label>
+                        <InputText @bind-Value="cotizacion.Observacion" class="form-control" />
+                        <ValidationMessage For="@(()=>cotizacion.Observacion)" />
+                    </div>
+                    @*  Monto*@
+                    <div class="mb-5">
+                        <label for=" Monto" class="form-label"><strong> Monto</strong></label>
+                        <InputNumber @bind-Value="cotizacion.Monto" class="form-control" />
+                        <ValidationMessage For="@(()=>cotizacion.Monto)" />
+                    </div>
+                    <div class="card-footer; aligh justify-content-center">
+                        <div class="btn-group">
+                            <button type="button" @onclick="Nuevo" class="btn btn-outline-secondary">
+                                <span class="bi bi-plus mt-3"></span>
+                                Nuevo
+                            </button>
+                            <button type="submit" class="btn btn-outline-success">
+                                <span class="bi bi-floppy mt-3"></span>
+                                Guardar
+                            </button>
+                            <button type="button" @onclick="Volver" class="btn btn-outline-primary">
+                                <span class="bi bi-arrow-left mt-3"></span>
+                               Volver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+@code {
+    [Parameter]
+    public int CotizacionId { get; set; }
+    public List<Clientes> clientes { get; set; } = new ();
+    public Cotizaciones? cotizacion { get; set; } = new Cotizaciones();
+    public CotizacionesDetalle? cotizacionesDetalle { get; set; } = new CotizacionesDetalle();
+    public List<Articulos> ListaArticulos { get; set; } = new List<Articulos>();
+    public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
+    public List<CotizacionesDetalle> ListacotizacionesDetalles { get; set; } = new List<CotizacionesDetalle>();
+    private bool existe = false;
+
+    public async Task Nuevo()
+    {
+        cotizacion = new Cotizaciones();
+        cotizacionesDetalle = new CotizacionesDetalle();
+        existe = false;
+    }
+
+    public async Task Buscar()
+    {
+        existe = false;
+        var encontrado = await cotizacionesServices.Buscar(cotizacion.CotizacionId);
+        if (encontrado != null)
+        {
+            cotizacion = encontrado;
+        }
+        else
+        {
+            Nuevo();
+        }
+    }
+
+    public async Task<bool> Validar()
+    {
+        existe = await cotizacionesServices.Existe(cotizacion.CotizacionId);
+        return !existe;
+    }
+
+    public async Task Guardar()
+    {
+        if (!await Validar())
+        {
+            return;
+        }
+        var guardo = await cotizacionesServices.Guardar(cotizacion);
+        if (guardo)
+        {
+            Nuevo();
+        }
+    }
+    public async Task Volver()
+    {
+        NavigationManager.NavigateTo("");
+    }
+
+}
