@@ -19,7 +19,7 @@
                 @* CotizacionId  *@
                 <div class="mb-3">
                     <div class="col-md-10 mb-3">
-                        <label for="CotizacionId" class="form-label"><strong>CotizacionId</strong></label>
+                        <label for="CotizacionId" class="form-label"><strong>Cotizaci&oacute;nId</strong></label>
                         <InputNumber @bind-Value="cotizacion.CotizacionId" class="form-control" />
                     </div>
                     @* Fecha *@
@@ -30,7 +30,7 @@
                     </div>
                     @* ClienteId *@
                     <div class="mb-3">
-                        <label for="ClienteId" class="form-label"><strong>Cliente:</strong></label>
+                        <label for="ClienteId" class="form-label"><strong>ClienteId:</strong></label>
                         <InputSelect @bind-Value="cotizacion.ClienteId" class="form-control">
                             <option value="0">Seleccionar un Cliente</option>
                             @foreach (var cliente in clientes)
@@ -57,7 +57,7 @@
                     </div>
 
                     <div class="border border-success">
-                        <h5>Cotizacion Detalles</h5>
+                        <h5>Modificar Cotizaci&oacute;nDetalle</h5>
                         <div class="card-body">
                             <div class="row align-items-end m-0">
                                 @* ArticuloId *@
