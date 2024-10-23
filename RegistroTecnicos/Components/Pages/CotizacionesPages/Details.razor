@@ -6,59 +6,60 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-@if(cotizacion != null)
+@if (cotizacion != null)
 {
-
     <div class="container">
-        <div class="card shadow-lg mt-3 ">
+        <div class="card shadow-lg mt-3">
             <div class="card-header text-center">
-                <h5>Eliminar Registro de Cotizaciones</h5>
+                <h5>Detalles de la Cotización</h5>
             </div>
             <div class="card-body">
-                @*   CotizacionId *@
+               @*   CotizacionId *@ 
                 <div class="mb-3 row">
-                    <label for=" CotizacionId" class="col-md-2 text-end col-form-label"><strong> CotizacionId:</strong></label>
+                    <label for="CotizacionId" class="col-md-2 text-end col-form-label"><strong>Cotización ID:</strong></label>
                     <div class="col-md-1">
-                        <p class="form-control-plaintext">@cotizacion?.CotizacionId</p>
+                        <p class="form-control-plaintext">@cotizacion.CotizacionId</p>
                     </div>
                 </div>
-                @*   Fecha *@
+                @*  Fecha  *@
                 <div class="mb-3 row">
                     <label for="Fecha" class="col-md-2 text-end col-form-label"><strong>Fecha:</strong></label>
                     <div class="col-md-3">
-                        <p class="form-control-plaintext">@cotizacion?.Fecha</p>
+                        <p class="form-control-plaintext">@cotizacion.Fecha.ToShortDateString()</p>
                     </div>
                 </div>
-                @*    ClienteId *@
+                 @*  Cliente  *@
                 <div class="mb-3 row">
-                    <label for="ClienteId" class="col-md-2 text-end col-form-label"><strong>ClienteId:</strong></label>
+                    <label for="ClienteId" class="col-md-2 text-end col-form-label"><strong>Cliente:</strong></label>
                     <div class="col-md-4">
                         <p class="form-control-plaintext">@cliente?.Nombres</p>
                     </div>
                 </div>
-                @*    Observacion *@
+                 @* Observacion  *@
                 <div class="mb-3 row">
-                    <label for="Observacion" class="col-md-2 text-end col-form-label"><strong>Observacion:</strong></label>
+                    <label for="Observacion" class="col-md-2 text-end col-form-label"><strong>Observación:</strong></label>
                     <div class="col-md-4">
-                        <p class="form-control-plaintext">@cotizacion?.Observacion</p>
+                        <p class="form-control-plaintext">@cotizacion.Observacion</p>
                     </div>
                 </div>
-                @*  Monto *@
+                @*  Monto  *@
                 <div class="mb-3 row">
                     <label for="Monto" class="col-md-2 text-end col-form-label"><strong>Monto:</strong></label>
                     <div class="col-md-2">
-                        <p class="form-control-plaintext">@cotizacion?.Monto</p>
+                        <p class="form-control-plaintext">@cotizacion.Monto.ToString("C")</p>
                     </div>
                 </div>
-                <div class="border border-success mt-3">
-                    <h5>Eliminar DetalleCotizacion</h5>
 
+               
+                <div class="border border-success mt-3">
+                    <h5 class="text-center">Detalles de la Cotización</h5>
                     <table class="table table-light table-bordered">
                         <thead class="table table-striped text-center">
                             <tr>
                                 <th>Artículo</th>
                                 <th>Cantidad</th>
                                 <th>Precio</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -68,18 +69,19 @@
                                 <tr>
                                     <td>@descripcionArticulo</td>
                                     <td>@detalle.Cantidad</td>
-                                    <td>@detalle.Precio</td>
-
+                                    <td>@detalle.Precio.ToString("C")</td>
+                                 
                                 </tr>
                             }
                         </tbody>
                     </table>
-                    <div class="card-footer text-center">
-                       
-                        <button type="button" class="btn btn-outline-primary" @onclick="Volver">
-                            <span class="bi bi-arrow-left"></span> Volver
-                        </button>
-                    </div>
+                </div>
+
+                @*  Botón Volver *@ 
+                <div class="card-footer text-center">
+                    <button type="button" class="btn btn-outline-primary" @onclick="Volver">
+                        <span class="bi bi-arrow-left"></span> Volver
+                    </button>
                 </div>
             </div>
         </div>
@@ -87,28 +89,27 @@
 }
 else
 {
-    <p>No se encuentra</p>
+    <p class="text-center text-danger">No se encuentra la cotización solicitada.</p>
 }
 
 @code {
     [Parameter]
     public int CotizacionId { get; set; }
-    public Cotizaciones? cotizacion { get; set; } = new Cotizaciones();
-    public CotizacionesDetalle? CotizacionesDetalle { get; set; } = new CotizacionesDetalle();
-    public List<Articulos> ListaArticulos { get; set; } = new();
-    public Articulos? articulos { get; set; } = new();
+    public Cotizaciones? cotizacion { get; set; }
     public List<CotizacionesDetalle> ListaCotizacionesDetalle { get; set; } = new();
+    public List<Articulos> ListaArticulos { get; set; } = new();
+    public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
     public Clientes? cliente { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-            cotizacion = await cotizacionesServices.Buscar(CotizacionId);
-            if (cotizacion != null)
-            {
-
-                cliente = await clientesServices.Buscar(cotizacion.ClienteId);
-                ListaArticulos = await articulosServices.ListarArticulos();
-            }
-        
+        cotizacion = await cotizacionesServices.ObtenerPorId(CotizacionId);
+        if (cotizacion != null)
+        {
+            ListaCotizacionesDetalle = cotizacion.CotizacionesDetalle.ToList(); 
+            cliente = await clientesServices.Buscar(cotizacion.ClienteId);
+            ListaArticulos = await articulosServices.ListarArticulos(); 
+        }
     }
 
     private void Volver()
@@ -116,4 +117,3 @@ else
         NavigationManager.NavigateTo("/Cotizacion/Index");
     }
 }
-
