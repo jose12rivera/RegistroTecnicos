@@ -4,6 +4,7 @@
 @inject ArticulosServices articulosServices
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
+@inject ToastService toastService
 
 <EditForm Model="cotizacion" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
@@ -180,6 +181,8 @@
             ListaCotizacionesDetalle.Add(nuevoDetalle);
             CalcularTotal();
             CotizacionesDetalle = new CotizacionesDetalle();
+
+            toastService.Notify(new(ToastType.Success, "Éxito", "Detalle agregado correctamente."));
         }
     }
 
@@ -192,6 +195,7 @@
     {
         ListaCotizacionesDetalle.Remove(detalle);
         CalcularTotal();
+        toastService.Notify(new(ToastType.Danger, "Información", "Artículo removido de la cotización."));
     }
 
     public async Task<bool> Validar()
@@ -218,13 +222,14 @@
 
         if (!await Validar())
         {
+            toastService.Notify(new(ToastType.Warning, "Advertencia", "La cotización ya existe."));
             return;
         }
         cotizacion.CotizacionesDetalle = ListaCotizacionesDetalle;
         var guardado = await cotizacionesServices.Guardar(cotizacion);
         if (guardado)
         {
-            Nuevo();
+            toastService.Notify(new(ToastType.Success, "Advertencia", "Ya se guardo el detalle y registro."));
         }
 
     }
