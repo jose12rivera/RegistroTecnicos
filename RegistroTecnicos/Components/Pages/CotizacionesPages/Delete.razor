@@ -4,6 +4,7 @@
 @inject ClientesServices clientesServices
 @inject ArticulosServices articulosServices
 @inject NavigationManager NavigationManager
+@inject ToastService toastService
 @rendermode InteractiveServer
 
 <div class="container">
@@ -119,7 +120,7 @@
                 await articulosServices.AgregarCantidad(detalle.ArticuloId, detalle.Cantidad);
             }
 
-            Volver();
+            toastService.Notify(new(ToastType.Danger, "Advertencia", "Ya se elimino el detalle y registro."));
         }
     }
 
