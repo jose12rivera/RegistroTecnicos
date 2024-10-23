@@ -5,30 +5,28 @@ using System.Linq.Expressions;
 
 
 namespace RegistroTecnicos.Services;
-public class TrabajosServices
+public class TrabajosServices(IDbContextFactory<Contexto> DbFactory)
 {
-    private readonly Contexto _contexto;
-    //Metodo Contexto
-    public TrabajosServices(Contexto contexto)
-    {
-        _contexto = contexto;
-    }
+    
     //Metodo  Existe
     public async Task<bool>Existe(int trabajoId)
     {
-        return await _contexto.Trabajos.AnyAsync(t=>t.TrabajoId == trabajoId);
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.Trabajos.AnyAsync(t=>t.TrabajoId == trabajoId);
     }
     //Metodo Insertar
     private async Task<bool> Insertar(Trabajos trabajo)
     {
-        _contexto.Trabajos.Add(trabajo);
-        return await _contexto.SaveChangesAsync()>0;
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        contexto.Trabajos.Add(trabajo);
+        return await contexto.SaveChangesAsync()>0;
     }
     //Metodo Modificar
     private async Task<bool>Modificar(Trabajos trabajo)
     {
-        _contexto.Trabajos.Update(trabajo);
-        return await _contexto.SaveChangesAsync() > 0;
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        contexto.Trabajos.Update(trabajo);
+        return await contexto.SaveChangesAsync() > 0;
     }
     //Metodo Guardar
     public async Task<bool>Guardar(Trabajos trabajo)
@@ -45,7 +43,8 @@ public class TrabajosServices
     //Metodo Finalizar
     public async Task<bool> Finalizar(int trabajoId)
     {
-        var cantidad = await _contexto.Trabajos
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        var cantidad = await contexto.Trabajos
             .Where(t => t.TrabajoId == trabajoId)
             .ExecuteUpdateAsync(t => t.SetProperty(x => x.Fecha, DateTime.Now));
         return cantidad > 0;
@@ -54,30 +53,34 @@ public class TrabajosServices
     //Metodo  Eliminar
     public async Task<bool>Eliminar(int id)
     {
-        var eliminado = await _contexto.Trabajos
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        var eliminado = await contexto.Trabajos
             .Where(t => t.TrabajoId == id)
             .ExecuteDeleteAsync();
         return eliminado > 0;
     }
     public async Task<bool> EliminarDetalle(int trabajoDetalleId)
     {
-        var detalle = await _contexto.TrabajosDetalle.FindAsync(trabajoDetalleId);
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        var detalle = await contexto.TrabajosDetalle.FindAsync(trabajoDetalleId);
         if (detalle != null)
         {
-            _contexto.TrabajosDetalle.Remove(detalle);
-            return await _contexto.SaveChangesAsync() > 0;
+            contexto.TrabajosDetalle.Remove(detalle);
+            return await contexto.SaveChangesAsync() > 0;
         }
         return false;
     }
     public async Task<Trabajos?> Buscar(int id)
     {
-        return await _contexto.Trabajos
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.Trabajos
             .Include(t => t.TrabajosDetalle) 
             .FirstOrDefaultAsync(t => t.TrabajoId == id);
     }
     public async Task<List<Trabajos>>Listar(Expression<Func<Trabajos, bool>> Criterio)
     {
-        return await _contexto.Trabajos
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.Trabajos
             .Include(t => t.Tecnicos)
             .Include(t => t.Clientes)
             .Include(t => t.Prioridades)
@@ -88,11 +91,12 @@ public class TrabajosServices
     }
     public async Task<bool> GuardarDetalles(List<TrabajosDetalle> detalles)
     {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
         foreach (var detalle in detalles)
         {
-            _contexto.TrabajosDetalle.Add(detalle); 
+            contexto.TrabajosDetalle.Add(detalle); 
         }
-        await _contexto.SaveChangesAsync();
+        await contexto.SaveChangesAsync();
         return true; 
     }
     public async Task<bool> Validar(Trabajos trabajo)
@@ -103,7 +107,7 @@ public class TrabajosServices
    
     public async Task Actualizar(Trabajos trabajo, List<TrabajosDetalle> detalles)
     {
-      
+        await using var contexto = await DbFactory.CreateDbContextAsync();
         var trabajoExistente = await Buscar(trabajo.TrabajoId);
         if (trabajoExistente != null)
         {
@@ -115,22 +119,22 @@ public class TrabajosServices
             trabajoExistente.Descripcion = trabajo.Descripcion;
             trabajoExistente.Monto = trabajo.Monto;
 
-            var detallesExistentes = _contexto.TrabajosDetalle.Where(td => td.TrabajoId == trabajo.TrabajoId);
-            _contexto.TrabajosDetalle.RemoveRange(detallesExistentes);
+            var detallesExistentes = contexto.TrabajosDetalle.Where(td => td.TrabajoId == trabajo.TrabajoId);
+            contexto.TrabajosDetalle.RemoveRange(detallesExistentes);
 
             foreach (var detalle in detalles)
             {
                 detalle.TrabajoId = trabajo.TrabajoId; 
-                _contexto.TrabajosDetalle.Add(detalle);
+                contexto.TrabajosDetalle.Add(detalle);
             }
 
-            await _contexto.SaveChangesAsync();
+            await contexto.SaveChangesAsync();
         }
     }
     public async Task<List<TrabajosDetalle>> ListarDetalles(int trabajoId)
     {
-        
-        var detalles = await _contexto.TrabajosDetalle
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        var detalles = await contexto.TrabajosDetalle
             .Where(td => td.TrabajoId == trabajoId)
             .ToListAsync();
 
