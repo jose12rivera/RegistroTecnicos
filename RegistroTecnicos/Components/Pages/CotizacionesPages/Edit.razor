@@ -10,7 +10,7 @@
     <DataAnnotationsValidator />
     <div class="container">
         <div class="card shadow-lg">
-            <div class="card-header text-center">
+            <div class="card-header ">
                 <h5>Registro de Cotizaciones</h5>
             </div>
 
@@ -45,10 +45,13 @@
                         <InputText @bind-Value="cotizacion.Observacion" class="form-control" />
                         <ValidationMessage For="@(()=>cotizacion.Observacion)" />
                     </div>
-                    @* Monto *@
+                    @* Monto  *@
                     <div class="mb-3">
                         <label for="Monto" class="form-label"><strong>Monto</strong></label>
-                        <InputNumber @bind-Value="cotizacion.Monto" class="form-control" Disabled />
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <InputNumber @bind-Value="cotizacion.Monto" class="form-control" Disabled />
+                        </div>
                         <ValidationMessage For="@(()=>cotizacion.Monto)" />
                     </div>
 
@@ -106,7 +109,7 @@
                                         <tr>
                                             <td>@descripcionArticulo</td>
                                             <td>@detalle.Cantidad</td>
-                                            <td>@detalle.Precio</td>
+                                            <td>@detalle.Precio.ToString("C")</td>
                                             <td>
                                                 <button @onclick="() => RemoverDetalle(detalle)" class="btn btn-outline-dark">
                                                     <span class="bi bi-trash mt-3"></span>
