@@ -73,6 +73,14 @@
                                     </div>
                                     <ValidationMessage For="@(() => CotizacionesDetalle.Cantidad)" />
                                 </div>
+                                @*   Precio *@
+                                <div class="col-md-2 p-0">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Precio:</span>
+                                        <InputNumber @bind-Value="CotizacionesDetalle.Precio" class="form-control" />
+                                    </div>
+                                    <ValidationMessage For="@(() => CotizacionesDetalle.Precio)" />
+                                </div>
                                 @*   Boton Agregar *@
                                 <div class="col-md-2 p-0">
                                     <button type="button" @onclick="AgregarDetalle" class="btn btn-outline-primary">
