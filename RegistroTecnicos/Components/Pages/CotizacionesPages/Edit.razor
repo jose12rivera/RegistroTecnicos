@@ -4,6 +4,7 @@
 @inject ClientesServices clientesServices
 @inject ArticulosServices articulosServices
 @inject NavigationManager NavigationManager
+@inject ToastService toastService
 @rendermode InteractiveServer
 
 <EditForm Model="cotizacion" OnValidSubmit="Guardar">
@@ -110,12 +111,11 @@
                                             <td>@descripcionArticulo</td>
                                             <td>@detalle.Cantidad</td>
                                             <td>@detalle.Precio.ToString("C")</td>
-                                            <td>
-                                                <button @onclick="() => RemoverDetalle(detalle)" class="btn btn-outline-dark">
-                                                    <span class="bi bi-trash mt-3"></span>
-                                                    Remover
-                                                </button>
-                                            </td>
+                                            <button type="button" @onclick="() => RemoverDetalle(detalle)" class="btn btn-outline-dark">
+                                                <span class="bi bi-trash mt-3"></span>
+                                                Remover
+                                            </button>
+
                                         </tr>
                                     }
                                 </tbody>
@@ -167,7 +167,7 @@
     {
         clientes = await clientesServices.Listar(c => true);
         ListaArticulos = await articulosServices.ListarArticulos();
-        if (CotizacionId.HasValue) // Verificamos si CotizacionId tiene un valor
+        if (CotizacionId.HasValue) 
         {
             cotizacion = await cotizacionesServices.ObtenerPorId(CotizacionId.Value);
 
@@ -180,13 +180,13 @@
         var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.ArticuloId == selectedArticuloId);
         if (articuloSeleccionado == null || CotizacionesDetalle.Cantidad <= 0)
         {
-
+            toastService.Notify(new(ToastType.Warning, "Advertencia", "Debe seleccionar un artículo y una cantidad válida."));
             return;
         }
 
         if (articuloSeleccionado.Existencia < CotizacionesDetalle.Cantidad)
         {
-
+            toastService.Notify(new(ToastType.Warning, "Advertencia", "No hay suficiente existencia del artículo."));
             return;
         }
 
@@ -201,6 +201,8 @@
         CotizacionesDetalle = new CotizacionesDetalle();
         selectedArticuloId = 0;
         CalcularTotal();
+
+        toastService.Notify(new(ToastType.Success, "Éxito", "Artículo agregado a la cotización."));
     }
 
     private async Task CalcularTotal()
@@ -210,18 +212,29 @@
 
     private async Task RemoverDetalle(CotizacionesDetalle detalle)
     {
-        ListaCotizacionesDetalle.Remove(detalle);
-        await CalcularTotal();
+        await cotizacionesServices.EliminarDetalle(detalle); 
+
+        ListaCotizacionesDetalle.Remove(detalle); 
+
+        selectedArticuloId = detalle.ArticuloId; 
+        CotizacionesDetalle.Cantidad = detalle.Cantidad; 
+        CotizacionesDetalle.Precio = detalle.Precio; 
+
+        await CalcularTotal(); 
+
+        toastService.Notify(new(ToastType.Danger, "Información", "Artículo removido de la cotización."));
+
+        StateHasChanged(); 
     }
+
     private async Task Guardar()
     {
       
-
         cotizacion.CotizacionesDetalle = ListaCotizacionesDetalle;
         var guardado = await cotizacionesServices.Guardar(cotizacion);
         if (guardado)
         {
-            Nuevo(); 
+            toastService.Notify(new(ToastType.Success, "Advertencia", "Ya se guardo el detalle y registro."));
           
         }
     }
