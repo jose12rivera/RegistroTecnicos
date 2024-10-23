@@ -74,7 +74,15 @@
                                     </div>
                                     <ValidationMessage For="@(() => CotizacionesDetalle.Cantidad)" />
                                 </div>
-                                @* Botón Agregar o Editar *@
+                                @*   Precio *@
+                                <div class="col-md-2 p-0">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Precio:</span>
+                                        <InputNumber @bind-Value="CotizacionesDetalle.Precio" class="form-control" />
+                                    </div>
+                                    <ValidationMessage For="@(() => CotizacionesDetalle.Precio)" />
+                                </div>
+                                @* Boton Agregar *@
                                 <div class="col-md-2 p-0">
                                     <button type="button" @onclick="AgregarDetalle" class="btn btn-outline-primary">
                                         <span class="bi bi-plus mt-3"></span>
@@ -132,14 +140,14 @@
 
 @code {
     [Parameter]
-    public int CotizacionId { get; set; }
+    public int? CotizacionId { get; set; }
     public Cotizaciones cotizacion { get; set; } = new();
     public CotizacionesDetalle CotizacionesDetalle = new();
     public List<Clientes> clientes { get; set; } = new();
     public List<Articulos> ListaArticulos { get; set; } = new();
     public List<CotizacionesDetalle> ListaCotizacionesDetalle { get; set; } = new();
     private int selectedArticuloId;
-    private bool editandoDetalle = false;
+
     private bool existe = false;
   
 
@@ -147,7 +155,7 @@
     {
         cotizacion = new Cotizaciones();
         CotizacionesDetalle = new CotizacionesDetalle();
-        editandoDetalle = false;
+       
         existe = false;
 
     }
@@ -156,43 +164,41 @@
     {
         clientes = await clientesServices.Listar(c => true);
         ListaArticulos = await articulosServices.ListarArticulos();
+        if (CotizacionId.HasValue) // Verificamos si CotizacionId tiene un valor
+        {
+            cotizacion = await cotizacionesServices.ObtenerPorId(CotizacionId.Value);
+
+           ListaCotizacionesDetalle = cotizacion.CotizacionesDetalle?.ToList() ?? new List<CotizacionesDetalle>();
+        }
     }
 
     private async Task AgregarDetalle()
     {
         var articuloSeleccionado = ListaArticulos.FirstOrDefault(a => a.ArticuloId == selectedArticuloId);
-        if (articuloSeleccionado != null && CotizacionesDetalle.Cantidad > 0)
+        if (articuloSeleccionado == null || CotizacionesDetalle.Cantidad <= 0)
         {
-            CotizacionesDetalle.Precio = articuloSeleccionado.Precio;
 
-            if (editandoDetalle) 
-            {
-                var detalleExistente = ListaCotizacionesDetalle.FirstOrDefault(d => d.ArticuloId == selectedArticuloId);
-                if (detalleExistente != null)
-                {
-                    detalleExistente.Cantidad = CotizacionesDetalle.Cantidad;
-                    detalleExistente.Precio = CotizacionesDetalle.Precio; 
-                }
-            }
-            else 
-            {
-                var nuevoDetalle = new CotizacionesDetalle
-                    {
-                        ArticuloId = articuloSeleccionado.ArticuloId,
-                        Cantidad = CotizacionesDetalle.Cantidad,
-                        Precio = articuloSeleccionado.Precio
-                    };
-                ListaCotizacionesDetalle.Add(nuevoDetalle);
-            }
-
-            await CalcularTotal();
-            CotizacionesDetalle = new CotizacionesDetalle(); 
-            editandoDetalle = false; 
-            selectedArticuloId = 0; 
+            return;
         }
-    }
 
-   
+        if (articuloSeleccionado.Existencia < CotizacionesDetalle.Cantidad)
+        {
+
+            return;
+        }
+
+        CotizacionesDetalle.Precio = articuloSeleccionado.Precio;
+        var nuevoDetalle = new CotizacionesDetalle
+            {
+                ArticuloId = articuloSeleccionado.ArticuloId,
+                Cantidad = CotizacionesDetalle.Cantidad,
+                Precio = articuloSeleccionado.Precio
+            };
+        ListaCotizacionesDetalle.Add(nuevoDetalle);
+        CotizacionesDetalle = new CotizacionesDetalle();
+        selectedArticuloId = 0;
+        CalcularTotal();
+    }
 
     private async Task CalcularTotal()
     {
@@ -207,44 +213,16 @@
     private async Task Guardar()
     {
       
+
         cotizacion.CotizacionesDetalle = ListaCotizacionesDetalle;
-
-       
-        if (!await Validar())
-        {
-            return;
-        }
-
-  
         var guardado = await cotizacionesServices.Guardar(cotizacion);
         if (guardado)
         {
             Nuevo(); 
-            await Buscar(); 
+          
         }
     }
-    public async Task<bool> Validar()
-    {
-        existe = await cotizacionesServices.Existe(cotizacion.CotizacionId);
-        return !existe;
-    }
-
-    public async Task Buscar()
-    {
-        existe = false;
-        var encontrado = await cotizacionesServices.Buscar(cotizacion.CotizacionId);
-        if (encontrado != null)
-        {
-            cotizacion = encontrado;
-            ListaCotizacionesDetalle = cotizacion.CotizacionesDetalle.ToList();
-        }
-        else
-        {
-            Nuevo();
-        }
-    }
-
-
+   
     private async Task Volver()
     {
         NavigationManager.NavigateTo("/Cotizacion/Index");
