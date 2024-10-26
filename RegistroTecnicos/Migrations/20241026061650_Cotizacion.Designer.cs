@@ -12,7 +12,7 @@ using RegistroTecnicos.DAL;
 namespace RegistroTecnicos.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20241023205026_Cotizacion")]
+    [Migration("20241026061650_Cotizacion")]
     partial class Cotizacion
     {
         /// <inheritdoc />
@@ -208,7 +208,8 @@ namespace RegistroTecnicos.Migrations
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Fecha")
+                    b.Property<DateTime?>("Fecha")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Monto")
