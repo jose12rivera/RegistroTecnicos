@@ -18,7 +18,7 @@
                 @* CotizacionId  *@
                 <div class="mb-3">
                     <div class="col-md-10 mb-3">
-                        <label for="CotizacionId" class="form-label"><strong>Cotizaci&Oacute;nId:</strong></label>
+                        <label for="CotizacionId" class="form-label"><strong>Cotizaci&oacute;nId:</strong></label>
                         <InputNumber @bind-Value="cotizacion.CotizacionId" class="form-control" />
                     </div>
                     @* Fecha *@
@@ -59,7 +59,7 @@
                         <h5>Registro Cotizaci&oacute;nDetalle</h5>
                         <div class="card-body">
                             <div class="row align-items-end m-0">
-                                @* ArticuloId  *@
+                                @* ArticuloId *@
                                 <div class="col-md-4 p-0">
                                     <InputSelect class="form-control" @bind-Value="selectedArticuloId">
                                         <option value="0" disabled>Seleccionar un Artículo</option>
@@ -69,7 +69,8 @@
                                         }
                                     </InputSelect>
                                 </div>
-                                @*   Cantidad  *@
+
+                                @* Cantidad *@
                                 <div class="col-md-3 p-0">
                                     <div class="input-group">
                                         <span class="input-group-text">Cantidad:</span>
@@ -77,11 +78,12 @@
                                     </div>
                                     <ValidationMessage For="@(() => CotizacionesDetalle.Cantidad)" />
                                 </div>
+
                                 @*   Precio *@
                                 <div class="col-md-2 p-0">
                                     <div class="input-group">
                                         <span class="input-group-text">Precio:</span>
-                                        <InputNumber @bind-Value="CotizacionesDetalle.Precio" class="form-control" />
+                                        <InputNumber @bind-Value="CotizacionesDetalle.Precio" class="form-control" Disabled/>
                                     </div>
                                     <ValidationMessage For="@(() => CotizacionesDetalle.Precio)" />
                                 </div>
