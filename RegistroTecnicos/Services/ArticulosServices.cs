@@ -41,7 +41,6 @@ public class ArticulosServices(IDbContextFactory<Contexto> DbFactory)
 
         if (articulo != null)
         {
-            // Permitir actualizar la existencia tanto para sumar como para restar
             int nuevaExistencia = articulo.Existencia + cantidad;
             if (nuevaExistencia >= 0)
             {
