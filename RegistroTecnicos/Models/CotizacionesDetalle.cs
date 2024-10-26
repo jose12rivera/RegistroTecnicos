@@ -9,6 +9,7 @@ public class CotizacionesDetalle
     public int DetalleId { get; set; }
     public int CotizacionId { get; set; }
 
+    public int CotizacionId { get; set; }
     [ForeignKey("CotizacionId")]
     public Cotizaciones? Cotizaciones { get; set; }
 

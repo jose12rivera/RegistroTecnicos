@@ -31,6 +31,7 @@ public class CotizacionesServices(IDbContextFactory<Contexto> DbFactory)
             return await Insertar(cotizacion);
         else
             return await Modificar(cotizacion);
+
     }
     public async Task <bool> Eliminar(int id)
     {
