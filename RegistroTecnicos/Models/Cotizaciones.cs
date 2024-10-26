@@ -8,7 +8,7 @@ public class Cotizaciones
     [Key]
     public int CotizacionId { get; set; }
     [Required(ErrorMessage = "La fecha es obligatoria.")]
-    public DateTime Fecha { get; set; }
+    public DateTime? Fecha { get; set; }
 
     [ForeignKey("Clientes")]
     public int ClienteId { get; set; }
