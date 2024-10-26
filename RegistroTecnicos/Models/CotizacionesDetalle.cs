@@ -18,7 +18,7 @@ public class CotizacionesDetalle
     public Articulos? Articulos { get; set; }
 
     [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor que 0.")]
-    public int Cantidad { get; set; } // Cambiado a decimal
+    public int Cantidad { get; set; } 
 
     [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor que 0.")]
     public decimal Precio { get; set; }
