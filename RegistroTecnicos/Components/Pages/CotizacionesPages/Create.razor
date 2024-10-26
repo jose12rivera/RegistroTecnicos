@@ -11,19 +11,19 @@
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header ">
-                <h5>Registro de Cotizaciones</h5>
+                <h5>Registro de Cotizaci&oacute;nes</h5>
             </div>
 
             <div class="card-body">
                 @* CotizacionId  *@
                 <div class="mb-3">
                     <div class="col-md-10 mb-3">
-                        <label for="CotizacionId" class="form-label"><strong>CotizacionId</strong></label>
+                        <label for="CotizacionId" class="form-label"><strong>Cotizaci&Oacute;nId:</strong></label>
                         <InputNumber @bind-Value="cotizacion.CotizacionId" class="form-control" />
                     </div>
                     @* Fecha *@
                     <div class="mb-3">
-                        <label for="Fecha" class="form-label"><strong>Fecha</strong></label>
+                        <label for="Fecha" class="form-label"><strong>Fecha:</strong></label>
                         <InputDate @bind-Value="cotizacion.Fecha" class="form-control" />
                         <ValidationMessage For="@(()=>cotizacion.Fecha)" />
                     </div>
@@ -41,13 +41,13 @@
                     </div>
                     @* Observacion  *@
                     <div class="mb-3">
-                        <label for="Observacion" class="form-label"><strong>Observacion</strong></label>
+                        <label for="Observacion" class="form-label"><strong>Observaci&oacute;n:</strong></label>
                         <InputText @bind-Value="cotizacion.Observacion" class="form-control" />
                         <ValidationMessage For="@(()=>cotizacion.Observacion)" />
                     </div>
                     @* Monto  *@
                     <div class="mb-3">
-                        <label for="Monto" class="form-label"><strong>Monto</strong></label>
+                        <label for="Monto" class="form-label"><strong>Monto:</strong></label>
                         <div class="input-group">
                             <span class="input-group-text">$</span> 
                             <InputNumber @bind-Value="cotizacion.Monto" class="form-control" Disabled />
