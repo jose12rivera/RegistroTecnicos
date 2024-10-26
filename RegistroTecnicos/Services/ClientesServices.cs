@@ -74,6 +74,18 @@ public class ClientesServices(IDbContextFactory<Contexto> DbFactory)
             .AsNoTracking()
             .ToListAsync();
     }
+    public async Task<Clientes> BuscarPorNombre(string nombre)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        if (string.IsNullOrWhiteSpace(nombre))
+        {
+            return null;
+        }
+        var cliente = await contexto.Clientes
+            .FirstOrDefaultAsync(c => c.Nombres.ToLower() == nombre.ToLower());
+
+        return cliente;
+    }
 }
 
 
