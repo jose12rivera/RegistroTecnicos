@@ -16,12 +16,12 @@ namespace RegistroTecnicos
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            // La inyección del contexto con SqlServer
+            // La inyecci?n del contexto con SqlServer
             var SqlConStr = builder.Configuration.GetConnectionString("SqlConStr");
             builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(SqlConStr));
 
 
-            // La inyección de servicios adicionales especificados en el segundo código
+            // La inyecci?n de servicios adicionales especificados en el segundo c?digo
             builder.Services.AddScoped<TecnicosServices>();
             builder.Services.AddScoped<TiposTecnicosServices>();
             builder.Services.AddScoped<ClientesServices>();
@@ -30,7 +30,7 @@ namespace RegistroTecnicos
             builder.Services.AddScoped<ArticulosServices>();
             builder.Services.AddScoped<CotizacionesServices>();
 
-            // La inyección del Bootstrap
+            // La inyecci?n del Bootstrap
             builder.Services.AddBlazorBootstrap();
 
             var app = builder.Build();
@@ -39,7 +39,7 @@ namespace RegistroTecnicos
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error", createScopeForErrors: true);
-                // The default HSTS value is 30 días. Puedes cambiar esto para escenarios de producción si es necesario.
+                // The default HSTS value is 30 d?as. Puedes cambiar esto para escenarios de producci?n si es necesario.
                 app.UseHsts();
             }
 
