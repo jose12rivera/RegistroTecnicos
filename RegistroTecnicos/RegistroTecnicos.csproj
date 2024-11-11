@@ -9,6 +9,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Data\**" />
+	  <Content Remove="Data\**" />
+	  <EmbeddedResource Remove="Data\**" />
+	  <None Remove="Data\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Blazor.Bootstrap" Version="3.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.sqlite" Version="8.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
@@ -17,11 +24,6 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Twilio" Version="7.3.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Data\" />
-	  <Folder Include="Data\" />
 	</ItemGroup>
 
 </Project>
